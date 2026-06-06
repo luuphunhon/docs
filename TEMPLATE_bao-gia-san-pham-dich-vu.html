@@ -1542,23 +1542,26 @@ async function saveToLark() {
       "SoBaoGia"     : soBG
     };
 
-    // ── Gửi 1 lần, server xử lý cả 2 bảng ───────────────
-    const resp = await fetch(LARK_PROXY_URL, {
-      method  : 'POST',
-      headers : { 'Content-Type': 'text/plain' },
-      body    : JSON.stringify({ action: 'saveFull', khachHang, duAn })
-    });
-
-    let result;
-    try { result = await resp.json(); } catch { result = { ok: resp.ok }; }
-
-    console.log('[Lark] HTTP', resp.status, '| response:', JSON.stringify(result));
-
-    if (!resp.ok || result.ok === false) {
-      throw new Error(result.msg || result.error || `HTTP ${resp.status}`);
+    // ── Hàm gửi 1 POST tới GAS ───────────────────────────
+    async function postGAS(body) {
+      const r = await fetch(LARK_PROXY_URL, {
+        method  : 'POST',
+        headers : { 'Content-Type': 'text/plain' },
+        body    : JSON.stringify(body)
+      });
+      let json;
+      try { json = await r.json(); } catch { json = { ok: r.ok }; }
+      if (!r.ok || json.ok === false) throw new Error(json.msg || json.error || `HTTP ${r.status}`);
+      return json;
     }
 
-    btn.textContent       = '✅ Đã lưu! (mở Console để xem chi tiết)';
+    // ── 1. Lưu khách hàng (upsert theo SĐT) ─────────────
+    await postGAS({ action: 'saveKhachHang', fields: khachHang });
+
+    // ── 2. Tạo dự án mới ─────────────────────────────────
+    await postGAS({ fields: duAn });
+
+    btn.textContent       = '✅ Đã lưu vào Lark!';
     btn.style.background  = '#2E7D32';
     setTimeout(() => {
       btn.textContent      = '☁ Lưu vào Lark';
