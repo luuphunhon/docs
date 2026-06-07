@@ -436,10 +436,15 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     </select>
   </div>
   <div id="tcPanel" style="display:none;">
-    <!-- Địa hình lấy từ select diaHinhNote phía trên (đã gom chung) -->
-    <div class="field"><label>Điều kiện sinh hoạt</label>
-      <select id="tcSinhHoat">
-        <option value="0">Có chỗ ở, điện nước sinh hoạt (+0đ/ha)</option>
+    <div class="field"><label>Địa hình / Điều kiện thi công</label>
+      <select id="tcDiaHinh" onchange="syncTcDiaHinh(this)">
+        <option value="0" data-note="Địa hình bằng, cơ giới vào được">Địa hình bằng / Cơ giới vào được (+0đ/ha)</option>
+        <option value="2000000" data-note="Địa hình phức tạp, khó cơ giới">Địa hình phức tạp / Khó cơ giới (+2.000.000đ/ha)</option>
+      </select>
+    </div>
+    <div class="field"><label>Điều kiện sinh hoạt tại công trình</label>
+      <select id="tcSinhHoat" onchange="calcAll()">
+        <option value="0">Có chỗ ở + điện nước sinh hoạt (+0đ/ha)</option>
         <option value="1000000">Không có chỗ ở / điện / nước (+1.000.000đ/ha)</option>
       </select>
     </div>
@@ -787,6 +792,15 @@ function syncMutualExclusive(changed){
 }
 
 // Sync địa hình → hidden input cho thi công
+function syncTcDiaHinh(sel){
+  const val=sel.value;
+  const note=sel.options[sel.selectedIndex].getAttribute('data-note')||'';
+  document.getElementById('tcDiaTeVal').value=val;
+  // Sync ngược lên diaHinhNote nếu cần
+  const dn=document.getElementById('diaHinhNote');
+  if(dn){for(const o of dn.options){if(o.getAttribute('data-tc')===val){dn.value=o.value;break;}}}
+  calcAll();
+}
 function syncDiaTe(sel){
   const tc=sel.options[sel.selectedIndex].getAttribute('data-tc')||'0';
   document.getElementById('tcDiaTeVal').value=tc;
