@@ -448,6 +448,12 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="val" id="calcTcVal">—</div>
       <div class="sub" id="calcTcSub">—</div>
     </div>
+    <div class="field"><label>Người phụ trách thi công (An Nông)</label>
+      <input id="tcNguoiPhuTrach" placeholder="Họ tên — Chức vụ"></div>
+    <div class="field"><label>Dự trù thời gian thi công</label>
+      <input id="tcThoiGian" placeholder="VD: 10–15 ngày làm việc"></div>
+    <div class="field"><label>Giám sát / Đại diện bên B</label>
+      <input id="tcGiamSatB" placeholder="Họ tên — Chức vụ"></div>
   </div>
 
   <h3 id="hdktSection">Dịch vụ HDKT / Giám sát</h3>
@@ -1769,6 +1775,300 @@ function generateBGTK(){
   </div>
 
   <div class="footer"><span>CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</span> &nbsp;·&nbsp; hethongtuoi.com &nbsp;·&nbsp; 037 242 8181 &nbsp;·&nbsp; annong@hethongtuoi.com</div>
+</div>`;
+
+  document.getElementById('preview').innerHTML=html;
+  document.title=getBGDocTitle();
+}
+
+
+// ── GENERATE BG-TC (Thi công Lắp đặt) ──────────────────
+function generateBGTC(){
+  const ha   = parseFloat(document.getElementById('dtHa').value)||7;
+  const cay  = document.getElementById('cayTrong').value||'Cà phê';
+  const dhn  = document.getElementById('diaHinhNote').value||'Địa hình bằng';
+  const base = getTcBase();
+  const adj  = parseInt(document.getElementById('tcDiaTeVal').value||0)
+             + parseInt(document.getElementById('tcSinhHoat').value||0);
+  const minFloor = cay==='Cà phê'?10000000:0;
+  const perHa = Math.max(minFloor, base+adj);
+  const tcNoVat = perHa*ha;
+  const vat   = Math.round(tcNoVat*0.1);
+  const tcVat = tcNoVat+vat;
+
+  // Lộ trình thanh toán
+  const tu = Math.round(tcVat*0.3);
+  const con= tcVat-tu;
+  const multiDot = tcVat > 100000000; // >100tr → nhiều đợt
+
+  const bgNgay   = document.getElementById('bgNgay').value;
+  const ngayLap  = bgNgay?new Date(bgNgay).toLocaleDateString('vi-VN'):todayVN();
+  const soBg     = document.getElementById('bgSo').value||'BG-TC-';
+  const nguoiLap = document.getElementById('nguoiLap').value||'—';
+  const khTen    = (document.getElementById('khTen').value||'—').toUpperCase();
+  const khSdt    = document.getElementById('khSdt').value||'Chưa cung cấp';
+  const khDC     = document.getElementById('khDiaChi').value||'—';
+  const npt      = document.getElementById('tcNguoiPhuTrach')?.value||'—';
+  const tgian    = document.getElementById('tcThoiGian')?.value||'Thoả thuận theo tiến độ';
+  const gstB     = document.getElementById('tcGiamSatB')?.value||'—';
+
+  const html=`
+<div class="page">
+  ${headerHTML('',ngayLap,nguoiLap)}
+  <div class="ttl">
+    <h1>Báo Giá Thi Công Lắp Đặt</h1>
+    <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
+    <div style="font-size:12px;color:#888;margin-top:2px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
+  </div>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
+  <table class="t-info">
+    <tr><td>Khách hàng (Bên B)</td><td><strong>${khTen}</strong></td></tr>
+    <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
+    <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
+    <tr><td>Diện tích thi công</td><td><strong>${ha} hecta (ha)</strong></td></tr>
+    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Địa hình</td><td>${dhn}</td></tr>
+    <tr><td>Dự trù thời gian</td><td>${tgian}</td></tr>
+    <tr><td>Người phụ trách (An Nông)</td><td>${npt}</td></tr>
+    <tr><td>Giám sát / Đại diện bên B</td><td>${gstB}</td></tr>
+  </table>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Cơ Sở Tính Phí Thi Công</div></div>
+  <div class="est-card">
+    <div class="est-card-ttl">Đơn giá thi công — ${ha}ha ${cay}</div>
+    <table class="est-tbl">
+      <tr><td>Đơn giá base theo loại cây & mật độ</td><td>${fmtFull(base)}/ha</td></tr>
+      ${adj>0?`<tr><td>Phụ phí địa hình & điều kiện sinh hoạt</td><td>+${fmtFull(adj)}/ha</td></tr>`:''}
+      ${minFloor>0&&base+adj<minFloor?`<tr><td style="color:#E65100;">Áp dụng sàn tối thiểu cà phê</td><td style="color:#E65100;">${fmtFull(minFloor)}/ha</td></tr>`:''}
+      <tr class="tot"><td>Đơn giá áp dụng</td><td>${fmtFull(perHa)}/ha</td></tr>
+      <tr class="tot"><td>Tổng phí thi công ${ha}ha (chưa VAT)</td><td>${fmtFull(tcNoVat)}</td></tr>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Hạng Mục Thi Công & Đơn Giá</div></div>
+  <table class="t-svc">
+    <thead><tr>
+      <th style="width:4%">STT</th>
+      <th class="left">Hạng mục công việc</th>
+      <th style="width:8%">ĐVT</th>
+      <th style="width:6%">KL</th>
+      <th style="width:14%">Đơn giá (đ)</th>
+      <th style="width:14%">Thành tiền (đ)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="c">1</td>
+        <td><div class="sn">Hàn / kết nối ống chính HDPE</div>
+        <div class="sd">Thi công tuyến ống HDPE theo thiết kế, bao gồm hàn nhiệt, phụ kiện tê, cút, côn.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r" colspan="2" style="font-style:italic;color:#555;">Tính gộp trong đơn giá/ha</td></tr>
+      <tr><td class="c">2</td>
+        <td><div class="sn">Lắp đặt bộ van chia ca tưới</div>
+        <div class="sd">Van bi, van bướm, đồng hồ áp, van xả khí theo thiết kế phân ca.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r" colspan="2" style="font-style:italic;color:#555;">Tính gộp trong đơn giá/ha</td></tr>
+      <tr><td class="c">3</td>
+        <td><div class="sn">Rải ống nhánh LDPE & lắp béc tưới</div>
+        <div class="sd">Rải ống LDPE/PE theo hàng cây, lắp béc/đầu nhỏ giọt, khởi thủy, đai siết theo mật độ thiết kế.</div></td>
+        <td class="c">ha</td><td class="c">${ha}</td>
+        <td class="r">${fmtFull(perHa)}</td><td class="r">${fmtFull(tcNoVat)}</td></tr>
+      <tr><td class="c">4</td>
+        <td><div class="sn">Lắp đặt trạm bơm / bộ lọc / tủ điện</div>
+        <div class="sd">Lắp máy bơm, rọ bơm, bộ lọc đĩa/lưới, tủ điện, đấu nối điện và đường ống đầu vào.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r" colspan="2" style="font-style:italic;color:#555;">Tính gộp trong đơn giá/ha</td></tr>
+      <tr><td class="c">5</td>
+        <td><div class="sn">Chạy thử, xả cặn & bịt đầu cuối</div>
+        <div class="sd">Chạy thử máy bơm, xả cặn đường ống, bịt đầu cuối ống chính và ống nhánh, kiểm tra rò rỉ.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r" colspan="2" style="font-style:italic;color:#555;">Tính gộp trong đơn giá/ha</td></tr>
+      <tr><td class="c">6</td>
+        <td><div class="sn">Nghiệm thu, hướng dẫn vận hành & bàn giao</div>
+        <div class="sd">Kiểm tra toàn hệ thống (béc, ca tưới, máy bơm), nghiệm thu theo lô, hướng dẫn vận hành, ký xác nhận.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r" colspan="2" style="font-style:italic;color:#555;">Tính gộp trong đơn giá/ha</td></tr>
+    </tbody>
+    <tfoot>
+      <tr class="sub-row"><td colspan="5">TỔNG PHÍ THI CÔNG (chưa VAT)</td><td>${fmtFull(tcNoVat)}</td></tr>
+      <tr class="vat-row"><td colspan="5">Thuế VAT (10%)</td><td>${fmtFull(vat)}</td></tr>
+      <tr class="grand-row"><td colspan="4">TỔNG THANH TOÁN (đã VAT)</td><td colspan="2">${fmtFull(tcVat)} đ</td></tr>
+      <tr><td colspan="6" style="background:#F9FBE7;padding:6px 8px;font-size:11px;color:#555;font-style:italic;">
+        Bằng chữ: <strong>${numToWords(tcVat)} đồng chẵn</strong></td></tr>
+    </tfoot>
+  </table>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">IV. Lộ Trình Thanh Toán</div></div>
+  <table class="t-pay">
+    <thead><tr>
+      <th class="left">Đợt</th><th class="left">Nội dung</th>
+      <th style="width:10%">Tỷ lệ</th><th style="width:20%">Số tiền (đ)</th>
+      <th class="left">Thời điểm</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="c">1</td>
+        <td>Tạm ứng thi công</td>
+        <td class="c">30%</td>
+        <td class="r"><strong>${fmtFull(tu)}</strong></td>
+        <td>Sau khi ký hợp đồng thi công (HD-TC)</td>
+      </tr>
+      ${multiDot?`
+      <tr>
+        <td class="c">2</td>
+        <td>Thanh toán theo tiến độ</td>
+        <td class="c">—</td>
+        <td class="r"><strong>Theo thực tế</strong></td>
+        <td>Căn cứ tiến độ thi công thực tế, tối đa nợ 100.000.000 đ</td>
+      </tr>
+      <tr>
+        <td class="c">3</td>
+        <td>Thanh toán quyết toán</td>
+        <td class="c">—</td>
+        <td class="r"><strong>Phần còn lại</strong></td>
+        <td>Sau khi nghiệm thu & ký biên bản bàn giao</td>
+      </tr>`:`
+      <tr>
+        <td class="c">2</td>
+        <td>Thanh toán còn lại</td>
+        <td class="c">70%</td>
+        <td class="r"><strong>${fmtFull(con)}</strong></td>
+        <td>Sau khi nghiệm thu & ký biên bản bàn giao</td>
+      </tr>`}
+    </tbody>
+  </table>
+  <p style="font-size:11px;color:#777;margin:4px 0 10px;font-style:italic;">* Tối đa không để nợ quá 100.000.000 đồng tại bất kỳ thời điểm nào trong quá trình thi công.</p>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">V. Điều Khoản Chung</div></div>
+  <table class="t-terms">
+    <tr><td>Phạm vi thi công</td><td>Theo bản vẽ thiết kế và bảng dự toán vật tư đã được hai bên xác nhận.</td></tr>
+    <tr><td>Vật tư</td><td>An Nông Agritech cung cấp toàn bộ vật tư. Thay đổi khối lượng sẽ điều chỉnh theo phụ lục.</td></tr>
+    <tr><td>Bảo hành</td><td>12 tháng kể từ ngày nghiệm thu. Lỗi lắp đặt An Nông chịu; lỗi do tác động bên ngoài không áp dụng.</td></tr>
+    <tr><td>Điều kiện phát sinh</td><td>Khối lượng phát sinh ngoài thiết kế sẽ lập phụ lục bổ sung trước khi thực hiện.</td></tr>
+    <tr><td>Hiệu lực báo giá</td><td>7 ngày kể từ ngày lập. Giá có thể thay đổi theo thực tế phát sinh.</td></tr>
+  </table>
+
+  <div class="sig-area" style="grid-template-columns:1fr 1fr;margin-top:14px;">
+    <div class="sig-col">
+      <div class="sig-ttl">KHÁCH HÀNG (BÊN B)</div>
+      <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+      <div style="font-size:10.5px;color:#777;margin-top:2px;">Giám sát / Đại diện: ${gstB}</div>
+      <div class="sig-name">${khTen}</div>
+    </div>
+    <div class="sig-col">
+      <div class="sig-ttl">AN NÔNG AGRITECH (BÊN A)</div>
+      <div class="sig-sub">(Ký, đóng dấu)</div>
+      <div style="font-size:10.5px;color:#777;margin-top:2px;">Người phụ trách: ${npt}</div>
+      <div class="sig-name">${CO.gd}</div>
+    </div>
+  </div>
+  <div class="footer"><span>CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</span> &nbsp;·&nbsp; hethongtuoi.com &nbsp;·&nbsp; 037 242 8181</div>
+</div>`;
+
+  document.getElementById('preview').innerHTML=html;
+  document.title=getBGDocTitle();
+}
+
+// ── GENERATE BG-HDKT (Hướng dẫn / Giám sát KT) ─────────
+function generateBGHDKT(){
+  const ha      = parseFloat(document.getElementById('dtHa').value)||7;
+  const cay     = document.getElementById('cayTrong').value||'Cà phê';
+  const khDC    = document.getElementById('khDiaChi').value||'—';
+  const bgNgay  = document.getElementById('bgNgay').value;
+  const ngayLap = bgNgay?new Date(bgNgay).toLocaleDateString('vi-VN'):todayVN();
+  const soBg    = document.getElementById('bgSo').value||'BG-HDKT-';
+  const nguoiLap= document.getElementById('nguoiLap').value||'—';
+  const khTen   = (document.getElementById('khTen').value||'—').toUpperCase();
+  const khSdt   = document.getElementById('khSdt').value||'Chưa cung cấp';
+  const ngay    = parseInt(document.getElementById('hdktNgay')?.value)||2;
+  const donGia  = parseInt(document.getElementById('hdktDonGia')?.value)||2000000;
+  const hdktNoVat = ngay*donGia;
+  const vat     = Math.round(hdktNoVat*0.1);
+  const hdktVat = hdktNoVat+vat;
+  const zone    = parseInt(document.getElementById('hdktZone')?.value)||100;
+  const dk      = document.getElementById('hdktDkSH')?.value||'1';
+  const zoneLabel=zone>=999?(document.getElementById('hdktZoneKhacText')?.value||'Khu vực khác')
+    :{100:'Trong tỉnh Gia Lai',200:'150–200km (Kon Tum, Đắk Lắk...)',
+      300:'250–300km (Đắk Nông)',400:'300–400km (Lâm Đồng, Bình Phước...)'}[zone]||'';
+  const dkLabel = dk==='1'?'Có chỗ ở + điện nước':'Không có chỗ ở, điện nước';
+  const phuPhiVal = document.getElementById('phuPhiLao')?.value||'0';
+  const diLaiSoTien = phuPhiVal==='2'?(parseFloat(document.getElementById('diLaiSoTien')?.value)||0):0;
+  const tongNoVat = hdktNoVat+diLaiSoTien;
+  const tongVat   = Math.round(tongNoVat*0.1);
+  const tongCong  = tongNoVat+tongVat;
+  const diLaiRow  = phuPhiVal!=='0'?`
+    <tr><td class="c">2</td>
+      <td><div class="sn">Chi phí đi lại</div>
+      <div class="sd">${phuPhiVal==='2'?'Đã thoả thuận.':'Báo riêng theo chuyến, xác nhận trước khi thực hiện.'}</div></td>
+      <td class="c">Chuyến</td><td class="c">1</td>
+      <td class="r">${diLaiSoTien>0?fmtFull(diLaiSoTien):'Báo riêng'}</td>
+      <td class="r">${diLaiSoTien>0?fmtFull(diLaiSoTien):'Báo riêng'}</td></tr>`:'';
+
+  const html=`
+<div class="page">
+  ${headerHTML('',ngayLap,nguoiLap)}
+  <div class="ttl">
+    <h1>Báo Giá Hướng Dẫn Kỹ Thuật</h1>
+    <h2>GIÁM SÁT THI CÔNG HỆ THỐNG TƯỚI</h2>
+    <div style="font-size:12px;color:#888;margin-top:2px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
+  </div>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
+  <table class="t-info">
+    <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
+    <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
+    <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
+    <tr><td>Diện tích</td><td>${ha} hecta — ${cay}</td></tr>
+    <tr><td>Khu vực</td><td>${zoneLabel}</td></tr>
+    <tr><td>Điều kiện sinh hoạt</td><td>${dkLabel}</td></tr>
+    <tr><td>Số ngày làm việc</td><td>${ngay} ngày (2 người: 1 KTV chính + 1 phụ)</td></tr>
+  </table>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Hạng Mục Dịch Vụ & Đơn Giá</div></div>
+  <table class="t-svc">
+    <thead><tr>
+      <th style="width:4%">STT</th><th class="left">Hạng mục</th>
+      <th style="width:8%">ĐVT</th><th style="width:6%">SL</th>
+      <th style="width:15%">Đơn giá (đ)</th><th style="width:15%">Thành tiền (đ)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="c">1</td>
+        <td><div class="sn">Hướng dẫn kỹ thuật / Giám sát thi công</div>
+        <div class="sd">2 người (1 KTV chính + 1 phụ). Khu vực: ${zoneLabel}, ${dkLabel}. Bao gồm: hướng dẫn hàn ống HDPE, lắp béc, lắp trạm bơm, chạy thử, giám sát tiến độ.</div></td>
+        <td class="c">Ngày</td><td class="c">${ngay}</td>
+        <td class="r">${fmt(donGia)}/2ng</td><td class="r">${fmtFull(hdktNoVat)}</td></tr>
+      ${diLaiRow}
+    </tbody>
+    <tfoot>
+      <tr class="sub-row"><td colspan="5">TỔNG PHÍ DỊCH VỤ (chưa VAT)</td><td>${fmtFull(tongNoVat)}</td></tr>
+      <tr class="vat-row"><td colspan="5">Thuế VAT (10%)</td><td>${fmtFull(tongVat)}</td></tr>
+      <tr class="grand-row"><td colspan="4">TỔNG THANH TOÁN (đã VAT)</td><td colspan="2">${fmtFull(tongCong)} đ</td></tr>
+      <tr><td colspan="6" style="background:#F9FBE7;padding:6px 8px;font-size:11px;color:#555;font-style:italic;">
+        Bằng chữ: <strong>${numToWords(tongCong)} đồng chẵn</strong></td></tr>
+    </tfoot>
+  </table>
+
+  ${phuPhiVal==='1'?'<div class="notice">⚠ Chi phí đi lại báo riêng theo chuyến — xác nhận trước khi thực hiện.</div>':''}
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Điều Khoản</div></div>
+  <table class="t-terms">
+    <tr><td>Thanh toán</td><td>100% trước hoặc ngay sau khi hoàn thành dịch vụ.</td></tr>
+    <tr><td>Bảo hành</td><td>Không áp dụng cho dịch vụ HDKT. Hỗ trợ kỹ thuật qua điện thoại sau bàn giao.</td></tr>
+    <tr><td>Hiệu lực BG</td><td>7 ngày kể từ ngày lập.</td></tr>
+  </table>
+
+  <div class="sig-area" style="grid-template-columns:1fr 1fr;margin-top:14px;">
+    <div class="sig-col">
+      <div class="sig-ttl">KHÁCH HÀNG</div>
+      <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+      <div class="sig-name">${khTen}</div>
+    </div>
+    <div class="sig-col">
+      <div class="sig-ttl">AN NÔNG AGRITECH</div>
+      <div class="sig-sub">(Ký, đóng dấu)</div>
+      <div class="sig-name">${CO.gd}</div>
+    </div>
+  </div>
+  <div class="footer"><span>CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</span> &nbsp;·&nbsp; hethongtuoi.com &nbsp;·&nbsp; 037 242 8181</div>
 </div>`;
 
   document.getElementById('preview').innerHTML=html;
