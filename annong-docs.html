@@ -3009,6 +3009,30 @@ function fillFromLark() {
 
   document.getElementById('larkStatus').textContent = `✅ Đã điền từ: ${p.ten}`;
 }
+
+// ── SCROLL-AWARE QUICK ACTION BUTTONS (mobile only) ────
+(function(){
+  let lastY=0,ticking=false;
+  function isMobile(){return window.innerWidth<=500;}
+  function getScrollY(){
+    return isMobile()?window.scrollY:(document.querySelector('.panel')?.scrollTop||0);
+  }
+  function onScroll(){
+    const btn=document.querySelector('.btn-sticky');
+    if(!btn){ticking=false;return;}
+    if(!isMobile()){btn.classList.remove('scrolled-down');ticking=false;return;}
+    const y=getScrollY();
+    if(y>lastY+8) btn.classList.add('scrolled-down');
+    else if(y<lastY-5) btn.classList.remove('scrolled-down');
+    lastY=y;ticking=false;
+  }
+  function scheduleUpdate(){if(!ticking){requestAnimationFrame(onScroll);ticking=true;}}
+  window.addEventListener('scroll',scheduleUpdate,{passive:true});
+  document.querySelector('.panel')?.addEventListener('scroll',scheduleUpdate,{passive:true});
+  window.addEventListener('resize',()=>{
+    if(!isMobile()) document.querySelector('.btn-sticky')?.classList.remove('scrolled-down');
+  });
+})();
 </script>
 </body>
 </html>
