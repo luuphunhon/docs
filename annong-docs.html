@@ -10,7 +10,9 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
 /* ── FORM PANEL ── */
 .panel{width:380px;height:100vh;background:#1B5E20;position:fixed;left:0;top:0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:20px 18px 20px;color:#fff;}
-.btn-sticky{margin-top:10px;} /* desktop: bình thường, không sticky */
+.btn-sticky{margin-top:10px;transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);}
+.btn-sticky.scrolled-down{opacity:0;pointer-events:none;transform:translateY(8px);}
+/* desktop: bình thường, không sticky */
 .panel h2{font-size:14px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:16px;color:#A5D6A7;}
 .panel h3{font-size:11.5px;text-transform:uppercase;color:#81C784;letter-spacing:.4px;margin:16px 0 8px;border-top:1px solid #2E7D32;padding-top:12px;}
 .field{margin-bottom:10px;}
@@ -61,9 +63,9 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
 /* HEADER */
 .hdr{display:grid;grid-template-columns:1fr auto;gap:0;align-items:start;padding-bottom:10px;border-bottom:2.5px solid #2E7D32;margin-bottom:14px;}
-.hdr-co{font-size:13px;font-weight:700;color:#1B5E20;margin-bottom:4px;}
-.hdr-addr{font-size:11px;color:#555;margin-bottom:2px;}
-.hdr-contact{font-size:11px;color:#444;margin-top:3px;line-height:1.7;}
+.hdr-co{font-size:14px;font-weight:700;color:#1B5E20;margin-bottom:5px;}
+.hdr-addr{font-size:10.5px;color:#555;margin-bottom:0;line-height:1.5;}
+.hdr-contact{font-size:10.5px;color:#444;margin-top:1px;line-height:1.5;}
 .hdr-boxes{display:flex;}
 .hdr-box{border:1px solid #C8E6C9;border-radius:4px;padding:7px 11px;background:#F9FBE7;text-align:center;min-width:95px;}
 .hdr-box+.hdr-box{border-left:none;border-radius:0 4px 4px 0;}
@@ -180,7 +182,8 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   .preview{margin-left:0;padding:10px;}
   .page{width:100%;}
   /* Chỉ mobile mới sticky */
-  .btn-sticky{position:fixed;bottom:0;left:0;right:0;background:#1B5E20;padding:8px 16px 12px;box-shadow:0 -2px 8px rgba(0,0,0,.3);z-index:100;}
+  .btn-sticky{position:fixed;bottom:0;left:0;right:0;background:#1B5E20;padding:8px 16px 12px;box-shadow:0 -2px 8px rgba(0,0,0,.3);z-index:100;transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);}
+  .btn-sticky.scrolled-down{opacity:0;pointer-events:none;transform:translateY(100%);}
 }
 @page{margin:10mm 12mm;size:A4;}
 @media print{
@@ -233,6 +236,15 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="cs-item" data-v="bg-vattu" data-code="BG-VT" onclick="csSelect(this)">
         <span class="cs-item-code">BG-VT</span><span class="cs-item-name">Báo giá Vật tư</span>
       </div>
+      <div class="cs-item" data-v="bg-tk" data-code="BG-TK" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-TK</span><span class="cs-item-name">Báo giá Khảo sát &amp; Thiết kế</span>
+      </div>
+      <div class="cs-item" data-v="bg-tc" data-code="BG-TC" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-TC</span><span class="cs-item-name">Báo giá Thi công Lắp đặt</span>
+      </div>
+      <div class="cs-item" data-v="bg-hdkt" data-code="BG-HDKT" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-HDKT</span><span class="cs-item-name">Báo giá Hướng dẫn / Giám sát KT</span>
+      </div>
       <div class="cs-group-hdr">Hợp đồng</div>
       <div class="cs-item" data-v="hdvt" data-code="HD-VT" onclick="csSelect(this)">
         <span class="cs-item-code">HD-VT</span><span class="cs-item-name">Cung Cấp Vật Tư</span>
@@ -242,6 +254,12 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       </div>
       <div class="cs-item" data-v="hdtc" data-code="HD-TC" onclick="csSelect(this)">
         <span class="cs-item-code">HD-TC</span><span class="cs-item-name">Thi Công Lắp Đặt</span>
+      </div>
+      <div class="cs-item" data-v="hdbt" data-code="HD-BT" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-BT</span><span class="cs-item-name">Bảo Trì Hệ Thống</span>
+      </div>
+      <div class="cs-item" data-v="hdbt" data-code="HD-BT" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-BT</span><span class="cs-item-name">Bảo Trì Hệ Thống</span>
       </div>
       <div class="cs-group-hdr">Khảo sát &amp; Nghiệm thu</div>
       <div class="cs-item" data-v="pks" data-code="PKS" onclick="csSelect(this)">
@@ -269,12 +287,12 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   <input type="hidden" id="docType" value="bg-dichvu">
 
   <h3>Thông tin dự án</h3>
-  <div class="field"><label>Số báo giá</label><input id="bgSo" value="BG-KS-TK-" placeholder="BG-KS-TK-YYYYMMDD-001"></div>
+  <div class="field"><label>Số báo giá</label><input id="bgSo" value="BG-KS-TK-" placeholder="YYYYMMDD-1/BG-KS-TK/AN"></div>
   <div class="field"><label>Ngày lập</label><input type="date" id="bgNgay"></div>
   <div class="field"><label>Người lập báo giá</label><input id="nguoiLap" placeholder="Họ tên nhân viên" value=""></div>
   <div class="field"><label>Khách hàng</label><input id="khTen" placeholder="Họ tên / Công ty" oninput="autoSlug()"></div>
   <div class="field"><label>Số điện thoại</label><input id="khSdt" placeholder="0xx xxx xxxx"></div>
-  <div class="field"><label>Địa chỉ vườn</label><input id="khDiaChi" placeholder="Xã/Huyện/Tỉnh"></div>
+  <div class="field"><label>Địa chỉ</label><input id="khDiaChi" placeholder="Xã/Huyện/Tỉnh" oninput="autoSlug()"></div>
 
   <!-- Extra fields cho non-BG types -->
   <div id="extraKhPanel" style="display:none">
@@ -303,7 +321,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <div class="field">
     <label>Slug dự án <span style="color:#A5D6A7;font-size:10px">— tên file PDF khi in</span></label>
-    <input id="duAnSlug" placeholder="hoang-anh-50ha" oninput="this._manual=true" title="Ngắn gọn, không dấu, gạch ngang. VD: hoang-anh-50ha">
+    <input type="hidden" id="duAnSlug" value="">
   </div>
   <div class="field"><label>Trạng thái</label>
     <select id="trangThai">
@@ -313,9 +331,9 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     </select>
   </div>
   <div class="row2">
-    <div class="field"><label>Diện tích (ha)</label><input type="number" id="dtHa" value="7" min="1" step="0.5"></div>
+    <div class="field"><label>Diện tích (ha)</label><input type="number" id="dtHa" value="7" min="1" step="0.5" oninput="autoSlug()"></div>
     <div class="field"><label>Loại cây</label>
-      <select id="cayTrong">
+      <select id="cayTrong" onchange="autoSlug()">
         <option value="Cà phê">Cà phê</option>
         <option value="Sầu riêng">Sầu riêng</option>
         <option value="Ca cao">Ca cao</option>
@@ -443,25 +461,53 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     </select>
   </div>
   <div id="hdktPanel" style="display:none;">
+    <div class="field">
+      <label>Khu vực dự án</label>
+      <select id="hdktZone" onchange="calcHdktRate()">
+        <option value="100">Trong tỉnh Gia Lai — dưới 100km</option>
+        <option value="200">150–200km — Kon Tum, Đắk Lắk, Bình Định, Phú Yên</option>
+        <option value="300">250–300km — Đắk Nông</option>
+        <option value="400">300–400km — Lâm Đồng, Bình Phước, Đồng Nai...</option>
+        <option value="999">Khu vực khác / Lào / Campuchia / Xa hơn 500km</option>
+      </select>
+      <div id="hdktZoneKhacRow" style="display:none;margin-top:6px;">
+        <input id="hdktZoneKhacText" placeholder="Nhập tên khu vực cụ thể..." style="width:100%;padding:7px 9px;border:1px solid #2E7D32;border-radius:4px;background:#0A3D0A;color:#fff;font-size:12.5px;">
+      </div>
+    </div>
+    <div class="field">
+      <label>Điều kiện ăn ở sinh hoạt tại công trình</label>
+      <select id="hdktDkSH" onchange="calcHdktRate()">
+        <option value="1">Có chỗ ở + điện nước sinh hoạt</option>
+        <option value="0">Không có — tăng thêm 500.000đ/ngày</option>
+      </select>
+    </div>
     <div class="row2">
-      <div class="field"><label>Số ngày KTV chính</label><input type="number" id="hdktNgay" value="2" min="1"></div>
-      <div class="field"><label>Số ngày phụ tá</label><input type="number" id="hdktPhuTa" value="0" min="0"></div>
+      <div class="field"><label>Số ngày</label><input type="number" id="hdktNgay" value="2" min="1" oninput="calcAll()"></div>
+      <div class="field"><label>Đơn giá / 2 người / ngày (đ)</label><input type="number" id="hdktDonGia" value="2000000" step="500000" oninput="this._userEdited=true;calcAll()"></div>
     </div>
     <div class="calc-result" id="calcHdkt">
-      <div class="lbl">Phí HDKT ước tính</div>
+      <div class="lbl">Phí HDKT <span style="font-weight:400;color:#81C784;font-size:10px;">(2 người: 1 chính + 1 phụ)</span></div>
       <div class="val" id="calcHdktVal">—</div>
-      <div class="sub">2.000.000đ/ngày KTV + 500.000đ/ngày phụ tá</div>
+      <div class="sub" id="calcHdktSub">—</div>
+    </div>
+    <!-- Chi phí đi lại — gộp thay thế 2 trường cũ -->
+    <div class="field" style="margin-top:8px;">
+      <label>Chi phí đi lại</label>
+      <select id="phuPhiLao" onchange="toggleDiLaiSoTien()">
+        <option value="0">Không tính — tự bỏ phí đi lại</option>
+        <option value="1">Báo riêng theo chuyến (ghi vào phụ lục)</option>
+        <option value="2">Số tiền cụ thể (đã thoả thuận)</option>
+      </select>
+    </div>
+    <div id="diLaiSoTienRow" style="display:none;">
+      <div class="field"><label>Số tiền đi lại (đ)</label>
+        <input type="number" id="diLaiSoTien" value="0" step="500000" oninput="calcAll()" placeholder="0">
+      </div>
     </div>
   </div>
 
   <h3>Điều khoản</h3>
-  <div class="field"><label>Phụ phí đi lại xa (ngoài tỉnh / nước ngoài)</label>
-    <select id="phuPhiLao">
-      <option value="0">Không có</option>
-      <option value="1">Có — báo riêng theo phụ lục trước khi đi</option>
-    </select>
-  </div>
-  </div><!-- /bgDVPanel -->
+    </div><!-- /bgDVPanel -->
 
   <!-- ── PHIẾU KHẢO SÁT ── -->
   <div id="pksFields" style="display:none">
@@ -793,6 +839,47 @@ function numToWords(n){
 }
 
 // ── LIVE CALC ──
+// Bảng đơn giá HDKT theo khu vực (2 người/ngày)
+const HDKT_RATES={
+  100:{co:2000000,khong:2500000},
+  200:{co:2500000,khong:3000000},
+  300:{co:3500000,khong:4000000},
+  400:{co:4500000,khong:5000000},
+  999:{co:4000000,khong:5000000}
+};
+function toggleDiLaiSoTien(){
+  const v=document.getElementById('phuPhiLao')?.value||'0';
+  document.getElementById('diLaiSoTienRow').style.display=v==='2'?'block':'none';
+  calcAll();
+}
+function autoSetDiLai(zone){
+  const sel=document.getElementById('phuPhiLao');
+  if(!sel) return;
+  if(zone>100 && sel.value==='0') sel.value='1';
+  else if(zone<=100 && sel.value==='1') sel.value='0';
+  toggleDiLaiSoTien();
+}
+function calcHdktRate(){
+  const zone=parseInt(document.getElementById('hdktZone')?.value)||100;
+  const dk=document.getElementById('hdktDkSH')?.value||'1';
+  const isKhac=zone>=999;
+  const khacRow=document.getElementById('hdktZoneKhacRow');
+  if(khacRow) khacRow.style.display=isKhac?'block':'none';
+  const el=document.getElementById('hdktDonGia');
+  if(el){
+    const rate=HDKT_RATES[zone]||{co:4000000,khong:5000000};
+    el.value=dk==='1'?rate.co:rate.khong;
+  }
+  autoSetDiLai(zone);
+  calcAll();
+}
+function doPrint(){
+  const t=getBGDocTitle();
+  document.title=t;
+  const titleEl=document.querySelector('title');
+  if(titleEl)titleEl.textContent=t;
+  setTimeout(()=>window.print(),80);
+}
 function calcAll(){
   const ha=parseFloat(document.getElementById('dtHa').value)||7;
   const vtDg=parseFloat(document.getElementById('vtDonGia').value)||70000000;
@@ -830,9 +917,16 @@ function calcAll(){
   document.getElementById('hdktPanel').style.display=hdktCo?'block':'none';
   if(hdktCo){
     const ngay=parseInt(document.getElementById('hdktNgay').value)||2;
-    const phuTa=parseInt(document.getElementById('hdktPhuTa').value)||0;
-    const total=ngay*2000000+phuTa*500000;
+    const donGia=parseInt(document.getElementById('hdktDonGia')?.value)||2000000;
+    const total=ngay*donGia;
+    const zone=parseInt(document.getElementById('hdktZone')?.value)||100;
     document.getElementById('calcHdktVal').textContent=fmtFull(total);
+    const minNgayNote=(zone>100&&ngay<2)?' · ⚠ Nên ở lại ≥ 2 ngày khi ngoài tỉnh':'';
+    document.getElementById('calcHdktSub').textContent=
+      ngay+' ngày × '+fmtFull(donGia)+'/2 người'+minNgayNote;
+    const dlv=document.getElementById('phuPhiLao')?.value||'0';
+    const dlRow=document.getElementById('diLaiSoTienRow');
+    if(dlRow) dlRow.style.display=dlv==='2'?'block':'none';
   }
 }
 
@@ -1212,8 +1306,7 @@ function generateVatTu(){
     <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
     <tr><td>Điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ</td><td>${khDC}</td></tr>
-    <tr><td>Người lập BG</td><td>${nguoiLap}</td></tr>
-  </table>
+      </table>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Danh Mục Vật Tư</div></div>
   <table class="t-vt">
@@ -1282,7 +1375,10 @@ function generateVatTu(){
 function generate(){
   const loaiBG=document.getElementById('docType')?.value||'bg-dichvu';
   if(loaiBG==='bg-vattu'){generateVatTu();return;}
-  if(['pgh','tu','tt','hdvt','hdtk','hdtc','pks','bbnt','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
+  if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
+  if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
+  if(loaiBG==='bg-hdkt'){generateBGHDKT();pmAutoSave();return;}
+  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
 
   const ha=parseFloat(document.getElementById('dtHa').value)||7;
   const vtDg=parseFloat(document.getElementById('vtDonGia').value)||70000000;
@@ -1309,7 +1405,7 @@ function generate(){
   const dhn=document.getElementById('diaHinhNote').value||'Chưa cung cấp';
   const soKs=document.getElementById('ksSoKs').value;
   const phuPhiKs=parseFloat(document.getElementById('ksPhuPhi').value)||0;
-  const phuPhiLao=document.getElementById('phuPhiLao').value==='1';
+  const phuPhiLaoVal=document.getElementById('phuPhiLao')?.value||'0';const phuPhiLao=phuPhiLaoVal!=='0';const diLaiSoTien=phuPhiLaoVal==='2'?(parseFloat(document.getElementById('diLaiSoTien')?.value)||0):0;
 
   const tcCo=document.getElementById('tcCo').value==='1';
   let tcPerHa=0,tcTotal=0,tcRow='';
@@ -1332,22 +1428,29 @@ function generate(){
   let hdktTotal=0,hdktRow='';
   if(hdktCo){
     const ngay=parseInt(document.getElementById('hdktNgay').value)||2;
-    const phuTa=parseInt(document.getElementById('hdktPhuTa').value)||0;
-    hdktTotal=ngay*2000000+phuTa*500000;
+    const donGia=parseInt(document.getElementById('hdktDonGia')?.value)||2000000;
+    hdktTotal=ngay*donGia;
+    const zone=parseInt(document.getElementById('hdktZone')?.value)||100;
+    const dk=document.getElementById('hdktDkSH')?.value||'1';
+    const zoneLabel=zone>=999?(document.getElementById('hdktZoneKhacText')?.value||'Khu vực khác'):{100:'Trong tỉnh Gia Lai',200:'150–200km (Kon Tum, Đắk Lắk...)',300:'250–300km (Đắk Nông)',400:'300–400km (Lâm Đồng, Bình Phước...)'}[zone]||'';
+    const dkLabel=dk==='1'?'có chỗ ở + điện nước sinh hoạt':'không có chỗ ở, điện nước';
+    const phuPhiLaoValHDKT=document.getElementById('phuPhiLao')?.value||'0';
+    const diLaiNote=(zone>100&&phuPhiLaoValHDKT!=='0')?' Chưa bao gồm chi phí đi lại (báo riêng theo chuyến).':'';
     hdktRow=`<tr class="opt">
       <td class="c" style="color:#2E7D32;font-weight:700;">+</td>
-      <td><div class="opt-lbl">Tuỳ chọn — Hướng dẫn kỹ thuật / Giám sát</div>
-      <div class="sd">KTV chính: ${ngay} ngày × 2.000.000đ${phuTa?'; Phụ tá: '+phuTa+' ngày × 500.000đ':''}. Bao gồm: lắp trạm bơm, bộ lọc, cụm van; hướng dẫn hàn ống HDPE; giám sát tiến độ.</div></td>
-      <td class="c">Ngày</td><td class="c">${ngay+(phuTa?'+'+phuTa:'')} </td>
-      <td class="r">2.000.000 / 500.000</td><td class="r">${fmtFull(hdktTotal)}</td></tr>`;
+      <td><div class="opt-lbl">Tuỳ chọn — Hướng dẫn kỹ thuật / Giám sát thi công</div>
+      <div class="sd">2 người (1 KTV chính + 1 phụ) × ${ngay} ngày. Khu vực: ${zoneLabel}, ${dkLabel}.${diLaiNote}</div></td>
+      <td class="c">Ngày</td><td class="c">${ngay}</td>
+      <td class="r">${fmt(donGia)}/2ng</td><td class="r">${fmtFull(hdktTotal)}</td></tr>`;
   }
 
   const phuPhiRow=phuPhiLao?`<tr class="opt">
     <td class="c" style="color:#7986CB;font-weight:700;">+</td>
-    <td><div class="opt-lbl">Phụ phí — Đi lại / Hỗ trợ trực tiếp tại công trình</div>
-    <div class="sd">Di chuyển, ăn ở, xe địa phương, phiên dịch/thủ tục (nếu có). Báo riêng trước khi thực hiện.</div></td>
-    <td class="c">Chuyến</td><td class="c">—</td><td class="r" style="color:#888;font-style:italic;">Báo riêng</td><td class="r" style="color:#888;font-style:italic;">Báo riêng</td></tr>`:'';
-
+    <td><div class="opt-lbl">Chi phí đi lại</div>
+    <div class="sd">Di chuyển, xe, ăn ở ngoài công trình.${diLaiSoTien>0?' Đã thoả thuận: '+fmtFull(diLaiSoTien)+'.':' Báo riêng theo chuyến, xác nhận trước khi đi.'}</div></td>
+    <td class="c">Chuyến</td><td class="c">—</td>
+    <td class="r" style="${diLaiSoTien>0?'':'color:#888;font-style:italic;'}">${diLaiSoTien>0?fmtFull(diLaiSoTien):'Báo riêng'}</td>
+    <td class="r" style="${diLaiSoTien>0?'':'color:#888;font-style:italic;'}">${diLaiSoTien>0?fmtFull(diLaiSoTien):'Báo riêng'}</td></tr>`:'';
   const psRow=phuPhiLao?`<tr class="ps"><td class="c">PS</td><td>Phụ phí đi lại nếu phát sinh chuyến khảo sát/hỗ trợ trực tiếp</td><td class="c">—</td><td class="r">Báo riêng</td><td>Xác nhận trước khi đi</td></tr>`:'';
 
   const html=`
@@ -1384,7 +1487,7 @@ function generate(){
   <table class="t-info">
     <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
-    <tr><td>Địa chỉ vườn</td><td>${khDC}</td></tr>
+    <tr><td>Địa chỉ</td><td>${khDC}</td></tr>
     <tr><td>Diện tích</td><td>${ha} hecta (ha)</td></tr>
     <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
     <tr><td>Địa hình</td><td>${dhn}</td></tr>
@@ -1760,8 +1863,9 @@ document.addEventListener('DOMContentLoaded',()=>{
     const today=new Date().toISOString().split('T')[0];
     document.getElementById('bgNgay').value=today;
     const d=today.replace(/-/g,'');
-    document.getElementById('bgSo').value='BG-KS-TK-'+d+'-001';
+    document.getElementById('bgSo').value=d+'-1/BG-KS-TK/AN';
     updateTcPanel();calcAll();onDocTypeChange();
+autoSlug();
   }
   // Live calc listeners
   document.querySelectorAll('input,select').forEach(el=>{
@@ -1769,6 +1873,7 @@ document.addEventListener('DOMContentLoaded',()=>{
     el.addEventListener('input',()=>{updateTcPanel();calcAll();});
   });
   pmRefreshSelect();
+  autoSlug();
 
   // Enter → cập nhật file in (áp dụng toàn bộ input trong panel)
   document.querySelector('.panel').addEventListener('keydown',e=>{
@@ -1825,21 +1930,42 @@ function toSlug(str){
 }
 function autoSlug(){
   const el=document.getElementById('duAnSlug');
-  if(!el||el._manual)return;
+  if(!el)return;
+  const docType=document.getElementById('docType')?.value||'bg-dichvu';
   const ten=document.getElementById('khTen')?.value||'';
   const ha=document.getElementById('dtHa')?.value||'';
-  const base=toSlug(ten).split('-').filter(Boolean).slice(-3).join('-');
-  el.value=ha?base+'-'+ha+'ha':base;
+  const cay=document.getElementById('cayTrong')?.value||'';
+  const dc=document.getElementById('khDiaChi')?.value||'';
+  const dcParts=dc.split(',');
+  const diaDiem=dcParts[dcParts.length-1]?.trim()||'';
+  let loaiDV='';
+  if(docType==='bg-dichvu') loaiDV='bao-gia-dv-ks-tk';
+  else if(docType==='bg-vattu') loaiDV='bao-gia-vat-tu';
+  else if(docType==='bg-tk') loaiDV='bao-gia-ks-tk';
+  else if(docType==='bg-tc') loaiDV='bao-gia-thi-cong';
+  else if(docType==='bg-hdkt') loaiDV='bao-gia-hdkt';
+  const parts=[
+    loaiDV,
+    ha?ha+'ha':'',
+    toSlug(cay),
+    toSlug(ten),
+    toSlug(diaDiem)
+  ].filter(Boolean);
+  el.value=parts.join('-');
 }
-const LOAI_MAP_ALL={'bg-dichvu':'BG','bg-vattu':'BG','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','ncc':'PDH'};
+const LOAI_MAP_ALL={'bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-hdkt':'BG-HDKT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','ncc':'PDH'};
 
 function getBGDocTitle(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
   const loai=LOAI_MAP_ALL[type]||'TL';
+  autoSlug();
   const slug=document.getElementById('duAnSlug')?.value||'du-an';
-  const v=document.getElementById('trangThai')?.value||'ban-nhap';
-  const tt=v==='gui'?'gui-'+(document.getElementById('bgNgay')?.value||'').replace(/-/g,''):v;
-  return `${loai}_${slug}_${tt}`;
+  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(type);
+  if(isBG){
+    const v=document.getElementById('trangThai')?.value||'ban-nhap';
+    return `${loai}_${slug}_${v}`;
+  }
+  return `${loai}_${slug}`;
 }
 // ──────────────────────────────────────────────────────────
 
@@ -1847,7 +1973,7 @@ function hasUnsavedData(){
   const hasItems=vtItems.some(r=>r.type==='item'&&(r.ten||+r.donGia>0||+r.sl>1));
   const khTen=(document.getElementById('khTen')?.value||'').trim();
   const loai=document.getElementById('docType')?.value||'bg-dichvu';
-  return hasItems||(['bg-dichvu','bg-vattu'].includes(loai)&&khTen.length>0);
+  return hasItems||(['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(loai)&&khTen.length>0);
 }
 
 // ══════════════════════════════════════════════════════
@@ -2109,19 +2235,22 @@ const CO={
 const LOGO_SRC='assets/logo-an-nong.png';
 function _logoImg(h=44){return `<img src="${LOGO_SRC}" style="height:${h}px;width:auto;object-fit:contain;flex-shrink:0;" onerror="this.style.display='none'">`;}
 
-function headerHTML(soTL,ngay){
-  const soStr=soTL?`<div class="bl">Số</div><div class="bv">${soTL}</div>`:'';
-  const ngayStr=ngay?`<div class="bl">Ngày</div><div class="bv">${ngay}</div>`:'';
+function headerHTML(soTL,ngay,npt){
+  const _npt=npt||document.getElementById('nguoiLap')?.value||'';
   return `<div class="hdr">
-    <div style="display:flex;gap:10px;align-items:flex-start;">
-      ${_logoImg(48)}
+    <div style="display:flex;gap:10px;align-items:center;">
+      ${_logoImg(66)}
       <div>
         <div class="hdr-co">${CO.ten}</div>
-        <div class="hdr-addr">MST: ${CO.mst} &nbsp;|&nbsp; ${CO.dc}</div>
-        <div class="hdr-contact">ĐT: ${CO.dt} &nbsp;·&nbsp; Email: ${CO.email} &nbsp;·&nbsp; Web: ${CO.web}</div>
+        <div class="hdr-addr">${CO.dc}</div>
+        <div class="hdr-contact">MST: ${CO.mst} &nbsp;|&nbsp; ĐT: ${CO.dt}</div>
+        <div class="hdr-contact">Email: ${CO.email} &nbsp;|&nbsp; Website: ${CO.web}</div>
       </div>
     </div>
-    <div class="hdr-boxes">${soStr?`<div class="hdr-box">${soStr}</div>`:''}${ngayStr?`<div class="hdr-box">${ngayStr}</div>`:''}</div>
+    ${(ngay||_npt)?`<div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:160px;line-height:1.9;">
+      ${ngay?`<div><span style="color:#888;">Ngày lập:</span> <strong style="color:#1B5E20;">${ngay}</strong></div>`:''}
+      ${_npt?`<div><span style="color:#888;">Người lập:</span> <strong style="color:#1B5E20;">${_npt}</strong></div>`:''}
+    </div>`:''}
   </div>`;
 }
 
@@ -2154,10 +2283,10 @@ function autoSoTL(){
   const dd=String(d.getDate()).padStart(2,'0');
   const mm=String(d.getMonth()+1).padStart(2,'0');
   const yyyy=d.getFullYear();
-  const map={pgh:`${dd}${mm}${yyyy}/PXK-ANA`,tt:`${dd}${mm}${yyyy}/TT-ANA`,tu:`${dd}${mm}${yyyy}/TU-ANA`,hdvt:`${dd}${mm}${yyyy}/HĐMB/${yyyy}`};
+  const map={pgh:`${dd}${mm}${yyyy}/PXK-ANA`,tt:`${dd}${mm}${yyyy}/TT-ANA`,tu:`${dd}${mm}${yyyy}/TU-ANA`,hdvt:`${yyyy}${mm}${dd}-1/HĐMB/AN`,hdtk:`${yyyy}${mm}${dd}-1/HD-TK/AN`,hdtc:`${yyyy}${mm}${dd}-1/HD-TC/AN`};
   let candidate=map[type]||`${dd}${mm}${yyyy}/TL-ANA`;
   let seq=1;
-  while(usedNums.has(candidate)){seq++;candidate=`${dd}${mm}${yyyy}-${String(seq).padStart(2,'0')}/${(map[type]||'TL-ANA').split('/')[1]}`;}
+  while(usedNums.has(candidate)){seq++;candidate=`${yyyy}${mm}${dd}-${seq}/${(map[type]||'TL-ANA').split('/')[1]}`;}
   usedNums.add(candidate);
   const el=document.getElementById('soTL');if(el)el.value=candidate;
   if(type==='hdvt'){const h=document.getElementById('soHD');if(h&&!h.value)h.value=candidate;}
@@ -2174,7 +2303,7 @@ function toggleKhLoai(){
 // ── ON DOC TYPE CHANGE ──────────────────────────────────
 function onDocTypeChange(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
-  const isBG=type==='bg-dichvu'||type==='bg-vattu';
+  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(type);
   const isVT=type==='bg-vattu';
 
   // BG panels
@@ -2200,8 +2329,8 @@ function onDocTypeChange(){
   if(isBG){
     const soEl=document.getElementById('bgSo');
     if(soEl){
-      if(isVT) soEl.value=soEl.value.replace('BG-KS-TK-','BG-VT-');
-      else soEl.value=soEl.value.replace('BG-VT-','BG-KS-TK-');
+      if(isVT) soEl.value=soEl.value.replace('/BG-KS-TK/','/BG-VT/');
+      else soEl.value=soEl.value.replace('/BG-VT/','/BG-KS-TK/');
     }
     if(isVT&&!vtItems.length){
       ['BÉC TƯỚI VÀ PHỤ KIỆN','ỐNG DẪN NƯỚC','PHỤ KIỆN ĐƯỜNG ỐNG','TRẠM LỌC','PHỤ KIỆN TRẠM BƠM','MÁY BƠM & TỦ ĐIỆN']
@@ -2336,7 +2465,7 @@ function genHDVT(d){
   const ghiChu=document.getElementById('hdGhiChu')?.value||'';
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HĐMB/${p[2]}`;}
-  return `<div class="page">${headerHTML()}
+  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:17px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
       <div class="sub">(V/v: ${moTa})</div><div class="sub">Số: ${soHD}</div></div>
@@ -2619,7 +2748,7 @@ function genHDTC(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HD-TC/${p[2]}`;}
   const moTa=`Thi công lắp đặt hệ thống tưới${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
 
-  return `<div class="page">${headerHTML()}
+  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl">
       <h1 style="font-size:16px;">Hợp Đồng Thi Công Lắp Đặt</h1>
@@ -2758,7 +2887,7 @@ function genHDTK(d){
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/${hdMa}/${p[2]}`;}
   const moTa=`${loaiTen}${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
-  return `<div class="page">${headerHTML()}
+  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Khảo Sát Thiết Kế</h1>
       <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${loaiTen})</div>
