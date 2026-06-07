@@ -1599,6 +1599,183 @@ function generate(){
 }
 
 // ══════════════════════════════════════════════════════
+// BG-TK — BÁO GIÁ KHẢO SÁT & THIẾT KẾ (chỉ phí KS-TK)
+// ══════════════════════════════════════════════════════
+function generateBGTK(){
+  const ha    = parseFloat(document.getElementById('dtHa').value)||7;
+  const vtDg  = parseFloat(document.getElementById('vtDonGia').value)||70000000;
+  const soTram= parseInt(document.getElementById('vtSoTram').value)||1;
+  const bomPT = parseFloat(document.getElementById('vtBomPerTram').value)||120000000;
+  const coTram= document.getElementById('coTramBom').value==='1';
+  const vtBom = coTram ? soTram*bomPT : 0;
+  const vtTotal = ha*vtDg + vtBom;
+  const phiNoVat = roundFee(vtTotal*0.05);
+  const vat      = roundFee(phiNoVat*0.1);
+  const phiVat   = phiNoVat + vat;
+  const dot1     = roundFee(phiVat*0.5);
+  const dot2     = phiVat - dot1;
+
+  const bgNgay  = document.getElementById('bgNgay').value;
+  const ngayLap = bgNgay ? new Date(bgNgay).toLocaleDateString('vi-VN') : todayVN();
+  const hieuLuc = bgNgay ? addDays(bgNgay,7) : addDays(new Date().toISOString().split('T')[0],7);
+  const soBg    = document.getElementById('bgSo').value || 'BG-KS-TK-';
+  const nguoiLap= document.getElementById('nguoiLap').value || '—';
+  const khTen   = document.getElementById('khTen').value || '—';
+  const khSdt   = document.getElementById('khSdt').value || 'Chưa cung cấp';
+  const khDC    = document.getElementById('khDiaChi').value || '—';
+  const cay     = document.getElementById('cayTrong').value;
+  const dhn     = document.getElementById('diaHinhNote').value || '—';
+  const soKs    = document.getElementById('ksSoKs').value;
+
+  // Tỷ lệ phân bổ nội bộ (giống BG-DV)
+  const ksAmt  = Math.round(phiNoVat*0.31);
+  const tkAmt  = Math.round(phiNoVat*0.55);
+  const bocAmt = Math.round(phiNoVat*0.14);
+  const ksDg   = Math.round(ksAmt/parseInt(soKs));
+
+  const html=`
+<div class="page">
+  <div class="hdr">
+    <div style="display:flex;gap:10px;align-items:center;">
+      ${_logoImg(66)}
+      <div>
+        <div class="hdr-co">CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</div>
+        <div class="hdr-addr">885 Võ Nguyên Giáp, Phường Hội Phú, Tỉnh Gia Lai</div>
+        <div class="hdr-contact">MST: 5901236472 &nbsp;|&nbsp; ĐT: 037 242 8181 | 082 444 8181</div>
+        <div class="hdr-contact">Email: annong@hethongtuoi.com &nbsp;|&nbsp; Website: hethongtuoi.com</div>
+      </div>
+    </div>
+    <div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:160px;line-height:1.9;">
+      <div><span style="color:#888;">Ngày lập:</span> <strong style="color:#1B5E20;">${ngayLap}</strong></div>
+      ${nguoiLap&&nguoiLap!=='—'?`<div><span style="color:#888;">Người lập:</span> <strong style="color:#1B5E20;">${nguoiLap}</strong></div>`:''}
+    </div>
+  </div>
+
+  <div class="ttl">
+    <h1>Báo Giá Khảo Sát &amp; Thiết Kế</h1>
+    <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
+    <div style="font-size:12px;color:#888;margin-top:2px;letter-spacing:.3px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
+  </div>
+
+  <!-- I. THÔNG TIN DỰ ÁN -->
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
+  <table class="t-info">
+    <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
+    <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
+    <tr><td>Địa chỉ</td><td>${khDC}</td></tr>
+    <tr><td>Diện tích</td><td>${ha} hecta (ha)</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Địa hình</td><td>${dhn}</td></tr>
+  </table>
+
+  <!-- II. CƠ SỞ TÍNH PHÍ -->
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Cơ Sở Tính Phí Khảo Sát &amp; Thiết Kế</div></div>
+  <div class="est-card">
+    <div class="est-card-ttl">Ước tính ngân sách vật tư — ${ha}ha ${cay}</div>
+    <table class="est-tbl">
+      <tr><td>Định mức vật tư tham khảo (dự án >10ha)</td><td>60.000.000 – 80.000.000 đ/ha</td></tr>
+      <tr><td>Đơn giá áp dụng ước tính</td><td>${fmtFull(vtDg)}/ha</td></tr>
+      <tr><td>Gói vật tư hệ thống tưới ${ha}ha &nbsp;(${ha} × ${fmtFull(vtDg)})</td><td>${fmtFull(ha*vtDg)}</td></tr>
+      ${coTram
+        ? `<tr><td>Trạm bơm + hệ thống lọc (${soTram} trạm × ${fmtFull(bomPT)}/trạm)</td><td>${fmtFull(vtBom)}</td></tr>`
+        : `<tr><td style="color:#888;font-style:italic;">Trạm bơm &amp; lọc</td><td style="color:#888;font-style:italic;">Khách đã có sẵn</td></tr>`}
+      <tr class="tot"><td>Tổng vật tư ước tính</td><td>${fmtFull(vtTotal)}</td></tr>
+      <tr class="tot"><td>Phí dịch vụ Khảo sát – Tư vấn – Thiết kế (5% × tổng vật tư)</td><td>${fmtFull(phiNoVat)}</td></tr>
+    </table>
+  </div>
+  <div style="font-size:11px;color:#888;margin:4px 0 8px;font-style:italic;">
+    * Phí chính thức xác nhận theo dự toán vật tư thực tế sau khi khảo sát hoàn thành.
+    Dự toán chi tiết theo từng hạng mục sẽ được lập sau khi hoàn thành thiết kế.
+  </div>
+
+  <!-- III. HẠNG MỤC DỊCH VỤ -->
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Hạng Mục Dịch Vụ &amp; Đơn Giá</div></div>
+  <table class="t-svc">
+    <thead><tr>
+      <th style="width:5%;">STT</th><th class="left">Hạng mục dịch vụ</th>
+      <th style="width:9%;">Đơn vị</th><th style="width:5%;">SL</th>
+      <th style="width:16%;">Đơn giá (VND)</th><th style="width:16%;">Thành tiền (VND)</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="c">1</td>
+        <td><div class="sn">Khảo sát thực địa &amp; Tư vấn giải pháp kỹ thuật</div>
+        <div class="sd">Thu thập dữ liệu ranh giới vườn (KMZ/KML), hiện trạng địa hình, nguồn nước, vị trí hồ chứa/trạm bơm; quay video tổng quan; tư vấn phương án hệ thống tưới phù hợp với mô hình canh tác. Bao gồm chi phí di chuyển và ăn ở đội kỹ thuật.</div></td>
+        <td class="c">Chuyến</td><td class="c">${soKs}</td>
+        <td class="r">${fmtFull(ksDg)}</td>
+        <td class="r">${fmtFull(ksAmt)}</td></tr>
+      <tr><td class="c">2</td>
+        <td><div class="sn">Thiết kế hệ thống tưới</div>
+        <div class="sd">Bản vẽ quy hoạch tổng thể: ranh giới vườn, phân khu/lô tưới theo ca, tuyến ống chính/nhánh, vị trí van; bản vẽ 3D trạm bơm. Tính toán thuỷ lực ca tưới, đường kính ống, công suất bơm. Bản vẽ thi công đủ để triển khai độc lập.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r">${fmtFull(tkAmt)}</td>
+        <td class="r">${fmtFull(tkAmt)}</td></tr>
+      <tr><td class="c">3</td>
+        <td><div class="sn">Bóc tách &amp; lập dự toán vật tư</div>
+        <div class="sd">Danh mục vật tư chi tiết: chủng loại, chất liệu, quy cách, khối lượng. Bảng dự toán cung cấp vật tư (file Excel). Cơ sở để lập báo giá vật tư chính thức.</div></td>
+        <td class="c">Trọn gói</td><td class="c">1</td>
+        <td class="r">${fmtFull(bocAmt)}</td>
+        <td class="r">${fmtFull(bocAmt)}</td></tr>
+    </tbody>
+    <tfoot>
+      <tr class="sub-row"><td colspan="5">TỔNG PHÍ DỊCH VỤ KS–TV–TK (chưa VAT) &nbsp;— 5% × ${fmtFull(vtTotal)}</td><td>${fmtFull(phiNoVat)}</td></tr>
+      <tr class="vat-row"><td colspan="5">Thuế VAT (10%)</td><td>${fmtFull(vat)}</td></tr>
+      <tr class="grand-row"><td colspan="5">TỔNG THANH TOÁN (đã VAT 10%)</td><td>${fmtFull(phiVat)}</td></tr>
+      <tr><td colspan="6" style="background:#F9FBE7;padding:6px 8px;font-size:11px;color:#555;border:1px solid #D7EDD9;font-style:italic;">
+        Bằng chữ: <strong>${numToWords(phiVat)} đồng chẵn</strong> (đã bao gồm VAT 10%)</td></tr>
+    </tfoot>
+  </table>
+
+  <!-- IV. LỘ TRÌNH THANH TOÁN -->
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">IV. Lộ Trình Thanh Toán</div></div>
+  <table class="t-pay">
+    <thead><tr>
+      <th style="width:7%;">Đợt</th><th class="left" style="width:33%;">Nội dung</th>
+      <th style="width:9%;">Tỷ lệ</th><th style="width:20%;">Số tiền (VND)</th>
+      <th style="width:31%;">Thời điểm</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="c"><strong>1</strong></td>
+        <td>Đặt cọc — ký Hợp đồng Khảo sát &amp; Thiết kế</td>
+        <td class="c">50%</td><td class="r">${fmtFull(dot1)}</td>
+        <td>Sau khi hai bên ký Hợp đồng Dịch vụ</td></tr>
+      <tr><td class="c"><strong>2</strong></td>
+        <td>Thanh toán khi bàn giao hồ sơ thiết kế &amp; dự toán vật tư hoàn chỉnh</td>
+        <td class="c">50%</td><td class="r">${fmtFull(dot2)}</td>
+        <td>Trước/Ngay khi nhận bàn giao hồ sơ đầy đủ</td></tr>
+    </tbody>
+  </table>
+  <div style="font-size:11px;color:#777;margin-top:4px;font-style:italic;">* 50% = ${fmtFull(dot1)} đồng/đợt</div>
+
+  <!-- V. HỒ SƠ BÀN GIAO & ĐIỀU KHOẢN -->
+  <div style="page-break-inside:avoid;break-inside:avoid;">
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">V. Hồ Sơ Bàn Giao &amp; Điều Khoản</div></div>
+    <table class="t-terms">
+      <tr><td>Bàn giao khi 100%</td><td>KMZ/KML ranh giới vườn; bản vẽ PDF hệ thống tưới (tổng thể + chi tiết thi công); bản vẽ 3D trạm bơm; dự toán vật tư Excel chi tiết; thuyết minh dự án PDF; họp trình bày phương án. <strong>Toàn bộ hồ sơ chỉ bàn giao sau khi thanh toán đủ 100%.</strong></td></tr>
+      <tr><td>Bàn giao khi 50%</td><td>Phương án sơ bộ: loại ống, đầu tưới dự kiến, đường kính ống chính, công suất bơm, số ca tưới, diện tích/ca, dung tích hồ chứa. <strong>Không bàn giao bản vẽ chi tiết và thuyết minh.</strong></td></tr>
+      <tr><td>Thời gian thực hiện</td><td>10–15 ngày làm việc kể từ khi xác nhận đủ thông tin và thanh toán đợt 1.</td></tr>
+      <tr><td>Hiệu lực báo giá</td><td>7 ngày kể từ ngày lập — hết hiệu lực ngày <strong>${hieuLuc}</strong>. Sau ngày này đơn giá có thể thay đổi.</td></tr>
+      <tr><td>Điều chỉnh phương án</td><td>Tối đa <strong>3 lần điều chỉnh miễn phí</strong> trong phạm vi thiết kế đã ký kết. Từ lần thứ 4 trở đi phụ thu theo thoả thuận.</td></tr>
+      <tr><td>Điều chỉnh phí</td><td>Phí chính thức tính theo dự toán vật tư thực tế (5% × tổng vật tư chốt). Nếu quy mô thực tế lớn hơn phạm vi ban đầu, phí được tính lại theo quy mô thực tế và thông báo trước khi thực hiện phần phát sinh.</td></tr>
+      <tr><td>Bảo mật dữ liệu</td><td>Toàn bộ hồ sơ kỹ thuật, bản vẽ, dự toán và thông tin dự án được bảo mật; không chia sẻ với bên thứ ba khi chưa thanh toán đủ 100%.</td></tr>
+    </table>
+
+    <!-- VI. XÁC NHẬN & KÝ KẾT -->
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">VI. Xác Nhận &amp; Ký Kết</div></div>
+    <p style="font-size:12px;color:#555;margin-bottom:12px;line-height:1.7;">Sau khi xác nhận báo giá, hai bên ký kết <strong>Hợp đồng Dịch vụ Khảo sát – Thiết kế hệ thống tưới (HD-TK)</strong> trước khi tiến hành công việc chính thức.</p>
+    <div class="sig-area">
+      <div class="sig-col"><div class="sig-ttl">KHÁCH HÀNG</div><div class="sig-sub">(Ký, ghi rõ họ tên)</div></div>
+      <div class="sig-col"><div class="sig-ttl">AN NÔNG AGRITECH</div><div class="sig-sub">(Ký, đóng dấu)</div></div>
+    </div>
+  </div>
+
+  <div class="footer"><span>CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</span> &nbsp;·&nbsp; hethongtuoi.com &nbsp;·&nbsp; 037 242 8181 &nbsp;·&nbsp; annong@hethongtuoi.com</div>
+</div>`;
+
+  document.getElementById('preview').innerHTML=html;
+  document.title=getBGDocTitle();
+}
+
+// ══════════════════════════════════════════════════════
 // NHẬP FILE EXCEL
 // ══════════════════════════════════════════════════════
 function parseTaxRate(raw){
