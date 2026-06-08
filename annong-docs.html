@@ -2939,11 +2939,11 @@ function toggleKhLoai(){
 // ── ON DOC TYPE CHANGE ──────────────────────────────────
 function onDocTypeChange(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
-  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);const isDA=type==='da';
+  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);
+  const isDA=type==='da';
   const isVT=type==='bg-vattu';
 
   // BG panels
-  const isDA=type==='da';
   document.getElementById('bgSo').closest('.field').style.display=(isBG&&!isDA)?'':'none';
   document.getElementById('bgDVPanel').style.display=type==='bg-dichvu'?'':'none';
   document.getElementById('vtModePanel').style.display=isVT?'block':'none';
