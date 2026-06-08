@@ -1846,12 +1846,15 @@ function generate(){
     </table>
   </div>
   <div style="margin:5px 0 8px;font-size:11px;line-height:2;">
-    <span style="color:#2E7D32;font-weight:700;">Gói vật tư hệ thống tưới bao gồm các hạng mục chính:</span><br>
-    <span style="background:#E8F5E9;border:1px solid #C8E6C9;border-radius:3px;padding:2px 8px;margin:2px 3px 2px 0;display:inline-block;">🌱 Béc tưới &amp; phụ kiện</span>
-    <span style="background:#E8F5E9;border:1px solid #C8E6C9;border-radius:3px;padding:2px 8px;margin:2px 3px 2px 0;display:inline-block;">💧 Ống dẫn nước</span>
-    <span style="background:#E8F5E9;border:1px solid #C8E6C9;border-radius:3px;padding:2px 8px;margin:2px 3px 2px 0;display:inline-block;">🔧 Phụ kiện HDPE</span>
-    ${coTramBom?`<span style="background:#E8F5E9;border:1px solid #C8E6C9;border-radius:3px;padding:2px 8px;margin:2px 3px 2px 0;display:inline-block;">⚙️ Trạm lọc</span>
-    <span style="background:#FFF8E1;border:1px solid #FFE082;border-radius:3px;padding:2px 8px;margin:2px 0;display:inline-block;">⚡ Trạm bơm &amp; điện</span>`:''}
+    <div style="font-size:11px;font-weight:600;color:#2E7D32;margin-bottom:6px;">Gói vật tư hệ thống tưới bao gồm các hạng mục chính:</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;">
+      <div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Béc tưới & phụ kiện</div>
+      <div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Ống dẫn nước</div>
+      <div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Phụ kiện đường ống</div>
+      ${coTramBom?`<div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Trạm lọc</div>
+      <div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Trạm bơm</div>
+      <div style="border:1px solid #C8E6C9;border-radius:3px;padding:5px 8px;font-size:11px;font-weight:600;color:#1B5E20;background:#F9FBE7;text-align:center;">Tủ điện & điều khiển</div>`:''}
+    </div>
     <br><span style="color:#888;font-size:10.5px;font-style:italic;">* Dự toán vật tư chi tiết theo từng hạng mục sẽ được lập sau khi hoàn thành khảo sát và thiết kế.</span>
   </div>
   ${phuPhiLao?`<div class="notice">Phụ phí đi lại nếu có: tính thêm theo thực tế, báo riêng bằng phụ lục trước khi thực hiện.</div>`:''}
