@@ -151,6 +151,18 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .footer span{color:#2E7D32;font-weight:500;}
 
 .kh-collapsed{display:none!important;}
+.crm-section{background:#0A2D0A;border:1px solid #2E7D32;border-radius:5px;margin-bottom:8px;overflow:hidden;}
+.crm-section-hdr{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;cursor:pointer;user-select:none;}
+.crm-section-hdr span{font-size:11px;font-weight:700;color:#81C784;text-transform:uppercase;letter-spacing:.4px;}
+.crm-section-hdr .crm-arrow{font-size:10px;color:#4a7a4a;transition:transform .2s;}
+.crm-section-hdr.open .crm-arrow{transform:rotate(180deg);}
+.crm-section-body{padding:8px 10px;display:none;}
+.crm-section-body.open{display:block;}
+.crm-field{margin-bottom:8px;}
+.crm-field label{display:block;font-size:10.5px;color:#C8E6C9;margin-bottom:3px;}
+.crm-field select,.crm-field input,.crm-field textarea{width:100%;padding:6px 8px;border:1px solid #2E7D32;border-radius:4px;background:#062806;color:#fff;font-size:12px;}
+.crm-field textarea{resize:vertical;min-height:44px;}
+.risk-low{color:#81C784;}.risk-mid{color:#FFE082;}.risk-high{color:#EF9A9A;}
 .kh-toggle-open{background:#1a5c1a!important;border-color:#81C784!important;}
 .kh-toggle-open::before{content:"▼ ";}
 /* ── VATTU TABLE ── */
@@ -352,6 +364,146 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <input id="daNguoiPhuTrach" placeholder="Họ tên — Chức vụ"></div>
     <div class="field"><label>Ghi chú nội bộ</label>
       <textarea id="daGhiChu" placeholder="Ghi chú về dự án, yêu cầu đặc biệt, rủi ro..."></textarea>
+    </div>
+
+    <!-- ── HỒ SƠ KHÁCH HÀNG (CRM) ── -->
+    <div style="margin-top:12px;border-top:1px solid #2E7D32;padding-top:10px;">
+      <div style="font-size:11px;font-weight:700;color:#A5D6A7;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;">📋 Hồ sơ Khách hàng (CRM)</div>
+      <div class="crm-field"><label>Mã KH (khớp WIKI AN)</label>
+        <input id="crmMaKH" placeholder="vd: pham-hoang-anh" oninput="this.value=this.value.toLowerCase().replace(/[^a-z0-9-]/g,'-')"></div>
+
+      <div class="crm-section">
+        <div class="crm-section-hdr" onclick="crmToggle(this)">
+          <span>1. Nhân khẩu học</span><span class="crm-arrow">▾</span>
+        </div>
+        <div class="crm-section-body">
+          <div class="crm-field"><label>Loại khách hàng</label>
+            <select id="crmLoaiKH">
+              <option value="">— Chọn —</option>
+              <option value="Thuần nông">Thuần nông</option>
+              <option value="Công chức / Viên chức">Công chức / Viên chức</option>
+              <option value="Buôn bán / Kinh doanh nhỏ">Buôn bán / Kinh doanh nhỏ</option>
+              <option value="Doanh nghiệp">Doanh nghiệp</option>
+              <option value="Đối tác tiềm năng">Đối tác tiềm năng</option>
+            </select></div>
+          <div class="row2">
+            <div class="crm-field"><label>Giới tính</label>
+              <select id="crmGioiTinh">
+                <option value="">—</option>
+                <option value="Nam">Nam</option>
+                <option value="Nữ">Nữ</option>
+              </select></div>
+            <div class="crm-field"><label>Độ tuổi</label>
+              <select id="crmDoTuoi">
+                <option value="">—</option>
+                <option value="Dưới 30">Dưới 30</option>
+                <option value="30–45">30–45</option>
+                <option value="45–60">45–60</option>
+                <option value="Trên 60">Trên 60</option>
+              </select></div>
+          </div>
+          <div class="crm-field"><label>Nơi sống</label>
+            <input id="crmNoiSong" placeholder="Huyện / Tỉnh"></div>
+          <div class="crm-field"><label>Nghề nghiệp</label>
+            <input id="crmNgheNghiep" placeholder="Cụ thể công việc đang làm"></div>
+        </div>
+      </div>
+
+      <div class="crm-section">
+        <div class="crm-section-hdr" onclick="crmToggle(this)">
+          <span>2. Tài chính & Pháp lý</span><span class="crm-arrow">▾</span>
+        </div>
+        <div class="crm-section-body">
+          <div class="crm-field"><label>Tình hình tài chính</label>
+            <select id="crmTaiChinh">
+              <option value="">—</option>
+              <option value="Tốt — có sẵn vốn">Tốt — có sẵn vốn</option>
+              <option value="Trung bình — cần xoay vốn">Trung bình — cần xoay vốn</option>
+              <option value="Hạn hẹp — cần hỗ trợ thanh toán">Hạn hẹp — cần hỗ trợ thanh toán</option>
+            </select></div>
+          <div class="crm-field"><label>Nợ xấu / Nợ quá hạn</label>
+            <select id="crmNoXau">
+              <option value="Không có">Không có</option>
+              <option value="Nghi ngờ — cần xác minh">Nghi ngờ — cần xác minh</option>
+              <option value="Có — cần cẩn thận">Có — cần cẩn thận</option>
+            </select></div>
+          <div class="crm-field"><label>Pháp lý đất đai</label>
+            <select id="crmPhapLy">
+              <option value="Sổ đỏ / Sổ hồng đầy đủ">Sổ đỏ / Sổ hồng đầy đủ</option>
+              <option value="Đang làm thủ tục">Đang làm thủ tục</option>
+              <option value="Đang tranh chấp">Đang tranh chấp</option>
+              <option value="Chưa rõ">Chưa rõ</option>
+            </select></div>
+        </div>
+      </div>
+
+      <div class="crm-section">
+        <div class="crm-section-hdr" onclick="crmToggle(this)">
+          <span>3. Hành vi & Tính cách</span><span class="crm-arrow">▾</span>
+        </div>
+        <div class="crm-section-body">
+          <div class="crm-field"><label>Phong cách ra quyết định</label>
+            <select id="crmQuyetDinh">
+              <option value="">—</option>
+              <option value="Nhanh — quyết ngay">Nhanh — quyết ngay</option>
+              <option value="Cẩn thận — so sánh nhiều nơi">Cẩn thận — so sánh nhiều nơi</option>
+              <option value="Cần thuyết phục — phụ thuộc gia đình">Cần thuyết phục — phụ thuộc gia đình</option>
+              <option value="Chần chừ — khó chốt">Chần chừ — khó chốt</option>
+            </select></div>
+          <div class="crm-field"><label>Mức độ am hiểu kỹ thuật</label>
+            <select id="crmKyThuat">
+              <option value="">—</option>
+              <option value="Am hiểu — tự vận hành được">Am hiểu — tự vận hành được</option>
+              <option value="Cơ bản — cần hướng dẫn ban đầu">Cơ bản — cần hướng dẫn ban đầu</option>
+              <option value="Yếu — cần hỗ trợ liên tục">Yếu — cần hỗ trợ liên tục</option>
+            </select></div>
+          <div class="crm-field"><label>Kênh liên hệ ưa thích</label>
+            <select id="crmKenhLH">
+              <option value="">—</option>
+              <option value="Zalo">Zalo</option>
+              <option value="Điện thoại trực tiếp">Điện thoại trực tiếp</option>
+              <option value="Gặp mặt">Gặp mặt</option>
+              <option value="Facebook">Facebook</option>
+            </select></div>
+          <div class="crm-field"><label>Ghi chú tính cách</label>
+            <textarea id="crmTinhCach" placeholder="Mô tả thêm về tính cách, cách làm việc, điểm cần lưu ý..."></textarea></div>
+        </div>
+      </div>
+
+      <div class="crm-section">
+        <div class="crm-section-hdr" onclick="crmToggle(this)">
+          <span>4. Tiềm năng bán thêm</span><span class="crm-arrow">▾</span>
+        </div>
+        <div class="crm-section-body">
+          <div class="crm-field"><label>Nhu cầu mở rộng</label>
+            <select id="crmMoRong">
+              <option value="">—</option>
+              <option value="Có — đang có kế hoạch">Có — đang có kế hoạch</option>
+              <option value="Có thể — phụ thuộc hiệu quả vụ đầu">Có thể — phụ thuộc hiệu quả vụ đầu</option>
+              <option value="Không — quy mô cố định">Không — quy mô cố định</option>
+            </select></div>
+          <div class="crm-field"><label>Tiềm năng bán thêm</label>
+            <input id="crmBanThem" placeholder="VD: phân bón, bảo trì, mở rộng thêm 3ha..."></div>
+          <div class="crm-field"><label>Nguồn giới thiệu</label>
+            <input id="crmGioiThieu" placeholder="VD: khách cũ Nguyễn Văn A / Facebook / tự tìm đến"></div>
+        </div>
+      </div>
+
+      <div class="crm-section">
+        <div class="crm-section-hdr" onclick="crmToggle(this)">
+          <span>5. Đánh giá rủi ro</span><span class="crm-arrow">▾</span>
+        </div>
+        <div class="crm-section-body">
+          <div class="crm-field"><label>Mức độ rủi ro</label>
+            <select id="crmRuiRo" onchange="updateRiskColor(this)">
+              <option value="Thấp">🟢 Thấp — khách tin cậy, tài chính ổn</option>
+              <option value="Trung bình">🟡 Trung bình — cần theo dõi thanh toán</option>
+              <option value="Cao">🔴 Cao — cẩn thận, hạn chế nợ</option>
+            </select></div>
+          <div class="crm-field"><label>Ghi chú rủi ro nội bộ</label>
+            <textarea id="crmGhiChuRuiRo" placeholder="Ghi lại dấu hiệu rủi ro, lưu ý cho nhân sự tiếp theo..."></textarea></div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -944,6 +1096,19 @@ function setKhMode(isDA){
     btn.classList.remove('kh-toggle-open');
     btn.innerHTML='▶ '+(name||'Thông tin khách hàng')+' <span style="font-weight:400;color:#4a7a4a;">(bấm để chỉnh)</span>';
   }
+}
+
+function crmToggle(hdr){
+  hdr.classList.toggle('open');
+  const body=hdr.nextElementSibling;
+  body.classList.toggle('open');
+}
+function updateRiskColor(sel){
+  const v=sel.value;
+  sel.className=sel.className.replace(/risk-\w+/g,'');
+  if(v==='Thấp') sel.classList.add('risk-low');
+  else if(v==='Trung bình') sel.classList.add('risk-mid');
+  else if(v==='Cao') sel.classList.add('risk-high');
 }
 function toggleDiLaiSoTien(){
   const v=document.getElementById('phuPhiLao')?.value||'0';
@@ -1725,6 +1890,25 @@ function generateDA(){
   const trangThai = document.getElementById('daTrangThai')?.value||'—';
   const phuTrach  = document.getElementById('daNguoiPhuTrach')?.value||'—';
   const ghiChu    = document.getElementById('daGhiChu')?.value||'';
+  const crmMaKH   = document.getElementById('crmMaKH')?.value||'—';
+  const crmLoaiKH = document.getElementById('crmLoaiKH')?.value||'—';
+  const crmGioiTinh=document.getElementById('crmGioiTinh')?.value||'—';
+  const crmDoTuoi = document.getElementById('crmDoTuoi')?.value||'—';
+  const crmNoiSong= document.getElementById('crmNoiSong')?.value||'—';
+  const crmNghiep = document.getElementById('crmNgheNghiep')?.value||'—';
+  const crmTC     = document.getElementById('crmTaiChinh')?.value||'—';
+  const crmNo     = document.getElementById('crmNoXau')?.value||'—';
+  const crmPL     = document.getElementById('crmPhapLy')?.value||'—';
+  const crmQD     = document.getElementById('crmQuyetDinh')?.value||'—';
+  const crmKT     = document.getElementById('crmKyThuat')?.value||'—';
+  const crmKLH    = document.getElementById('crmKenhLH')?.value||'—';
+  const crmTC2    = document.getElementById('crmTinhCach')?.value||'';
+  const crmMR     = document.getElementById('crmMoRong')?.value||'—';
+  const crmBT     = document.getElementById('crmBanThem')?.value||'—';
+  const crmGT     = document.getElementById('crmGioiThieu')?.value||'—';
+  const crmRR     = document.getElementById('crmRuiRo')?.value||'Thấp';
+  const crmRRNote = document.getElementById('crmGhiChuRuiRo')?.value||'';
+  const rrColor   = crmRR==='Cao'?'#c62828':crmRR==='Trung bình'?'#e65100':'#2E7D32';
   const ngayLap= document.getElementById('bgNgay')?.value?new Date(document.getElementById('bgNgay').value).toLocaleDateString('vi-VN'):todayVN();
   const html=`
 <div class="page">
@@ -1750,8 +1934,36 @@ function generateDA(){
   </table>
   ${ghiChu?`<div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Ghi Chú Nội Bộ</div></div>
   <div class="notice" style="color:#1a1a1a;background:#FFF8DC;border-color:#F9A825;">${ghiChu.replace(/\n/g,'<br>')}</div>`:''}
-  <div style="margin-top:16px;padding:10px;background:#E8F5E9;border-radius:5px;font-size:11px;color:#2E7D32;line-height:1.7;">
-    📋 Dùng hồ sơ này làm nguồn thông tin cho tất cả báo giá và hợp đồng. Khi chuyển sang BG-TK, BG-TC, HD-VT... thông tin tự điền, không cần nhập lại.
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Hồ Sơ Khách Hàng (CRM) — Nội Bộ</div></div>
+  <table class="t-info">
+    <tr><td>Mã KH</td><td><strong style="color:#1B5E20;">${crmMaKH}</strong></td></tr>
+    <tr><td>Loại khách</td><td>${crmLoaiKH}</td></tr>
+    <tr><td>Giới tính / Độ tuổi</td><td>${crmGioiTinh} · ${crmDoTuoi}</td></tr>
+    <tr><td>Nơi sống</td><td>${crmNoiSong}</td></tr>
+    <tr><td>Nghề nghiệp</td><td>${crmNghiep}</td></tr>
+  </table>
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">Tài chính & Pháp lý</div></div>
+  <table class="t-info">
+    <tr><td>Tài chính</td><td>${crmTC}</td></tr>
+    <tr><td>Nợ xấu</td><td>${crmNo}</td></tr>
+    <tr><td>Pháp lý đất đai</td><td>${crmPL}</td></tr>
+  </table>
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">Hành vi & Tiềm năng</div></div>
+  <table class="t-info">
+    <tr><td>Ra quyết định</td><td>${crmQD}</td></tr>
+    <tr><td>Kỹ thuật</td><td>${crmKT}</td></tr>
+    <tr><td>Liên hệ qua</td><td>${crmKLH}</td></tr>
+    <tr><td>Mở rộng</td><td>${crmMR}</td></tr>
+    <tr><td>Bán thêm</td><td>${crmBT}</td></tr>
+    <tr><td>Giới thiệu từ</td><td>${crmGT}</td></tr>
+    ${crmTC2?`<tr><td>Tính cách</td><td style="font-style:italic;">${crmTC2}</td></tr>`:''}
+  </table>
+  <div style="margin:10px 0;padding:10px 14px;background:${rrColor}18;border-left:4px solid ${rrColor};border-radius:0 5px 5px 0;">
+    <div style="font-weight:700;color:${rrColor};font-size:12px;">⚠ Rủi ro: ${crmRR}</div>
+    ${crmRRNote?`<div style="font-size:11px;color:#333;margin-top:4px;">${crmRRNote}</div>`:''}
+  </div>
+  <div style="margin-top:10px;padding:8px 10px;background:#E8F5E9;border-radius:5px;font-size:10.5px;color:#2E7D32;">
+    📋 Tài liệu nội bộ — không chia sẻ với khách hàng.
   </div>
 </div>`;
   document.getElementById('preview').innerHTML=html;
@@ -2636,7 +2848,7 @@ function pmCollect(){
     'nccTen','nccSdt','nccDiaChi','nccDuAn','nccNgayGiao','nccNoiNhan','nccGhiChu',
     'dotGiao','bienSo','ngayGiao','ttTong','ttDaTU','ttDot1','ttDot23','ttSoTien','tuLyDo'];
   const vals={};
-  const daExtraFields=['daNguonNuoc','daTrangThai','daNguoiPhuTrach','daGhiChu'];
+  const daExtraFields=['daNguonNuoc','daTrangThai','daNguoiPhuTrach','daGhiChu','crmMaKH','crmLoaiKH','crmGioiTinh','crmDoTuoi','crmNoiSong','crmNgheNghiep','crmTaiChinh','crmNoXau','crmPhapLy','crmQuyetDinh','crmKyThuat','crmKenhLH','crmTinhCach','crmMoRong','crmBanThem','crmGioiThieu','crmRuiRo','crmGhiChuRuiRo'];
   [...fields,...daExtraFields].forEach(f=>{const el=document.getElementById(f);if(el)vals[f]=el.value;});
   return{id:_pmId,name,type,vals,
     vtItems:JSON.parse(JSON.stringify(vtItems)),vtIdCnt,
