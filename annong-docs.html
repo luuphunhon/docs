@@ -1800,7 +1800,8 @@ function generateBGTK(){
 function generateBGTC(){
   const ha   = parseFloat(document.getElementById('dtHa').value)||7;
   const cay  = document.getElementById('cayTrong').value||'Cà phê';
-  const dhn  = document.getElementById('diaHinhNote').value||'Địa hình bằng';
+  const dhn  = document.getElementById('tcDiaHinh')?.options[document.getElementById('tcDiaHinh')?.selectedIndex]?.getAttribute('data-note')||document.getElementById('diaHinhNote').value||'Địa hình bằng, cơ giới vào được';
+  const shNote= document.getElementById('tcSinhHoat')?.value==='1000000'?'Không có chỗ ở / điện / nước':'Có chỗ ở + điện nước sinh hoạt';
   const base = getTcBase();
   const adj  = parseInt(document.getElementById('tcDiaTeVal').value||0)
              + parseInt(document.getElementById('tcSinhHoat').value||0);
@@ -1842,7 +1843,8 @@ function generateBGTC(){
     <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
     <tr><td>Diện tích thi công</td><td><strong>${ha} hecta (ha)</strong></td></tr>
     <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
-    <tr><td>Địa hình</td><td>${dhn}</td></tr>
+    <tr><td>Địa hình / Điều kiện thi công</td><td>${dhn}</td></tr>
+    <tr><td>Điều kiện sinh hoạt</td><td>${shNote}</td></tr>
     <tr><td>Dự trù thời gian</td><td>${tgian}</td></tr>
   </table>
 
