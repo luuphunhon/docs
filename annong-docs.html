@@ -338,8 +338,36 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   <div id="soHDField" class="field" style="display:none">
     <label>Căn cứ hợp đồng số</label><input id="soHD" placeholder="06062026/HĐMB/2026">
   </div>
-  <!-- DA — fields bổ sung -->
+  <!-- DA — fields bổ sung (khớp cấu trúc WIKI AN wiki/khach-hang/) -->
   <div id="daFields" style="display:none">
+
+    <div style="font-size:10px;color:#4a7a4a;background:#062806;border-radius:3px;padding:4px 8px;margin-bottom:8px;letter-spacing:.3px;">
+      THÔNG TIN LIÊN HỆ BỔ SUNG
+    </div>
+    <div class="field"><label>Số Zalo (nếu khác SĐT)</label>
+      <input id="daKhZalo" placeholder="0xx xxx xxxx"></div>
+    <div class="field"><label>Địa chỉ thường trú</label>
+      <input id="daKhDiaChiNha" placeholder="Thôn/Xã/Huyện/Tỉnh (nơi ở, khác vườn)"></div>
+    <div class="field"><label>CCCD / CMND</label>
+      <input id="daKhCCCD" placeholder="Số CCCD (dùng khi lập hợp đồng)"></div>
+    <div class="field"><label>Phân loại khách hàng (WIKI AN)</label>
+      <select id="daLoaiKhachWiki">
+        <option value="tiem-nang">Tiềm năng — chưa mua</option>
+        <option value="da-ban-hang">Đã bán hàng</option>
+      </select>
+    </div>
+
+    <div style="font-size:10px;color:#4a7a4a;background:#062806;border-radius:3px;padding:4px 8px;margin:8px 0;letter-spacing:.3px;">
+      THÔNG TIN VƯỜN & DỰ ÁN
+    </div>
+    <div class="row2">
+      <div class="field"><label>Diện tích vườn (ha)</label>
+        <input type="number" id="daDienTichVuon" placeholder="Tổng diện tích" step="0.5" min="0"></div>
+      <div class="field"><label>Diện tích cần làm HTT (ha)</label>
+        <input type="number" id="daDienTichHTT" placeholder="Ha cần lắp" step="0.5" min="0"></div>
+    </div>
+    <div class="field"><label>Độ tuổi cây (năm)</label>
+      <input id="daDoTuoiCay" placeholder="VD: 3 năm, mới trồng, sắp trồng..."></div>
     <div class="field"><label>Nguồn nước</label>
       <select id="daNguonNuoc">
         <option value="Hồ chứa / Đập">Hồ chứa / Đập</option>
@@ -347,12 +375,48 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
         <option value="Suối / Mương tự nhiên">Suối / Mương tự nhiên</option>
         <option value="Mương thủy lợi">Mương thủy lợi</option>
         <option value="Ao / Giếng đào">Ao / Giếng đào</option>
+        <option value="Đập thủy điện">Đập thủy điện</option>
         <option value="Chưa xác định">Chưa xác định</option>
       </select>
     </div>
+    <div class="field"><label>Tình trạng hệ thống hiện tại</label>
+      <select id="daTinhTrang">
+        <option value="Làm mới hoàn toàn">Làm mới hoàn toàn</option>
+        <option value="Sửa chữa hệ thống cũ">Sửa chữa hệ thống cũ</option>
+        <option value="Nâng cấp / Mở rộng">Nâng cấp / Mở rộng</option>
+      </select>
+    </div>
+    <div class="field"><label>Phương pháp tưới hiện tại</label>
+      <input id="daTuoiHienTai" placeholder="VD: tưới phun tay, tưới béc cũ, chưa có hệ thống..."></div>
+    <div class="field"><label>Hạng mục hỗ trợ cần thiết</label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;padding:6px 0;">
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_HTT" style="width:auto;"> Hệ thống tưới</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_DMT" style="width:auto;"> Điện mặt trời</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_Bom" style="width:auto;"> Máy bơm</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_Loc" style="width:auto;"> Bộ lọc</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_CaiTao" style="width:auto;"> Cải tạo cũ</label>
+        <label style="display:flex;align-items:center;gap:4px;font-size:12px;color:#C8E6C9;cursor:pointer;"><input type="checkbox" id="daHM_Khac" style="width:auto;"> Khác</label>
+      </div>
+    </div>
+    <div class="field"><label>Ngân sách dự kiến</label>
+      <select id="daAngSach">
+        <option value="">Chưa biết / Chưa chia sẻ</option>
+        <option value="Dưới 50 triệu">Dưới 50 triệu</option>
+        <option value="50–100 triệu">50–100 triệu</option>
+        <option value="100–300 triệu">100–300 triệu</option>
+        <option value="300–500 triệu">300–500 triệu</option>
+        <option value="500 triệu – 1 tỷ">500 triệu – 1 tỷ</option>
+        <option value="Trên 1 tỷ">Trên 1 tỷ</option>
+      </select>
+    </div>
+
+    <div style="font-size:10px;color:#4a7a4a;background:#062806;border-radius:3px;padding:4px 8px;margin:8px 0;letter-spacing:.3px;">
+      QUẢN LÝ NỘI BỘ
+    </div>
     <div class="field"><label>Trạng thái dự án</label>
       <select id="daTrangThai">
-        <option value="Đang khảo sát">Đang khảo sát</option>
+        <option value="Đang tư vấn">Đang tư vấn</option>
+        <option value="Đã khảo sát">Đã khảo sát</option>
         <option value="Đã báo giá — chờ phản hồi">Đã báo giá — chờ phản hồi</option>
         <option value="Đã ký hợp đồng">Đã ký hợp đồng</option>
         <option value="Đang thi công">Đang thi công</option>
@@ -363,7 +427,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     <div class="field"><label>Người phụ trách (An Nông)</label>
       <input id="daNguoiPhuTrach" placeholder="Họ tên — Chức vụ"></div>
     <div class="field"><label>Ghi chú nội bộ</label>
-      <textarea id="daGhiChu" placeholder="Ghi chú về dự án, yêu cầu đặc biệt, rủi ro..."></textarea>
+      <textarea id="daGhiChu" placeholder="Yêu cầu đặc biệt, rủi ro, lịch sử trao đổi..."></textarea>
     </div>
 
     <!-- ── HỒ SƠ KHÁCH HÀNG (CRM) ── -->
@@ -2848,7 +2912,7 @@ function pmCollect(){
     'nccTen','nccSdt','nccDiaChi','nccDuAn','nccNgayGiao','nccNoiNhan','nccGhiChu',
     'dotGiao','bienSo','ngayGiao','ttTong','ttDaTU','ttDot1','ttDot23','ttSoTien','tuLyDo'];
   const vals={};
-  const daExtraFields=['daNguonNuoc','daTrangThai','daNguoiPhuTrach','daGhiChu','crmMaKH','crmLoaiKH','crmGioiTinh','crmDoTuoi','crmNoiSong','crmNgheNghiep','crmTaiChinh','crmNoXau','crmPhapLy','crmQuyetDinh','crmKyThuat','crmKenhLH','crmTinhCach','crmMoRong','crmBanThem','crmGioiThieu','crmRuiRo','crmGhiChuRuiRo'];
+  const daExtraFields=['daNguonNuoc','daTrangThai','daNguoiPhuTrach','daGhiChu','daKhZalo','daKhDiaChiNha','daKhCCCD','daLoaiKhachWiki','daDienTichVuon','daDienTichHTT','daDoTuoiCay','daTinhTrang','daTuoiHienTai','daAngSach','crmMaKH','crmLoaiKH','crmGioiTinh','crmDoTuoi','crmNoiSong','crmNgheNghiep','crmTaiChinh','crmNoXau','crmPhapLy','crmQuyetDinh','crmKyThuat','crmKenhLH','crmTinhCach','crmMoRong','crmBanThem','crmGioiThieu','crmRuiRo','crmGhiChuRuiRo'];
   [...fields,...daExtraFields].forEach(f=>{const el=document.getElementById(f);if(el)vals[f]=el.value;});
   return{id:_pmId,name,type,vals,
     vtItems:JSON.parse(JSON.stringify(vtItems)),vtIdCnt,
@@ -3015,6 +3079,16 @@ async function saveToLark() {
       "NhomKhach"    : "Tiềm năng"
     };
 
+    // ── Sinh SoDuAn tự động nếu chưa có: DA-YYYY-NNN ────
+    // NNN = 3 chữ số cuối của timestamp (đủ phân biệt trong ngày)
+    const soDuAnAuto = (() => {
+      const stored = localStorage.getItem('lastSoDuAn_' + soBG);
+      if (stored) return stored;
+      const yyyy = new Date().getFullYear();
+      const seq  = String(Date.now()).slice(-4); // 4 số cuối timestamp
+      return `DA-${yyyy}-${seq}`;
+    })();
+
     // ── Dữ liệu dự án ────────────────────────────────────
     const duAn = {
       "TenDuAn"      : `${ha}ha ${cay} — ${khTen}`,
@@ -3027,10 +3101,11 @@ async function saveToLark() {
       "GiaKSTK"      : loai === 'bg-dichvu' ? phiKsTkVat : 0,
       "GiaThiCong"   : tcTotal,
       "NguoiPhuTrach": npt,
+      "SoDuAn"       : soDuAnAuto,
       "SoBaoGia"     : soBG
     };
 
-    // ── Hàm gửi 1 POST tới GAS ───────────────────────────
+    // ── Gửi 1 POST duy nhất với saveFull (upsert KH + upsert DA) ─
     async function postGAS(body) {
       const r = await fetch(LARK_PROXY_URL, {
         method  : 'POST',
@@ -3043,11 +3118,7 @@ async function saveToLark() {
       return json;
     }
 
-    // ── 1. Lưu khách hàng (upsert theo SĐT) ─────────────
-    await postGAS({ action: 'saveKhachHang', fields: khachHang });
-
-    // ── 2. Tạo dự án mới ─────────────────────────────────
-    await postGAS({ fields: duAn });
+    await postGAS({ action: 'saveFull', khachHang, duAn });
 
     btn.textContent       = '✅ Đã lưu vào Lark!';
     btn.style.background  = '#2E7D32';
