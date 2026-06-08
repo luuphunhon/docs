@@ -703,6 +703,12 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     </select>
   </div>
   <div class="field"><label>Phụ phí đi lại (nếu có, đ)</label><input type="number" id="ksPhuPhi" value="0" step="1000000"></div>
+  <div class="field"><label>Phương án thanh toán dịch vụ</label>
+    <select id="ksTTOption" onchange="calcAll()">
+      <option value="50-50">50% / 50% — đặt cọc 50%, bàn giao 50%</option>
+      <option value="30-40-30">30% / 40% / 30% — đặt cọc 30%, phương án sơ bộ 40%, bàn giao 30%</option>
+    </select>
+  </div>
 
   <div class="calc-result" id="calcKsTK">
     <div class="lbl">Phí KS-TK (5% vật tư)</div>
@@ -1736,8 +1742,11 @@ function generate(){
   const phiKsTkNoVat=roundFee(vtTotal*0.05);
   const phiKsTkVat=roundFee(phiKsTkNoVat*1.1);
   const vat=phiKsTkVat-phiKsTkNoVat;
-  const dot1=roundFee(phiKsTkVat*0.5);
-  const dot2=phiKsTkVat-dot1;
+  const ttOpt=document.getElementById('ksTTOption')?.value||'50-50';
+  const is303=ttOpt==='30-40-30';
+  const dot1=roundFee(phiKsTkVat*(is303?0.3:0.5));
+  const dot2=is303?roundFee(phiKsTkVat*0.4):(phiKsTkVat-dot1);
+  const dot3=is303?(phiKsTkVat-dot1-dot2):0;
 
   const bgNgay=document.getElementById('bgNgay').value;
   const ngayLap=bgNgay?new Date(bgNgay).toLocaleDateString('vi-VN'):todayVN();
@@ -1912,14 +1921,25 @@ function generate(){
       <th style="width:31%;">Thời điểm</th>
     </tr></thead>
     <tbody>
-      <tr><td class="c"><strong>1</strong></td><td>Đặt cọc ký Hợp đồng Dịch vụ Khảo sát – Thiết kế</td>
-        <td class="c">50%</td><td class="r">${fmtFull(dot1)} đ</td><td>Sau khi ký Hợp đồng Dịch vụ</td></tr>
+      <tr><td class="c"><strong>1</strong></td><td>Đặt cọc — ký Hợp đồng Dịch vụ Khảo sát – Thiết kế</td>
+        <td class="c">${is303?'30%':'50%'}</td><td class="r">${fmtFull(dot1)} đ</td>
+        <td>Sau khi ký Hợp đồng Dịch vụ</td></tr>
+      ${is303?`
+      <tr><td class="c"><strong>2</strong></td><td>Thanh toán đủ 70% — nhận phương án sơ bộ</td>
+        <td class="c">40%</td><td class="r">${fmtFull(dot2)} đ</td>
+        <td>Sau khi An Nông gửi phương án sơ bộ (loại ống, đầu tưới, công suất bơm, số ca tưới)</td></tr>
+      <tr><td class="c"><strong>3</strong></td><td>Thanh toán 30% còn lại — nhận hồ sơ hoàn chỉnh</td>
+        <td class="c">30%</td><td class="r">${fmtFull(dot3)} đ</td>
+        <td>Trước/Ngay khi nhận bàn giao hồ sơ thiết kế + dự toán vật tư đầy đủ</td></tr>
+      `:`
       <tr><td class="c"><strong>2</strong></td><td>Thanh toán khi bàn giao hồ sơ thiết kế + dự toán vật tư hoàn chỉnh</td>
-        <td class="c">50%</td><td class="r">${fmtFull(dot2)} đ</td><td>Trước/Ngay khi nhận bàn giao hồ sơ đầy đủ</td></tr>
+        <td class="c">50%</td><td class="r">${fmtFull(dot2)} đ</td>
+        <td>Trước/Ngay khi nhận bàn giao hồ sơ đầy đủ</td></tr>
+      `}
       ${psRow}
     </tbody>
   </table>
-  <div style="font-size:11px;color:#777;margin-top:4px;font-style:italic;">* 50% = ${fmtFull(dot1)}đ/đợt</div>
+  <div style="font-size:11px;color:#777;margin-top:4px;font-style:italic;">${is303?`* 30% đặt cọc = ${fmtFull(dot1)}đ · 40% phương án sơ bộ = ${fmtFull(dot2)}đ · 30% bàn giao = ${fmtFull(dot3)}đ`:`* 50% = ${fmtFull(dot1)}đ/đợt`}</div>
 
   <div style="page-break-inside:avoid;break-inside:avoid;">
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">V. Hồ Sơ Bàn Giao &amp; Điều Khoản</div></div>
