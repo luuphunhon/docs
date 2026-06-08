@@ -1954,6 +1954,25 @@ function generateDA(){
   const trangThai = document.getElementById('daTrangThai')?.value||'—';
   const phuTrach  = document.getElementById('daNguoiPhuTrach')?.value||'—';
   const ghiChu    = document.getElementById('daGhiChu')?.value||'';
+  // Thông tin bổ sung WIKI AN
+  const khZalo    = document.getElementById('daKhZalo')?.value||'';
+  const khDCNha   = document.getElementById('daKhDiaChiNha')?.value||'';
+  const khCCCD    = document.getElementById('daKhCCCD')?.value||'';
+  const loaiKhWiki= document.getElementById('daLoaiKhachWiki')?.value||'tiem-nang';
+  const dtVuon    = document.getElementById('daDienTichVuon')?.value||ha;
+  const dtHTT     = document.getElementById('daDienTichHTT')?.value||ha;
+  const doTuoiCay = document.getElementById('daDoTuoiCay')?.value||'—';
+  const tinhTrang = document.getElementById('daTinhTrang')?.value||'—';
+  const tuoiCu    = document.getElementById('daTuoiHienTai')?.value||'—';
+  const angSach   = document.getElementById('daAngSach')?.value||'Chưa biết';
+  const hmHTT     = document.getElementById('daHM_HTT')?.checked?'Hệ thống tưới':'';
+  const hmDMT     = document.getElementById('daHM_DMT')?.checked?'Điện mặt trời':'';
+  const hmBom     = document.getElementById('daHM_Bom')?.checked?'Máy bơm':'';
+  const hmLoc     = document.getElementById('daHM_Loc')?.checked?'Bộ lọc':'';
+  const hmCaiTao  = document.getElementById('daHM_CaiTao')?.checked?'Cải tạo cũ':'';
+  const hmKhac    = document.getElementById('daHM_Khac')?.checked?'Khác':'';
+  const hangMuc   = [hmHTT,hmDMT,hmBom,hmLoc,hmCaiTao,hmKhac].filter(Boolean).join(' · ')||'Chưa xác định';
+  const loaiKhWikiLabel = loaiKhWiki==='da-ban-hang'?'✅ Đã bán hàng':'🔵 Tiềm năng — chưa mua';
   const crmMaKH   = document.getElementById('crmMaKH')?.value||'—';
   const crmLoaiKH = document.getElementById('crmLoaiKH')?.value||'—';
   const crmGioiTinh=document.getElementById('crmGioiTinh')?.value||'—';
@@ -1984,20 +2003,33 @@ function generateDA(){
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Khách Hàng</div></div>
   <table class="t-info">
     <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
-    <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
-    <tr><td>Địa chỉ / Vị trí vườn</td><td>${khDC}</td></tr>
+    <tr><td>Phân loại</td><td>${loaiKhWikiLabel}</td></tr>
+    <tr><td>Số điện thoại</td><td>${khSdt}${khZalo&&khZalo!==khSdt?' &nbsp;·&nbsp; Zalo: '+khZalo:''}</td></tr>
+    <tr><td>Địa chỉ vườn</td><td>${khDC}</td></tr>
+    ${khDCNha?`<tr><td>Địa chỉ thường trú</td><td>${khDCNha}</td></tr>`:''}
+    ${khCCCD?`<tr><td>CCCD / CMND</td><td>${khCCCD}</td></tr>`:''}
   </table>
-  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Thông Tin Dự Án</div></div>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Thông Tin Vườn & Dự Án</div></div>
   <table class="t-info">
-    <tr><td>Diện tích</td><td><strong>${ha} hecta</strong></td></tr>
+    <tr><td>Diện tích vườn</td><td><strong>${dtVuon} ha</strong></td></tr>
+    <tr><td>Diện tích cần HTT</td><td><strong>${dtHTT} ha</strong></td></tr>
     <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Độ tuổi cây</td><td>${doTuoiCay}</td></tr>
     <tr><td>Địa hình</td><td>${dhn}</td></tr>
     <tr><td>Nguồn nước</td><td>${nguonNuoc}</td></tr>
+    <tr><td>Tình trạng HTT</td><td>${tinhTrang}</td></tr>
+    <tr><td>Tưới hiện tại</td><td>${tuoiCu}</td></tr>
+    <tr><td>Hạng mục cần</td><td>${hangMuc}</td></tr>
+    <tr><td>Ngân sách</td><td>${angSach}</td></tr>
+  </table>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Quản Lý Nội Bộ</div></div>
+  <table class="t-info">
     <tr><td>Trạng thái</td><td><strong style="color:#1B5E20;">${trangThai}</strong></td></tr>
     <tr><td>Người phụ trách</td><td>${phuTrach}</td></tr>
+    ${ghiChu?`<tr><td>Ghi chú</td><td style="font-style:italic;">${ghiChu.replace(/\n/g,'<br>')}</td></tr>`:''}
   </table>
-  ${ghiChu?`<div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Ghi Chú Nội Bộ</div></div>
-  <div class="notice" style="color:#1a1a1a;background:#FFF8DC;border-color:#F9A825;">${ghiChu.replace(/\n/g,'<br>')}</div>`:''}
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Hồ Sơ Khách Hàng (CRM) — Nội Bộ</div></div>
   <table class="t-info">
     <tr><td>Mã KH</td><td><strong style="color:#1B5E20;">${crmMaKH}</strong></td></tr>
