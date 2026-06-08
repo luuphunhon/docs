@@ -242,8 +242,8 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="cs-item" data-v="bg-tc" data-code="BG-TC" onclick="csSelect(this)">
         <span class="cs-item-code">BG-TC</span><span class="cs-item-name">Báo giá Thi công Lắp đặt</span>
       </div>
-      <div class="cs-item" data-v="bg-hdkt" data-code="BG-HDKT" onclick="csSelect(this)">
-        <span class="cs-item-code">BG-HDKT</span><span class="cs-item-name">Báo giá Hướng dẫn / Giám sát KT</span>
+      <div class="cs-item" data-v="bg-kt" data-code="BG-KT" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-KT</span><span class="cs-item-name">Báo giá Kỹ thuật (HDKT)</span>
       </div>
       <div class="cs-group-hdr">Hợp đồng</div>
       <div class="cs-item" data-v="hdvt" data-code="HD-VT" onclick="csSelect(this)">
@@ -1394,7 +1394,7 @@ function generate(){
   if(loaiBG==='bg-vattu'){generateVatTu();return;}
   if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
   if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
-  if(loaiBG==='bg-hdkt'){generateBGHDKT();pmAutoSave();return;}
+  if(loaiBG==='bg-kt'){generateBGKT();pmAutoSave();return;}
   if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
 
   const ha=parseFloat(document.getElementById('dtHa').value)||7;
@@ -1980,34 +1980,37 @@ function generateBGTC(){
   document.title=getBGDocTitle();
 }
 
-// ── GENERATE BG-HDKT (Hướng dẫn / Giám sát KT) ─────────
-function generateBGHDKT(){
+// ── GENERATE BG-KT (Hướng dẫn / Giám sát KT) ─────────
+function generateBGKT(){
   const ha      = parseFloat(document.getElementById('dtHa').value)||7;
   const cay     = document.getElementById('cayTrong').value||'Cà phê';
   const khDC    = document.getElementById('khDiaChi').value||'—';
   const bgNgay  = document.getElementById('bgNgay').value;
   const ngayLap = bgNgay?new Date(bgNgay).toLocaleDateString('vi-VN'):todayVN();
-  const soBg    = document.getElementById('bgSo').value||'BG-HDKT-';
+  const soBg    = document.getElementById('bgSo').value||'BG-KT-';
   const nguoiLap= document.getElementById('nguoiLap').value||'—';
   const khTen   = (document.getElementById('khTen').value||'—').toUpperCase();
   const khSdt   = document.getElementById('khSdt').value||'Chưa cung cấp';
   const ngay    = parseInt(document.getElementById('hdktNgay')?.value)||2;
   const donGia  = parseInt(document.getElementById('hdktDonGia')?.value)||2000000;
   const hdktNoVat = ngay*donGia;
-  const vat     = Math.round(hdktNoVat*0.1);
-  const hdktVat = hdktNoVat+vat;
   const zone    = parseInt(document.getElementById('hdktZone')?.value)||100;
   const dk      = document.getElementById('hdktDkSH')?.value||'1';
-  const zoneLabel=zone>=999?(document.getElementById('hdktZoneKhacText')?.value||'Khu vực khác')
-    :{100:'Trong tỉnh Gia Lai',200:'150–200km (Kon Tum, Đắk Lắk...)',
-      300:'250–300km (Đắk Nông)',400:'300–400km (Lâm Đồng, Bình Phước...)'}[zone]||'';
-  const dkLabel = dk==='1'?'Có chỗ ở + điện nước':'Không có chỗ ở, điện nước';
+  const isKhac  = zone>=999;
+  const zoneLabel=isKhac?(document.getElementById('hdktZoneKhacText')?.value||'Khu vực khác / Lào / Campuchia')
+    :{100:'Trong tỉnh Gia Lai (dưới 100km)',200:'150–200km — Kon Tum, Đắk Lắk, Bình Định, Phú Yên',
+      300:'250–300km — Đắk Nông',400:'300–400km — Lâm Đồng, Bình Phước, Đồng Nai...'}[zone]||'';
+  const dkLabel = dk==='1'?'Có chỗ ở + điện nước sinh hoạt':'Không có chỗ ở / điện / nước';
+  const rateBase = HDKT_RATES[zone]||{co:4000000,khong:5000000};
+  const rateAp   = dk==='1'?rateBase.co:rateBase.khong;
   const phuPhiVal = document.getElementById('phuPhiLao')?.value||'0';
   const diLaiSoTien = phuPhiVal==='2'?(parseFloat(document.getElementById('diLaiSoTien')?.value)||0):0;
   const tongNoVat = hdktNoVat+diLaiSoTien;
   const tongVat   = Math.round(tongNoVat*0.1);
   const tongCong  = tongNoVat+tongVat;
-  const diLaiRow  = phuPhiVal!=='0'?`
+  const ngoaiTinh = zone>100;
+
+  const diLaiRow = phuPhiVal!=='0'?`
     <tr><td class="c">2</td>
       <td><div class="sn">Chi phí đi lại</div>
       <div class="sd">${phuPhiVal==='2'?'Đã thoả thuận.':'Báo riêng theo chuyến, xác nhận trước khi thực hiện.'}</div></td>
@@ -2020,7 +2023,7 @@ function generateBGHDKT(){
   ${headerHTML('',ngayLap,nguoiLap)}
   <div class="ttl">
     <h1>Báo Giá Hướng Dẫn Kỹ Thuật</h1>
-    <h2>GIÁM SÁT THI CÔNG HỆ THỐNG TƯỚI</h2>
+    <h2>GIÁM SÁT & HỖ TRỢ KỸ THUẬT HỆ THỐNG TƯỚI</h2>
     <div style="font-size:12px;color:#888;margin-top:2px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
   </div>
 
@@ -2029,13 +2032,28 @@ function generateBGHDKT(){
     <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
-    <tr><td>Diện tích</td><td>${ha} hecta — ${cay}</td></tr>
+    <tr><td>Diện tích / Cây trồng</td><td>${ha} hecta — ${cay}</td></tr>
     <tr><td>Khu vực</td><td>${zoneLabel}</td></tr>
     <tr><td>Điều kiện sinh hoạt</td><td>${dkLabel}</td></tr>
-    <tr><td>Số ngày làm việc</td><td>${ngay} ngày (2 người: 1 KTV chính + 1 phụ)</td></tr>
+    <tr><td>Số ngày làm việc</td><td>${ngay} ngày</td></tr>
   </table>
 
-  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Hạng Mục Dịch Vụ & Đơn Giá</div></div>
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Cơ Sở Tính Phí Kỹ Thuật</div></div>
+  <div class="est-card">
+    <div class="est-card-ttl">Đơn giá theo khu vực — 2 người (1 KTV chính + 1 phụ) / ngày</div>
+    <table class="est-tbl">
+      <tr><td>Trong tỉnh Gia Lai (&lt;100km)</td><td>2.000.000 / 2.500.000 đ/ngày</td></tr>
+      <tr><td>150–200km (Kon Tum, Đắk Lắk, Bình Định, Phú Yên)</td><td>2.500.000 / 3.000.000 đ/ngày</td></tr>
+      <tr><td>250–300km (Đắk Nông)</td><td>3.500.000 / 4.000.000 đ/ngày</td></tr>
+      <tr><td>300–400km (Lâm Đồng, Bình Phước, Đồng Nai...)</td><td>4.500.000 / 5.000.000 đ/ngày</td></tr>
+      <tr><td>Khu vực khác / Lào / Campuchia</td><td>Tối thiểu 4.000.000 / 5.000.000 đ/ngày</td></tr>
+      <tr style="font-size:10px;color:#888;"><td colspan="2">* Giá trước / sau dấu "/" = có / không có điều kiện ăn ở sinh hoạt. Chưa bao gồm chi phí đi lại.</td></tr>
+      <tr class="tot"><td>Khu vực áp dụng: ${zoneLabel}</td><td>${fmtFull(rateAp)}/ngày/2 người</td></tr>
+      <tr class="tot"><td>Tổng ${ngay} ngày × ${fmtFull(rateAp)}</td><td>${fmtFull(hdktNoVat)}</td></tr>
+    </table>
+  </div>
+
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Hạng Mục Dịch Vụ & Đơn Giá</div></div>
   <table class="t-svc">
     <thead><tr>
       <th style="width:4%">STT</th><th class="left">Hạng mục</th>
@@ -2045,9 +2063,9 @@ function generateBGHDKT(){
     <tbody>
       <tr><td class="c">1</td>
         <td><div class="sn">Hướng dẫn kỹ thuật / Giám sát thi công</div>
-        <div class="sd">2 người (1 KTV chính + 1 phụ). Khu vực: ${zoneLabel}, ${dkLabel}. Bao gồm: hướng dẫn hàn ống HDPE, lắp béc, lắp trạm bơm, chạy thử, giám sát tiến độ.</div></td>
+        <div class="sd">2 người (1 KTV chính + 1 phụ). Khu vực: ${zoneLabel}. ${dkLabel}.${ngoaiTinh&&phuPhiVal==='0'?' Chi phí đi lại: tự bỏ.':''} Bao gồm: hướng dẫn hàn ống HDPE, lắp béc, lắp trạm bơm, chạy thử, giám sát tiến độ, nghiệm thu bàn giao.</div></td>
         <td class="c">Ngày</td><td class="c">${ngay}</td>
-        <td class="r">${fmt(donGia)}/2ng</td><td class="r">${fmtFull(hdktNoVat)}</td></tr>
+        <td class="r">${fmt(rateAp)}/2ng</td><td class="r">${fmtFull(hdktNoVat)}</td></tr>
       ${diLaiRow}
     </tbody>
     <tfoot>
@@ -2061,11 +2079,11 @@ function generateBGHDKT(){
 
   ${phuPhiVal==='1'?'<div class="notice">⚠ Chi phí đi lại báo riêng theo chuyến — xác nhận trước khi thực hiện.</div>':''}
 
-  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Điều Khoản</div></div>
+  <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">IV. Điều Khoản</div></div>
   <table class="t-terms">
     <tr><td>Thanh toán</td><td>100% trước hoặc ngay sau khi hoàn thành dịch vụ.</td></tr>
-    <tr><td>Bảo hành</td><td>Không áp dụng cho dịch vụ HDKT. Hỗ trợ kỹ thuật qua điện thoại sau bàn giao.</td></tr>
-    <tr><td>Hiệu lực BG</td><td>7 ngày kể từ ngày lập.</td></tr>
+    <tr><td>Chi phí đi lại</td><td>${ngoaiTinh&&phuPhiVal==='0'?'Tự bỏ, không tính vào hợp đồng.':phuPhiVal==='1'?'Báo riêng theo chuyến, xác nhận trước khi thực hiện.':'Đã tính trong báo giá.'}</td></tr>
+    <tr><td>Hiệu lực BG</td><td>7 ngày kể từ ngày lập. Đơn giá có thể điều chỉnh theo điều kiện thực tế.</td></tr>
   </table>
 
   <div class="sig-area" style="grid-template-columns:1fr 1fr;margin-top:14px;">
@@ -2423,7 +2441,7 @@ function autoSlug(){
   else if(docType==='bg-vattu') loaiDV='bao-gia-vat-tu';
   else if(docType==='bg-tk') loaiDV='bao-gia-ks-tk';
   else if(docType==='bg-tc') loaiDV='bao-gia-thi-cong';
-  else if(docType==='bg-hdkt') loaiDV='bao-gia-hdkt';
+  else if(docType==='bg-kt') loaiDV='bao-gia-kt';
   const parts=[
     loaiDV,
     ha?ha+'ha':'',
@@ -2433,14 +2451,14 @@ function autoSlug(){
   ].filter(Boolean);
   el.value=parts.join('-');
 }
-const LOAI_MAP_ALL={'bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-hdkt':'BG-HDKT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','ncc':'PDH'};
+const LOAI_MAP_ALL={'bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','ncc':'PDH'};
 
 function getBGDocTitle(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
   const loai=LOAI_MAP_ALL[type]||'TL';
   autoSlug();
   const slug=document.getElementById('duAnSlug')?.value||'du-an';
-  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(type);
+  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);
   if(isBG){
     const v=document.getElementById('trangThai')?.value||'ban-nhap';
     return `${loai}_${slug}_${v}`;
@@ -2453,7 +2471,7 @@ function hasUnsavedData(){
   const hasItems=vtItems.some(r=>r.type==='item'&&(r.ten||+r.donGia>0||+r.sl>1));
   const khTen=(document.getElementById('khTen')?.value||'').trim();
   const loai=document.getElementById('docType')?.value||'bg-dichvu';
-  return hasItems||(['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(loai)&&khTen.length>0);
+  return hasItems||(['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(loai)&&khTen.length>0);
 }
 
 // ══════════════════════════════════════════════════════
@@ -2783,7 +2801,7 @@ function toggleKhLoai(){
 // ── ON DOC TYPE CHANGE ──────────────────────────────────
 function onDocTypeChange(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
-  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-hdkt'].includes(type);
+  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);
   const isVT=type==='bg-vattu';
 
   // BG panels
@@ -2797,8 +2815,8 @@ function onDocTypeChange(){
   } else if(type!=='bg-dichvu'){
     // Không phải BG-DV → ẩn tcPanel (sẽ được calcAll quản lý)
   }
-  // BG-HDKT: hiện hdktPanel trực tiếp
-  if(type==='bg-hdkt'){
+  // BG-KT: hiện hdktPanel trực tiếp
+  if(type==='bg-kt'){
     document.getElementById('hdktPanel').style.display='block';
     document.getElementById('hdktCo').value='1';
   }
@@ -2822,7 +2840,7 @@ function onDocTypeChange(){
     const soEl=document.getElementById('bgSo');
     if(soEl){
       // Xác định suffix đúng theo loại
-      const suffixMap={'bg-dichvu':'BG-KS-TK','bg-vattu':'BG-VT','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-hdkt':'BG-HDKT'};
+      const suffixMap={'bg-dichvu':'BG-KS-TK','bg-vattu':'BG-VT','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT'};
       const newSuffix=suffixMap[type]||'BG-KS-TK';
       // Thay suffix cũ bằng suffix mới (giữ nguyên phần ngày và số)
       soEl.value=soEl.value.replace(/\/BG-[A-Z-]+\/AN/,'/'+newSuffix+'/AN');
