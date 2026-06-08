@@ -2788,6 +2788,18 @@ function onDocTypeChange(){
   document.getElementById('bgSo').closest('.field').style.display=isBG?'':'none';
   document.getElementById('bgDVPanel').style.display=type==='bg-dichvu'?'':'none';
   document.getElementById('vtModePanel').style.display=isVT?'block':'none';
+  // BG-TC: hiện tcPanel trực tiếp (không cần bật tcCo)
+  if(type==='bg-tc'){
+    document.getElementById('tcPanel').style.display='block';
+    document.getElementById('tcCo').value='1';
+  } else if(type!=='bg-dichvu'){
+    // Không phải BG-DV → ẩn tcPanel (sẽ được calcAll quản lý)
+  }
+  // BG-HDKT: hiện hdktPanel trực tiếp
+  if(type==='bg-hdkt'){
+    document.getElementById('hdktPanel').style.display='block';
+    document.getElementById('hdktCo').value='1';
+  }
 
   // Non-BG panels
   document.getElementById('extraKhPanel').style.display=isBG?'none':'';
