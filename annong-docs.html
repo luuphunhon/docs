@@ -2819,8 +2819,11 @@ function onDocTypeChange(){
   if(isBG){
     const soEl=document.getElementById('bgSo');
     if(soEl){
-      if(isVT) soEl.value=soEl.value.replace('/BG-KS-TK/','/BG-VT/');
-      else soEl.value=soEl.value.replace('/BG-VT/','/BG-KS-TK/');
+      // Xác định suffix đúng theo loại
+      const suffixMap={'bg-dichvu':'BG-KS-TK','bg-vattu':'BG-VT','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-hdkt':'BG-HDKT'};
+      const newSuffix=suffixMap[type]||'BG-KS-TK';
+      // Thay suffix cũ bằng suffix mới (giữ nguyên phần ngày và số)
+      soEl.value=soEl.value.replace(/\/BG-[A-Z-]+\/AN/,'/'+newSuffix+'/AN');
     }
     if(isVT&&!vtItems.length){
       ['BÉC TƯỚI VÀ PHỤ KIỆN','ỐNG DẪN NƯỚC','PHỤ KIỆN ĐƯỜNG ỐNG','TRẠM LỌC','PHỤ KIỆN TRẠM BƠM','MÁY BƠM & TỦ ĐIỆN']
