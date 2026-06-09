@@ -613,12 +613,25 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   <div class="row2">
     <div class="field"><label>Diện tích (ha)</label><input type="number" id="dtHa" value="7" min="1" step="0.5" oninput="autoSlug()"></div>
     <div class="field"><label>Loại cây</label>
-      <select id="cayTrong" onchange="autoSlug()">
-        <option value="Cà phê">Cà phê</option>
-        <option value="Sầu riêng">Sầu riêng</option>
-        <option value="Ca cao">Ca cao</option>
-        <option value="Chuối">Chuối</option>
-        <option value="Khác">Khác</option>
+      <select id="cayTrong" onchange="autoSlug();updateTcPanel();">
+        <optgroup label="── Có dữ liệu mật độ ──">
+          <option value="Cà phê">Cà phê</option>
+          <option value="Sầu riêng">Sầu riêng</option>
+          <option value="Ca cao">Ca cao</option>
+        </optgroup>
+        <optgroup label="── Tự nhập khoảng cách ──">
+          <option value="Chuối">Chuối</option>
+          <option value="Cau">Cau</option>
+          <option value="Xoài">Xoài</option>
+          <option value="Mít">Mít</option>
+          <option value="Bơ">Bơ</option>
+          <option value="Dừa">Dừa</option>
+          <option value="Hồ tiêu">Hồ tiêu</option>
+          <option value="Chanh dây">Chanh dây</option>
+          <option value="Nhãn">Nhãn</option>
+          <option value="Vải">Vải</option>
+          <option value="Khác">Khác</option>
+        </optgroup>
       </select>
     </div>
   </div>
@@ -664,6 +677,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
           <option value="7500000">5×6m — ~333 cây/ha ⚠️</option>
         </optgroup>
       </select>
+    </div>
+    <!-- Tự nhập: hiện khi cây chưa có dữ liệu mật độ -->
+    <div id="matDoKhac" class="field" style="display:none;">
+      <label>Khoảng cách trồng <span style="color:#A5D6A7;font-weight:400;font-size:10px;">— ghi để in vào tài liệu</span></label>
+      <input id="tcMatDoKhacText" placeholder="VD: 6×6m — ~278 cây/ha" style="">
     </div>
   </div>
   <div class="field"><label>Địa hình / Vận chuyển</label>
@@ -1126,11 +1144,20 @@ function getTcBase(){
 }
 
 // Cập nhật hiển thị mật độ theo loại cây (luôn hiển thị, không phụ thuộc tcCo)
+// Trả về tên cây + khoảng cách nếu là loại tự nhập
+function cayDisplay(){
+  const cay=document.getElementById('cayTrong').value;
+  const kc=(document.getElementById('tcMatDoKhacText')?.value||'').trim();
+  return (kc&&!['Cà phê','Ca cao','Sầu riêng'].includes(cay))?`${cay} (${kc})`:cay;
+}
+
 function updateTcPanel(){
   const crop=document.getElementById('cayTrong').value;
+  const hasData=['Cà phê','Ca cao','Sầu riêng'];
   document.getElementById('matDoCaPhe').style.display=crop==='Cà phê'?'block':'none';
   document.getElementById('matDoCaCao').style.display=crop==='Ca cao'?'block':'none';
   document.getElementById('matDoSauRieng').style.display=crop==='Sầu riêng'?'block':'none';
+  document.getElementById('matDoKhac').style.display=!hasData.includes(crop)?'block':'none';
 }
 function addDays(dateStr,days){
   const d=new Date(dateStr);d.setDate(d.getDate()+days);
@@ -1894,7 +1921,7 @@ function generate(){
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ</td><td>${khDC}</td></tr>
     <tr><td>Diện tích</td><td>${ha} hecta (ha)</td></tr>
-    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
     <tr><td>Địa hình</td><td>${dhn}</td></tr>
   </table>
 
@@ -2207,7 +2234,7 @@ function generateDA(){
   <table class="t-info">
     <tr><td>Diện tích vườn</td><td><strong>${dtVuon} ha</strong></td></tr>
     <tr><td>Diện tích cần HTT</td><td><strong>${dtHTT} ha</strong></td></tr>
-    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
     <tr><td>Độ tuổi cây</td><td>${doTuoiCay}</td></tr>
     <tr><td>Địa hình</td><td>${dhn}</td></tr>
     <tr><td>Nguồn nước</td><td>${nguonNuoc}</td></tr>
@@ -2322,7 +2349,7 @@ function generateBGTK(){
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ</td><td>${khDC}</td></tr>
     <tr><td>Diện tích</td><td>${ha} hecta (ha)</td></tr>
-    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
     <tr><td>Địa hình</td><td>${dhn}</td></tr>
   </table>
 
@@ -2481,7 +2508,7 @@ function generateBGTC(){
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
     <tr><td>Diện tích thi công</td><td><strong>${ha} hecta (ha)</strong></td></tr>
-    <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
     <tr><td>Địa hình / Điều kiện thi công</td><td>${dhn}</td></tr>
     <tr><td>Điều kiện sinh hoạt</td><td>${shNote}</td></tr>
     <tr><td>Dự trù thời gian</td><td>${tgian}</td></tr>
@@ -3777,7 +3804,7 @@ function genPKS(d){
     <table class="t-info" style="margin-bottom:10px">
       <tr><td>Vị trí vườn</td><td>${diaDiem}</td></tr>
       <tr><td>Diện tích cần làm</td><td><b>${ha} ha</b></td></tr>
-      <tr><td>Loại cây trồng</td><td>${cay}</td></tr>
+      <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
       <tr><td>Nguồn nước tưới</td><td>${nguonNuoc}</td></tr>
       <tr><td>Địa hình</td><td>${diaTe}</td></tr>
       <tr><td>Điện hiện trường</td><td>${dien}</td></tr>
