@@ -759,6 +759,10 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
         <input id="tcThoiGian" placeholder="VD: 10–15 ngày làm việc"></div>
       <div class="field"><label>Giám sát / Đại diện bên B</label>
         <input id="tcGiamSatB" placeholder="Họ tên — Chức vụ"></div>
+      <div class="field">
+        <label>Điều kiện thanh toán tiến độ <span style="color:#A5D6A7;font-weight:400;font-size:10px;">— tự điền, in thẳng vào BG</span></label>
+        <input id="tcTienDoNote" value="Căn cứ tiến độ thi công thực tế, tối đa nợ 100.000.000 đ" placeholder="VD: Tối đa nợ 100tr tại bất kỳ thời điểm...">
+      </div>
     </div>
   </div>
 
@@ -2448,6 +2452,7 @@ function generateBGTC(){
   const npt      = document.getElementById('tcNguoiPhuTrach')?.value||'—';
   const tgian    = document.getElementById('tcThoiGian')?.value||'Thoả thuận theo tiến độ';
   const gstB     = document.getElementById('tcGiamSatB')?.value||'—';
+  const tienDoNote = document.getElementById('tcTienDoNote')?.value||'Căn cứ tiến độ thi công thực tế, tối đa nợ 100.000.000 đ';
 
   const html=`
 <div class="page">
@@ -2554,7 +2559,7 @@ function generateBGTC(){
         <td>Thanh toán theo tiến độ</td>
         <td class="c">—</td>
         <td class="r"><strong>Theo thực tế</strong></td>
-        <td>Căn cứ tiến độ thi công thực tế, tối đa nợ 100.000.000 đ</td>
+        <td>${tienDoNote}</td>
       </tr>
       <tr>
         <td class="c">3</td>
@@ -2577,7 +2582,7 @@ function generateBGTC(){
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">V. Điều Khoản Chung</div></div>
   <table class="t-terms">
     <tr><td>Phạm vi thi công</td><td>Theo bản vẽ thiết kế và bảng dự toán vật tư đã được hai bên xác nhận.</td></tr>
-    <tr><td>Vật tư</td><td>An Nông Agritech cung cấp toàn bộ vật tư. Thay đổi khối lượng sẽ điều chỉnh theo phụ lục.</td></tr>
+    <tr><td>Vật tư</td><td><strong>Đơn giá thi công lắp đặt là đơn giá tiền công, chưa bao gồm vật tư.</strong> Vật tư do hai bên thỏa thuận riêng theo dự toán vật tư đã ký kết; thay đổi khối lượng điều chỉnh qua phụ lục hợp đồng.</td></tr>
     <tr><td>Bảo hành</td><td>12 tháng kể từ ngày nghiệm thu. Lỗi lắp đặt An Nông chịu; lỗi do tác động bên ngoài không áp dụng.</td></tr>
     <tr><td>Điều kiện phát sinh</td><td>Khối lượng phát sinh ngoài thiết kế sẽ lập phụ lục bổ sung trước khi thực hiện.</td></tr>
     <tr><td>Hiệu lực báo giá</td><td>7 ngày kể từ ngày lập. Giá có thể thay đổi theo thực tế phát sinh.</td></tr>
