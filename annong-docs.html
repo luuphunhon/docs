@@ -3362,6 +3362,20 @@ const CO={
 const LOGO_SRC='assets/logo-an-nong.png';
 function _logoImg(h=44){return `<img src="${LOGO_SRC}" style="height:${h}px;width:auto;object-fit:contain;flex-shrink:0;" onerror="this.style.display='none'">`;}
 
+// ── Party card helper — dùng cho PGH, HD, BBNT, TU/TT ──
+// rows: [{label, value}]
+function _partyCard(title,rows,accentColor='#1B5E20'){
+  const trs=rows.map(r=>`<tr><td style="font-weight:600;color:#2E7D32;white-space:nowrap;padding:4px 8px;font-size:11.5px;border:1px solid #D7EDD9;background:#F9FBE7;width:1%;min-width:80px;">${r.label}</td><td style="padding:4px 8px;font-size:11.5px;border:1px solid #D7EDD9;">${r.value||'—'}</td></tr>`).join('');
+  return `<div style="border:1px solid #C8E6C9;border-radius:5px;overflow:hidden;">
+    <div style="background:${accentColor};color:#fff;font-size:11px;font-weight:700;padding:5px 10px;letter-spacing:.2px;">${title}</div>
+    <table style="width:100%;border-collapse:collapse;">${trs}</table>
+  </div>`;
+}
+// Wrapper 2 cột — tự động wrap khi in hẹp
+function _partyGrid(leftCard,rightCard){
+  return `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">${leftCard}${rightCard}</div>`;
+}
+
 function headerHTML(soTL,ngay,npt,opts={}){
   const _npt=npt||document.getElementById('nguoiLap')?.value||'';
   const {soBg,label}=opts; // soBg: hiện số BG trong meta box; label: thay "Người lập" bằng label khác
@@ -3454,8 +3468,9 @@ function onDocTypeChange(){
   document.getElementById('bgDVPanel').style.display=type==='bg-dichvu'?'':'none';
   document.getElementById('vtModePanel').style.display=isVT?'block':'none';
   document.getElementById('daFields').style.display=isDA?'':'none';
-  // Toggle KH info
-  setKhMode(isDA);
+  // Toggle KH info — mở rộng cho HD/PGH/BBNT/NCC vì cần nhập đủ thông tin khách
+  const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','ncc','pks'].includes(type);
+  setKhMode(needKhExpanded);
 
   // Non-BG panels
   document.getElementById('extraKhPanel').style.display=isBG?'none':'';
@@ -3540,12 +3555,19 @@ function genPGH(d){
     <div class="ttl"><h1 style="font-size:17px;">Phiếu Xuất Kho – Biên Bản Bàn Giao Hàng Hóa</h1>
       <div class="sub">Số: ${d.soTL} &nbsp;|&nbsp; Đợt giao: ${dot}</div></div>
     <p style="font-size:12px;margin-bottom:8px">Căn cứ Hợp đồng mua bán số <b>${d.soHD}</b> giữa công ty Cổ phần An Nông Agritech và ông/bà <b>${d.khTen}</b>, hai bên cùng thống nhất giao nhận hàng hóa với thông tin sau:</p>
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px">
-      <div><div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">BÊN GIAO (Bên A): ${CO.ten}</div>
-        <table class="t-info"><tr><td>Đại diện</td><td>${d.nguoiLap}</td></tr><tr><td>Điện thoại</td><td>${CO.dt.split('|')[0].trim()}</td></tr><tr><td>Địa chỉ</td><td>${CO.dc}</td></tr></table></div>
-      <div><div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">BÊN NHẬN (Bên B):</div>
-        <table class="t-info"><tr><td>Họ tên</td><td>${d.khTen}</td></tr><tr><td>CCCD/CMND</td><td>${d.khCCCD}</td></tr><tr><td>Điện thoại</td><td>${d.khSdt}</td></tr><tr><td>Địa chỉ nhận</td><td>${d.khDiaChi}</td></tr></table></div>
-    </div>
+    ${_partyGrid(
+      _partyCard(`BÊN GIAO (Bên A): ${CO.ten}`,[
+        {label:'Đại diện',value:d.nguoiLap},
+        {label:'Điện thoại',value:CO.dt.split('|')[0].trim()},
+        {label:'Địa chỉ giao',value:CO.dc}
+      ],'#1B5E20'),
+      _partyCard('BÊN NHẬN (Bên B)',[
+        {label:'Họ tên',value:`<strong>${d.khTen}</strong>`},
+        {label:'CCCD/CMND',value:d.khCCCD},
+        {label:'Điện thoại',value:d.khSdt},
+        {label:'Địa chỉ nhận',value:d.khDiaChi}
+      ],'#2E7D32')
+    )}
     <table class="t-info" style="margin-bottom:8px;width:100%"><tr><td style="width:30%">Phương tiện vận chuyển</td><td>Xe tải biển kiểm soát: ${bienSo}</td></tr><tr><td>Ngày giao hàng</td><td>${ngayGiao}</td></tr></table>
     <table class="t-vt"><thead><tr><th style="width:5%">STT</th><th class="left">Tên hàng hóa / Vật tư</th><th style="width:8%">ĐVT</th><th style="width:10%">SL theo ĐH</th><th style="width:10%">SL thực giao</th><th style="width:14%">Ghi chú</th></tr></thead><tbody>${rows}</tbody></table>
     <div class="notice">Trong vòng 48h sau khi nhận hàng, các đơn vị không phản hồi thì coi như đơn hàng đã hoàn tất. Bên B xác nhận Bên A đã giao đúng chủng loại, đủ số lượng. Biên bản lập thành 02 bản có giá trị pháp lý như nhau.</div>
@@ -3614,10 +3636,10 @@ function genHDVT(d){
   const ghiChu=document.getElementById('hdGhiChu')?.value||'';
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HĐMB/${p[2]}`;}
-  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
+  return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:17px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
-      <div class="sub">(V/v: ${moTa})</div><div class="sub">Số: ${soHD}</div></div>
+      <div class="sub">(V/v: ${moTa})</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24 tháng 11 năm 2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên bán (Bên A): ${CO.ten}</div></div>
     <table class="t-info" style="margin-bottom:8px"><tr><td>Mã số thuế</td><td>${CO.mst}</td></tr><tr><td>Địa chỉ</td><td>${CO.dc}</td></tr><tr><td>Tài khoản số</td><td>${CO.stk} — ${CO.ngan} Chi nhánh Gia Lai</td></tr><tr><td>Đại diện</td><td>Ông ${CO.gd} &nbsp;&nbsp; Chức vụ: Giám đốc</td></tr></table>
@@ -3899,12 +3921,11 @@ function genHDTC(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HD-TC/${p[2]}`;}
   const moTa=`Thi công lắp đặt hệ thống tưới${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
 
-  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
+  return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl">
       <h1 style="font-size:16px;">Hợp Đồng Thi Công Lắp Đặt</h1>
       <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${moTa})</div>
-      <div class="sub">Số: ${soHD}</div>
     </div>
 
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">
@@ -4038,11 +4059,10 @@ function genHDTK(d){
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/${hdMa}/${p[2]}`;}
   const moTa=`${loaiTen}${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
-  return `<div class="page">${headerHTML(d.soTL,d.ngay,d.nguoiLap)}
+  return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Khảo Sát Thiết Kế</h1>
-      <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${loaiTen})</div>
-      <div class="sub">Số: ${soHD}</div></div>
+      <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${loaiTen})</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24/11/2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay}, hai bên gồm:</p>
 
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên thực hiện dịch vụ (Bên A): ${CO.ten}</div></div>
