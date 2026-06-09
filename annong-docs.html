@@ -1869,13 +1869,25 @@ function generate(){
     <td class="r" style="${diLaiSoTien>0?'':'color:#888;font-style:italic;'}">${diLaiSoTien>0?fmtFull(diLaiSoTien):'Báo riêng'}</td></tr>`:'';
   const psRow=phuPhiLao?`<tr class="ps"><td class="c">PS</td><td>Phụ phí đi lại nếu phát sinh chuyến khảo sát/hỗ trợ trực tiếp</td><td class="c">—</td><td class="r">Báo riêng</td><td>Xác nhận trước khi đi</td></tr>`:'';
 
+  // ── Tiêu đề động theo toggle ──
+  const _svcs=[];
+  if(_svcTK) _svcs.push('TK'); if(_svcTC) _svcs.push('TC'); if(_svcKT) _svcs.push('KT');
+  const _titleMap={
+    'TK-TC' :['Báo Giá Dịch Vụ','KHẢO SÁT &amp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG LẮP ĐẶT'],
+    'TK-KT' :['Báo Giá Dịch Vụ','KHẢO SÁT &amp; THIẾT KẾ &nbsp;·&nbsp; HƯỚNG DẪN KỸ THUẬT'],
+    'TC-KT' :['Báo Giá Dịch Vụ','THI CÔNG LẮP ĐẶT &nbsp;·&nbsp; HƯỚNG DẪN KỸ THUẬT'],
+    'TK-TC-KT':['Báo Giá Dịch Vụ','KHẢO SÁT &nbsp;·&nbsp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG &nbsp;·&nbsp; KỸ THUẬT'],
+  };
+  const _titleKey=_svcs.join('-');
+  const [_h1,_h2]=_titleMap[_titleKey]||['Báo Giá Dịch Vụ','HỆ THỐNG TƯỚI NÔNG NGHIỆP'];
+
   const html=`
 <div class="page">
   ${headerHTML('',ngayLap,nguoiLap,{soBg})}
 
   <div class="ttl">
-    <h1>Báo Giá Dịch Vụ</h1>
-    <h2>KHẢO SÁT &nbsp;·&nbsp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG HỆ THỐNG TƯỚI</h2>
+    <h1>${_h1}</h1>
+    <h2>${_h2}</h2>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
