@@ -1669,24 +1669,11 @@ function generateVatTu(){
 
   const html=`
 <div class="page">
-  <div class="hdr">
-    <div style="display:flex;gap:10px;align-items:flex-start;">
-      ${_logoImg(48)}
-      <div>
-        <div class="hdr-co">CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</div>
-        <div class="hdr-addr">885 Võ Nguyên Giáp, Phường Hội Phú, Tỉnh Gia Lai &nbsp;|&nbsp; MST: 5901236472</div>
-        <div class="hdr-contact">ĐT: 037 242 8181 | 082 444 8181 &nbsp;·&nbsp; Email: annong@hethongtuoi.com &nbsp;·&nbsp; Website: hethongtuoi.com</div>
-      </div>
-    </div>
-    <div class="hdr-boxes">
-      <div class="hdr-box"><div class="bl">Số BG</div><div class="bv">${soBg}</div></div>
-      <div class="hdr-box"><div class="bl">Ngày lập</div><div class="bv">${ngayLap}</div></div>
-    </div>
-  </div>
+  ${headerHTML('',ngayLap,nguoiLap,{soBg})}
 
   <div class="ttl">
     <h1>Báo Giá Cung Cấp Vật Tư</h1>
-    <div class="sub">Người lập: ${nguoiLap}</div>
+    <h2>VẬT TƯ THIẾT BỊ HỆ THỐNG TƯỚI</h2>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">Thông Tin Khách Hàng</div></div>
@@ -1884,26 +1871,11 @@ function generate(){
 
   const html=`
 <div class="page">
-  <div class="hdr">
-    <div style="display:flex;gap:10px;align-items:center;">
-      ${_logoImg(66)}
-      <div>
-        <div class="hdr-co">CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</div>
-        <div class="hdr-addr">885 Võ Nguyên Giáp, Phường Hội Phú, Tỉnh Gia Lai</div>
-        <div class="hdr-contact">MST: 5901236472 &nbsp;|&nbsp; ĐT: 037 242 8181 | 082 444 8181</div>
-        <div class="hdr-contact">Email: annong@hethongtuoi.com &nbsp;|&nbsp; Website: hethongtuoi.com</div>
-      </div>
-    </div>
-    ${ngayLap||nguoiLap?`<div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:160px;line-height:1.9;">
-      ${ngayLap?`<div><span style="color:#888;">Ngày lập:</span> <strong style="color:#1B5E20;">${ngayLap}</strong></div>`:''}
-      ${nguoiLap&&nguoiLap!=='—'?`<div><span style="color:#888;">Người lập:</span> <strong style="color:#1B5E20;">${nguoiLap}</strong></div>`:''}
-    </div>`:''}
-  </div>
+  ${headerHTML('',ngayLap,nguoiLap,{soBg})}
 
   <div class="ttl">
     <h1>Báo Giá Dịch Vụ</h1>
-    <h2>KHẢO SÁT &nbsp;·&nbsp; THIẾT KẾ HỆ THỐNG TƯỚI</h2>
-    <div style="font-size:12px;color:#888;margin-top:2px;letter-spacing:.3px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
+    <h2>KHẢO SÁT &nbsp;·&nbsp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG HỆ THỐNG TƯỚI</h2>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
@@ -2311,26 +2283,11 @@ function generateBGTK(){
 
   const html=`
 <div class="page">
-  <div class="hdr">
-    <div style="display:flex;gap:10px;align-items:center;">
-      ${_logoImg(66)}
-      <div>
-        <div class="hdr-co">CÔNG TY CỔ PHẦN AN NÔNG AGRITECH</div>
-        <div class="hdr-addr">885 Võ Nguyên Giáp, Phường Hội Phú, Tỉnh Gia Lai</div>
-        <div class="hdr-contact">MST: 5901236472 &nbsp;|&nbsp; ĐT: 037 242 8181 | 082 444 8181</div>
-        <div class="hdr-contact">Email: annong@hethongtuoi.com &nbsp;|&nbsp; Website: hethongtuoi.com</div>
-      </div>
-    </div>
-    <div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:160px;line-height:1.9;">
-      <div><span style="color:#888;">Ngày lập:</span> <strong style="color:#1B5E20;">${ngayLap}</strong></div>
-      ${nguoiLap&&nguoiLap!=='—'?`<div><span style="color:#888;">Người lập:</span> <strong style="color:#1B5E20;">${nguoiLap}</strong></div>`:''}
-    </div>
-  </div>
+  ${headerHTML('',ngayLap,nguoiLap,{soBg})}
 
   <div class="ttl">
     <h1>Báo Giá Khảo Sát &amp; Thiết Kế</h1>
     <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
-    <div style="font-size:12px;color:#888;margin-top:2px;letter-spacing:.3px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
   </div>
 
   <!-- I. THÔNG TIN DỰ ÁN -->
@@ -2486,11 +2443,10 @@ function generateBGTC(){
 
   const html=`
 <div class="page">
-  ${headerHTML('',ngayLap,nguoiLap)}
+  ${headerHTML('',ngayLap,nguoiLap,{soBg})}
   <div class="ttl">
     <h1>Báo Giá Thi Công Lắp Đặt</h1>
     <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
-    <div style="font-size:12px;color:#888;margin-top:2px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
@@ -2675,11 +2631,10 @@ function generateBGKT(){
 
   const html=`
 <div class="page">
-  ${headerHTML('',ngayLap,nguoiLap)}
+  ${headerHTML('',ngayLap,nguoiLap,{soBg})}
   <div class="ttl">
     <h1>Báo Giá Hướng Dẫn Kỹ Thuật</h1>
-    <h2>GIÁM SÁT & HỖ TRỢ KỸ THUẬT HỆ THỐNG TƯỚI</h2>
-    <div style="font-size:12px;color:#888;margin-top:2px;">Số BG: <strong style="color:#1B5E20;">${soBg}</strong></div>
+    <h2>GIÁM SÁT &amp; HỖ TRỢ KỸ THUẬT HỆ THỐNG TƯỚI</h2>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
@@ -2687,7 +2642,8 @@ function generateBGKT(){
     <tr><td>Khách hàng</td><td><strong>${khTen}</strong></td></tr>
     <tr><td>Số điện thoại</td><td>${khSdt}</td></tr>
     <tr><td>Địa chỉ công trình</td><td>${khDC}</td></tr>
-    <tr><td>Diện tích / Cây trồng</td><td>${ha} hecta — ${cay}</td></tr>
+    <tr><td>Diện tích</td><td>${ha} hecta (ha)</td></tr>
+    <tr><td>Loại cây trồng</td><td>${cayDisplay()}</td></tr>
     <tr><td>Khu vực</td><td>${zoneLabel}</td></tr>
     <tr><td>Điều kiện sinh hoạt</td><td>${dkLabel}</td></tr>
     <tr><td>Số ngày làm việc</td><td>${ngay} ngày</td></tr>
@@ -3394,8 +3350,9 @@ const CO={
 const LOGO_SRC='assets/logo-an-nong.png';
 function _logoImg(h=44){return `<img src="${LOGO_SRC}" style="height:${h}px;width:auto;object-fit:contain;flex-shrink:0;" onerror="this.style.display='none'">`;}
 
-function headerHTML(soTL,ngay,npt){
+function headerHTML(soTL,ngay,npt,opts={}){
   const _npt=npt||document.getElementById('nguoiLap')?.value||'';
+  const {soBg,label}=opts; // soBg: hiện số BG trong meta box; label: thay "Người lập" bằng label khác
   return `<div class="hdr">
     <div style="display:flex;gap:10px;align-items:center;">
       ${_logoImg(66)}
@@ -3406,10 +3363,12 @@ function headerHTML(soTL,ngay,npt){
         <div class="hdr-contact">Email: ${CO.email} &nbsp;|&nbsp; Website: ${CO.web}</div>
       </div>
     </div>
-    ${(ngay||_npt)?`<div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:160px;line-height:1.9;">
+    <div style="border:1px solid #C8E6C9;border-radius:5px;background:#F9FBE7;padding:7px 14px;font-size:11px;min-width:170px;line-height:2;">
+      ${soBg?`<div><span style="color:#888;">Số:</span> <strong style="color:#1B5E20;">${soBg}</strong></div>`:''}
+      ${soTL?`<div><span style="color:#888;">Số:</span> <strong style="color:#1B5E20;">${soTL}</strong></div>`:''}
       ${ngay?`<div><span style="color:#888;">Ngày lập:</span> <strong style="color:#1B5E20;">${ngay}</strong></div>`:''}
-      ${_npt?`<div><span style="color:#888;">Người lập:</span> <strong style="color:#1B5E20;">${_npt}</strong></div>`:''}
-    </div>`:''}
+      ${_npt?`<div><span style="color:#888;">${label||'Người lập'}:</span> <strong style="color:#1B5E20;">${_npt}</strong></div>`:''}
+    </div>
   </div>`;
 }
 
@@ -3442,10 +3401,22 @@ function autoSoTL(){
   const dd=String(d.getDate()).padStart(2,'0');
   const mm=String(d.getMonth()+1).padStart(2,'0');
   const yyyy=d.getFullYear();
-  const map={pgh:`${dd}${mm}${yyyy}/PXK-ANA`,tt:`${dd}${mm}${yyyy}/TT-ANA`,tu:`${dd}${mm}${yyyy}/TU-ANA`,hdvt:`${yyyy}${mm}${dd}-1/HĐMB/AN`,hdtk:`${yyyy}${mm}${dd}-1/HD-TK/AN`,hdtc:`${yyyy}${mm}${dd}-1/HD-TC/AN`};
-  let candidate=map[type]||`${dd}${mm}${yyyy}/TL-ANA`;
+  const map={
+    pgh :`${dd}${mm}${yyyy}/PXK-ANA`,
+    tt  :`${dd}${mm}${yyyy}/TT-ANA`,
+    tu  :`${dd}${mm}${yyyy}/TU-ANA`,
+    hdvt:`${yyyy}${mm}${dd}-1/HĐMB/AN`,
+    hdtk:`${yyyy}${mm}${dd}-1/HD-TK/AN`,
+    hdtc:`${yyyy}${mm}${dd}-1/HD-TC/AN`,
+    pks :`${yyyy}${mm}${dd}-1/PKS-ANA`,
+    bbnt:`${yyyy}${mm}${dd}-1/BBNT-ANA`,
+    ncc :`${dd}${mm}${yyyy}/PDH-ANA`
+  };
+  const fallbackCode='TL-ANA';
+  const baseCode=(map[type]||`${dd}${mm}${yyyy}/${fallbackCode}`).split('/').slice(1).join('/');
+  let candidate=map[type]||`${dd}${mm}${yyyy}/${fallbackCode}`;
   let seq=1;
-  while(usedNums.has(candidate)){seq++;candidate=`${yyyy}${mm}${dd}-${seq}/${(map[type]||'TL-ANA').split('/')[1]}`;}
+  while(usedNums.has(candidate)){seq++;candidate=`${yyyy}${mm}${dd}-${seq}/${baseCode}`;}
   usedNums.add(candidate);
   const el=document.getElementById('soTL');if(el)el.value=candidate;
   if(type==='hdvt'){const h=document.getElementById('soHD');if(h&&!h.value)h.value=candidate;}
