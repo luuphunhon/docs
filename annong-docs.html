@@ -165,6 +165,13 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .risk-low{color:#81C784;}.risk-mid{color:#FFE082;}.risk-high{color:#EF9A9A;}
 .kh-toggle-open{background:#1a5c1a!important;border-color:#81C784!important;}
 .kh-toggle-open::before{content:"▼ ";}
+/* ── SERVICE TOGGLE ── */
+.svc-toggle-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin:6px 0 10px;}
+.svc-btn{padding:9px 4px;border:1.5px solid #2E7D32;border-radius:5px;background:#0A3D0A;color:#81C784;font-size:11px;font-weight:400;text-align:center;cursor:pointer;transition:all .15s;line-height:1.5;}
+.svc-btn.active{background:#2E7D32;color:#fff;border-color:#43A047;box-shadow:0 1px 4px rgba(0,0,0,.3);}
+.svc-btn:hover:not(.active){border-color:#81C784;background:#0f3d0f;}
+.svc-section-hdr{font-size:10px;font-weight:700;color:#A5D6A7;text-transform:uppercase;letter-spacing:.5px;margin:10px 0 8px;padding:5px 0 5px;border-bottom:1px solid #1a4a1a;}
+
 /* ── VATTU TABLE ── */
 .t-vt{width:100%;border-collapse:collapse;}
 .t-vt thead tr{background:#2E7D32;}
@@ -253,19 +260,13 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     <div class="cs-panel" id="csPanel">
       <div class="cs-group-hdr">Báo giá</div>
       <div class="cs-item cs-active" data-v="bg-dichvu" data-code="BG-DV" onclick="csSelect(this)">
-        <span class="cs-item-code">BG-DV</span><span class="cs-item-name">Báo giá Dịch vụ (KS-TK)</span>
+        <span class="cs-item-code">BG-DV</span>
+        <span class="cs-item-name">Báo giá Dịch vụ
+          <span style="display:block;font-size:10px;color:#81C784;margin-top:1px;">TK · TC · KT — chọn trong panel</span>
+        </span>
       </div>
       <div class="cs-item" data-v="bg-vattu" data-code="BG-VT" onclick="csSelect(this)">
         <span class="cs-item-code">BG-VT</span><span class="cs-item-name">Báo giá Vật tư</span>
-      </div>
-      <div class="cs-item" data-v="bg-tk" data-code="BG-TK" onclick="csSelect(this)">
-        <span class="cs-item-code">BG-TK</span><span class="cs-item-name">Báo giá Khảo sát &amp; Thiết kế</span>
-      </div>
-      <div class="cs-item" data-v="bg-tc" data-code="BG-TC" onclick="csSelect(this)">
-        <span class="cs-item-code">BG-TC</span><span class="cs-item-name">Báo giá Thi công Lắp đặt</span>
-      </div>
-      <div class="cs-item" data-v="bg-kt" data-code="BG-KT" onclick="csSelect(this)">
-        <span class="cs-item-code">BG-KT</span><span class="cs-item-name">Báo giá Kỹ thuật (HDKT)</span>
       </div>
       <div class="cs-group-hdr">Hợp đồng</div>
       <div class="cs-item" data-v="hdvt" data-code="HD-VT" onclick="csSelect(this)">
@@ -674,133 +675,145 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   </div>
 
   <div id="bgDVPanel">
-  <h3>Dịch vụ KS – Tư vấn – Thiết kế</h3>
-  <div class="field"><label>Đơn giá vật tư (đ/ha)</label><input type="number" id="vtDonGia" value="70000000" step="5000000" oninput="calcAll()"></div>
-
-  <div class="field">
-    <label>Trạm bơm & hệ thống lọc</label>
-    <select id="coTramBom" onchange="toggleTramBom()">
-      <option value="1">Có báo trạm bơm</option>
-      <option value="0">Không có trạm bơm (khách đã có sẵn)</option>
-    </select>
-  </div>
-  <div id="tramBomPanel">
-    <div class="row2">
-      <div class="field"><label>Số trạm bơm</label><input type="number" id="vtSoTram" value="1" min="1" max="10" step="1" oninput="calcAll()"></div>
-      <div class="field"><label>Chi phí / trạm (đ)</label><input type="number" id="vtBomPerTram" value="120000000" step="10000000" oninput="calcAll()"></div>
-    </div>
-    <div class="calc-result" style="margin-bottom:0;">
-      <div class="lbl">Tổng trạm bơm + lọc</div>
-      <div class="val" id="calcBomVal">120.000.000 đ</div>
-      <div class="sub" id="calcBomSub">1 trạm × 120.000.000 đ (~20ha/trạm)</div>
-    </div>
-  </div>
-  <div class="field"><label>Số chuyến khảo sát</label>
-    <select id="ksSoKs">
-      <option value="1">1 chuyến</option>
-      <option value="2" selected>2 chuyến</option>
-      <option value="3">3 chuyến</option>
-    </select>
-  </div>
-  <div class="field"><label>Phụ phí đi lại (nếu có, đ)</label><input type="number" id="ksPhuPhi" value="0" step="1000000"></div>
-  <div class="field"><label>Phương án thanh toán dịch vụ</label>
-    <select id="ksTTOption" onchange="calcAll()">
-      <option value="50-50">50% / 50% — đặt cọc 50%, bàn giao 50%</option>
-      <option value="30-40-30">30% / 40% / 30% — đặt cọc 30%, phương án sơ bộ 40%, bàn giao 30%</option>
-    </select>
+  <h3>Dịch vụ báo giá</h3>
+  <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+  <div class="svc-toggle-row">
+    <button type="button" class="svc-btn active" id="svcTK" onclick="toggleSvc('TK')">
+      <strong>BG-TK</strong><br>Khảo sát<br>&amp; Thiết kế
+    </button>
+    <button type="button" class="svc-btn" id="svcTC" onclick="toggleSvc('TC')">
+      <strong>BG-TC</strong><br>Thi công<br>Lắp đặt
+    </button>
+    <button type="button" class="svc-btn" id="svcKT" onclick="toggleSvc('KT')">
+      <strong>BG-KT</strong><br>Hướng dẫn<br>Kỹ thuật
+    </button>
   </div>
 
-  <div class="calc-result" id="calcKsTK">
-    <div class="lbl">Phí KS-TK (5% vật tư)</div>
-    <div class="val" id="calcKsTKVal">—</div>
-    <div class="sub" id="calcKsTKSub">—</div>
-  </div>
-
-  <h3>Dịch vụ Thi công lắp đặt</h3>
-  <div class="field"><label>Có báo thi công không?</label>
-    <select id="tcCo" onchange="syncMutualExclusive('tc')">
-      <option value="0">Không (chỉ KS-TK)</option>
-      <option value="1">Có — báo thi công</option>
-    </select>
-  </div>
-  <div id="tcPanel" style="display:none;">
-    <div class="field"><label>Địa hình / Điều kiện thi công</label>
-      <select id="tcDiaHinh" onchange="syncTcDiaHinh(this)">
-        <option value="0" data-note="Địa hình bằng, cơ giới vào được">Địa hình bằng / Cơ giới vào được (+0đ/ha)</option>
-        <option value="2000000" data-note="Địa hình phức tạp, khó cơ giới">Địa hình phức tạp / Khó cơ giới (+2.000.000đ/ha)</option>
-      </select>
-    </div>
-    <div class="field"><label>Điều kiện sinh hoạt tại công trình</label>
-      <select id="tcSinhHoat" onchange="calcAll()">
-        <option value="0">Có chỗ ở + điện nước sinh hoạt (+0đ/ha)</option>
-        <option value="1000000">Không có chỗ ở / điện / nước (+1.000.000đ/ha)</option>
-      </select>
-    </div>
-    <div class="calc-result" id="calcTc">
-      <div class="lbl">Phí thi công ước tính</div>
-      <div class="val" id="calcTcVal">—</div>
-      <div class="sub" id="calcTcSub">—</div>
-    </div>
-    <div class="field"><label>Người phụ trách thi công (An Nông)</label>
-      <input id="tcNguoiPhuTrach" placeholder="Họ tên — Chức vụ"></div>
-    <div class="field"><label>Dự trù thời gian thi công</label>
-      <input id="tcThoiGian" placeholder="VD: 10–15 ngày làm việc"></div>
-    <div class="field"><label>Giám sát / Đại diện bên B</label>
-      <input id="tcGiamSatB" placeholder="Họ tên — Chức vụ"></div>
-  </div>
-
-  <h3 id="hdktSection">Dịch vụ HDKT / Giám sát</h3>
-  <div class="field" id="hdktCoField"><label>Có báo HDKT không?</label>
-    <select id="hdktCo" onchange="syncMutualExclusive('hdkt')">
-      <option value="0">Không</option>
-      <option value="1">Có — báo HDKT</option>
-    </select>
-  </div>
-  <div id="hdktPanel" style="display:none;">
+  <!-- ── SECTION: KS-TK ── -->
+  <div id="svcTKSection">
+    <div class="svc-section-hdr">📐 KHẢO SÁT &amp; THIẾT KẾ (KS-TK)</div>
+    <div class="field"><label>Đơn giá vật tư (đ/ha)</label><input type="number" id="vtDonGia" value="70000000" step="5000000" oninput="calcAll()"></div>
     <div class="field">
-      <label>Khu vực dự án</label>
-      <select id="hdktZone" onchange="calcHdktRate()">
-        <option value="100">Trong tỉnh Gia Lai — dưới 100km</option>
-        <option value="200">150–200km — Kon Tum, Đắk Lắk, Bình Định, Phú Yên</option>
-        <option value="300">250–300km — Đắk Nông</option>
-        <option value="400">300–400km — Lâm Đồng, Bình Phước, Đồng Nai...</option>
-        <option value="999">Khu vực khác / Lào / Campuchia / Xa hơn 500km</option>
+      <label>Trạm bơm &amp; hệ thống lọc</label>
+      <select id="coTramBom" onchange="toggleTramBom()">
+        <option value="1">Có báo trạm bơm</option>
+        <option value="0">Không có trạm bơm (khách đã có sẵn)</option>
       </select>
-      <div id="hdktZoneKhacRow" style="display:none;margin-top:6px;">
-        <input id="hdktZoneKhacText" placeholder="Nhập tên khu vực cụ thể..." style="width:100%;padding:7px 9px;border:1px solid #2E7D32;border-radius:4px;background:#0A3D0A;color:#fff;font-size:12.5px;">
+    </div>
+    <div id="tramBomPanel">
+      <div class="row2">
+        <div class="field"><label>Số trạm bơm</label><input type="number" id="vtSoTram" value="1" min="1" max="10" step="1" oninput="calcAll()"></div>
+        <div class="field"><label>Chi phí / trạm (đ)</label><input type="number" id="vtBomPerTram" value="120000000" step="10000000" oninput="calcAll()"></div>
+      </div>
+      <div class="calc-result" style="margin-bottom:0;">
+        <div class="lbl">Tổng trạm bơm + lọc</div>
+        <div class="val" id="calcBomVal">120.000.000 đ</div>
+        <div class="sub" id="calcBomSub">1 trạm × 120.000.000 đ (~20ha/trạm)</div>
       </div>
     </div>
-    <div class="field">
-      <label>Điều kiện ăn ở sinh hoạt tại công trình</label>
-      <select id="hdktDkSH" onchange="calcHdktRate()">
-        <option value="1">Có chỗ ở + điện nước sinh hoạt</option>
-        <option value="0">Không có — tăng thêm 500.000đ/ngày</option>
+    <div class="field"><label>Số chuyến khảo sát</label>
+      <select id="ksSoKs">
+        <option value="1">1 chuyến</option>
+        <option value="2" selected>2 chuyến</option>
+        <option value="3">3 chuyến</option>
       </select>
     </div>
-    <div class="row2">
-      <div class="field"><label>Số ngày</label><input type="number" id="hdktNgay" value="2" min="1" oninput="calcAll()"></div>
-      <div class="field"><label>Đơn giá / 2 người / ngày (đ)</label><input type="number" id="hdktDonGia" value="2000000" step="500000" oninput="this._userEdited=true;calcAll()"></div>
-    </div>
-    <div class="calc-result" id="calcHdkt">
-      <div class="lbl">Phí HDKT <span style="font-weight:400;color:#81C784;font-size:10px;">(2 người: 1 chính + 1 phụ)</span></div>
-      <div class="val" id="calcHdktVal">—</div>
-      <div class="sub" id="calcHdktSub">—</div>
-    </div>
-    <!-- Chi phí đi lại — gộp thay thế 2 trường cũ -->
-    <div class="field" style="margin-top:8px;">
-      <label>Chi phí đi lại</label>
-      <select id="phuPhiLao" onchange="toggleDiLaiSoTien()">
-        <option value="0">Không tính — tự bỏ phí đi lại</option>
-        <option value="1">Báo riêng theo chuyến (ghi vào phụ lục)</option>
-        <option value="2">Số tiền cụ thể (đã thoả thuận)</option>
+    <div class="field"><label>Phụ phí đi lại (nếu có, đ)</label><input type="number" id="ksPhuPhi" value="0" step="1000000"></div>
+    <div class="field"><label>Phương án thanh toán dịch vụ</label>
+      <select id="ksTTOption" onchange="calcAll()">
+        <option value="50-50">50% / 50% — đặt cọc 50%, bàn giao 50%</option>
+        <option value="30-40-30">30% / 40% / 30% — đặt cọc 30%, phương án sơ bộ 40%, bàn giao 30%</option>
       </select>
     </div>
-    <div id="diLaiSoTienRow" style="display:none;">
-      <div class="field"><label>Số tiền đi lại (đ)</label>
-        <input type="number" id="diLaiSoTien" value="0" step="500000" oninput="calcAll()" placeholder="0">
+    <div class="calc-result" id="calcKsTK">
+      <div class="lbl">Phí KS-TK (5% vật tư)</div>
+      <div class="val" id="calcKsTKVal">—</div>
+      <div class="sub" id="calcKsTKSub">—</div>
+    </div>
+  </div>
+
+  <!-- ── SECTION: TC ── -->
+  <div id="svcTCSection" style="display:none">
+    <div class="svc-section-hdr">🔧 THI CÔNG LẮP ĐẶT (TC)</div>
+    <div id="tcPanel">
+      <div class="field"><label>Địa hình / Điều kiện thi công</label>
+        <select id="tcDiaHinh" onchange="syncTcDiaHinh(this)">
+          <option value="0" data-note="Địa hình bằng, cơ giới vào được">Địa hình bằng / Cơ giới vào được (+0đ/ha)</option>
+          <option value="2000000" data-note="Địa hình phức tạp, khó cơ giới">Địa hình phức tạp / Khó cơ giới (+2.000.000đ/ha)</option>
+        </select>
+      </div>
+      <div class="field"><label>Điều kiện sinh hoạt tại công trình</label>
+        <select id="tcSinhHoat" onchange="calcAll()">
+          <option value="0">Có chỗ ở + điện nước sinh hoạt (+0đ/ha)</option>
+          <option value="1000000">Không có chỗ ở / điện / nước (+1.000.000đ/ha)</option>
+        </select>
+      </div>
+      <div class="calc-result" id="calcTc">
+        <div class="lbl">Phí thi công ước tính</div>
+        <div class="val" id="calcTcVal">—</div>
+        <div class="sub" id="calcTcSub">—</div>
+      </div>
+      <div class="field"><label>Người phụ trách thi công (An Nông)</label>
+        <input id="tcNguoiPhuTrach" placeholder="Họ tên — Chức vụ"></div>
+      <div class="field"><label>Dự trù thời gian thi công</label>
+        <input id="tcThoiGian" placeholder="VD: 10–15 ngày làm việc"></div>
+      <div class="field"><label>Giám sát / Đại diện bên B</label>
+        <input id="tcGiamSatB" placeholder="Họ tên — Chức vụ"></div>
+    </div>
+  </div>
+
+  <!-- ── SECTION: KT ── -->
+  <div id="svcKTSection" style="display:none">
+    <div class="svc-section-hdr">👷 HƯỚNG DẪN KỸ THUẬT (HDKT)</div>
+    <div id="hdktPanel">
+      <div class="field">
+        <label>Khu vực dự án</label>
+        <select id="hdktZone" onchange="calcHdktRate()">
+          <option value="100">Trong tỉnh Gia Lai — dưới 100km</option>
+          <option value="200">150–200km — Kon Tum, Đắk Lắk, Bình Định, Phú Yên</option>
+          <option value="300">250–300km — Đắk Nông</option>
+          <option value="400">300–400km — Lâm Đồng, Bình Phước, Đồng Nai...</option>
+          <option value="999">Khu vực khác / Lào / Campuchia / Xa hơn 500km</option>
+        </select>
+        <div id="hdktZoneKhacRow" style="display:none;margin-top:6px;">
+          <input id="hdktZoneKhacText" placeholder="Nhập tên khu vực cụ thể..." style="width:100%;padding:7px 9px;border:1px solid #2E7D32;border-radius:4px;background:#0A3D0A;color:#fff;font-size:12.5px;">
+        </div>
+      </div>
+      <div class="field">
+        <label>Điều kiện ăn ở sinh hoạt tại công trình</label>
+        <select id="hdktDkSH" onchange="calcHdktRate()">
+          <option value="1">Có chỗ ở + điện nước sinh hoạt</option>
+          <option value="0">Không có — tăng thêm 500.000đ/ngày</option>
+        </select>
+      </div>
+      <div class="row2">
+        <div class="field"><label>Số ngày</label><input type="number" id="hdktNgay" value="2" min="1" oninput="calcAll()"></div>
+        <div class="field"><label>Đơn giá / 2 người / ngày (đ)</label><input type="number" id="hdktDonGia" value="2000000" step="500000" oninput="this._userEdited=true;calcAll()"></div>
+      </div>
+      <div class="calc-result" id="calcHdkt">
+        <div class="lbl">Phí HDKT <span style="font-weight:400;color:#81C784;font-size:10px;">(2 người: 1 chính + 1 phụ)</span></div>
+        <div class="val" id="calcHdktVal">—</div>
+        <div class="sub" id="calcHdktSub">—</div>
+      </div>
+      <div class="field" style="margin-top:8px;">
+        <label>Chi phí đi lại</label>
+        <select id="phuPhiLao" onchange="toggleDiLaiSoTien()">
+          <option value="0">Không tính — tự bỏ phí đi lại</option>
+          <option value="1">Báo riêng theo chuyến (ghi vào phụ lục)</option>
+          <option value="2">Số tiền cụ thể (đã thoả thuận)</option>
+        </select>
+      </div>
+      <div id="diLaiSoTienRow" style="display:none;">
+        <div class="field"><label>Số tiền đi lại (đ)</label>
+          <input type="number" id="diLaiSoTien" value="0" step="500000" oninput="calcAll()" placeholder="0">
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Legacy hidden inputs (đọc bởi generate + calcAll) -->
+  <input type="hidden" id="tcCo" value="0">
+  <input type="hidden" id="hdktCo" value="0">
 
   <h3>Điều khoản</h3>
     </div><!-- /bgDVPanel -->
@@ -1722,15 +1735,42 @@ function generateVatTu(){
   pmAutoSave();
 }
 
+// ── TOGGLE SERVICE (BG-DV) ──
+function toggleSvc(type){
+  const btn=document.getElementById('svc'+type);
+  const sec=document.getElementById('svc'+type+'Section');
+  const isActive=btn.classList.contains('active');
+  // Không cho tắt hạng mục cuối cùng
+  const anyOther=['TK','TC','KT'].filter(t=>t!==type&&document.getElementById('svc'+t).classList.contains('active')).length>0;
+  if(isActive&&!anyOther) return;
+  btn.classList.toggle('active');
+  const nowOn=btn.classList.contains('active');
+  if(sec) sec.style.display=nowOn?'':'none';
+  // Sync hidden selects để generate() đọc đúng
+  if(type==='TC'){const el=document.getElementById('tcCo');if(el)el.value=nowOn?'1':'0';}
+  if(type==='KT'){const el=document.getElementById('hdktCo');if(el)el.value=nowOn?'1':'0';}
+  calcAll();
+}
+
 // ── GENERATE ──
 function generate(){
   const loaiBG=document.getElementById('docType')?.value||'bg-dichvu';
   if(loaiBG==='bg-vattu'){generateVatTu();return;}
   if(loaiBG==='da'){generateDA();pmAutoSave();return;}
+  // Backward compat cho project đã lưu với loại cũ
   if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
   if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
   if(loaiBG==='bg-kt'){generateBGKT();pmAutoSave();return;}
   if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
+
+  // BG-DV: đọc toggle state để route đúng generator
+  const _svcTK=document.getElementById('svcTK')?.classList.contains('active')??true;
+  const _svcTC=document.getElementById('svcTC')?.classList.contains('active')??false;
+  const _svcKT=document.getElementById('svcKT')?.classList.contains('active')??false;
+  if(!_svcTK&&_svcTC&&!_svcKT){generateBGTC();pmAutoSave();return;}
+  if(!_svcTK&&!_svcTC&&_svcKT){generateBGKT();pmAutoSave();return;}
+  if(_svcTK&&!_svcTC&&!_svcKT){generateBGTK();pmAutoSave();return;}
+  // TK+TC, TK+KT, TK+TC+KT → combined template bên dưới (đọc tcCo / hdktCo)
 
   const ha=parseFloat(document.getElementById('dtHa').value)||7;
   const vtDg=parseFloat(document.getElementById('vtDonGia').value)||70000000;
@@ -3040,7 +3080,7 @@ function getBGDocTitle(){
   const loai=LOAI_MAP_ALL[type]||'TL';
   autoSlug();
   const slug=document.getElementById('duAnSlug')?.value||'du-an';
-  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);const isDA=type==='da';
+  const isBG=['bg-dichvu','bg-vattu'].includes(type);const isDA=type==='da';
   if(isBG){
     const v=document.getElementById('trangThai')?.value||'ban-nhap';
     return `${loai}_${slug}_${v}`;
@@ -3053,7 +3093,7 @@ function hasUnsavedData(){
   const hasItems=vtItems.some(r=>r.type==='item'&&(r.ten||+r.donGia>0||+r.sl>1));
   const khTen=(document.getElementById('khTen')?.value||'').trim();
   const loai=document.getElementById('docType')?.value||'bg-dichvu';
-  return hasItems||(['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(loai)&&khTen.length>0);
+  return hasItems||(['bg-dichvu','bg-vattu'].includes(loai)&&khTen.length>0);
 }
 
 // ══════════════════════════════════════════════════════
@@ -3391,7 +3431,7 @@ function toggleKhLoai(){
 // ── ON DOC TYPE CHANGE ──────────────────────────────────
 function onDocTypeChange(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
-  const isBG=['bg-dichvu','bg-vattu','bg-tk','bg-tc','bg-kt'].includes(type);
+  const isBG=['bg-dichvu','bg-vattu'].includes(type);
   const isDA=type==='da';
   const isVT=type==='bg-vattu';
 
@@ -3402,18 +3442,6 @@ function onDocTypeChange(){
   document.getElementById('daFields').style.display=isDA?'':'none';
   // Toggle KH info
   setKhMode(isDA);
-  // BG-TC: hiện tcPanel trực tiếp (không cần bật tcCo)
-  if(type==='bg-tc'){
-    document.getElementById('tcPanel').style.display='block';
-    document.getElementById('tcCo').value='1';
-  } else if(type!=='bg-dichvu'){
-    // Không phải BG-DV → ẩn tcPanel (sẽ được calcAll quản lý)
-  }
-  // BG-KT: hiện hdktPanel trực tiếp
-  if(type==='bg-kt'){
-    document.getElementById('hdktPanel').style.display='block';
-    document.getElementById('hdktCo').value='1';
-  }
 
   // Non-BG panels
   document.getElementById('extraKhPanel').style.display=isBG?'none':'';
@@ -3434,7 +3462,7 @@ function onDocTypeChange(){
     const soEl=document.getElementById('bgSo');
     if(soEl){
       // Xác định suffix đúng theo loại
-      const suffixMap={'bg-dichvu':'BG-KS-TK','bg-vattu':'BG-VT','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT'};
+      const suffixMap={'bg-dichvu':'BG-KS-TK','bg-vattu':'BG-VT'};
       const newSuffix=suffixMap[type]||'BG-KS-TK';
       // Thay suffix cũ bằng suffix mới (giữ nguyên phần ngày và số)
       soEl.value=soEl.value.replace(/\/BG-[A-Z-]+\/AN/,'/'+newSuffix+'/AN');
