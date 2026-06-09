@@ -1753,6 +1753,18 @@ function toggleSvc(type){
   // Sync hidden selects để generate() đọc đúng
   if(type==='TC'){const el=document.getElementById('tcCo');if(el)el.value=nowOn?'1':'0';}
   if(type==='KT'){const el=document.getElementById('hdktCo');if(el)el.value=nowOn?'1':'0';}
+  // Cập nhật suffix số BG theo service đang active
+  const tk=document.getElementById('svcTK').classList.contains('active');
+  const tc=document.getElementById('svcTC').classList.contains('active');
+  const kt=document.getElementById('svcKT').classList.contains('active');
+  const suffixMap={
+    '100':'BG-KS-TK','010':'BG-TC','001':'BG-KT',
+    '110':'BG-TK-TC','101':'BG-TK-KT','011':'BG-TC-KT','111':'BG-DV'
+  };
+  const key=(tk?'1':'0')+(tc?'1':'0')+(kt?'1':'0');
+  const newSuffix=suffixMap[key]||'BG-DV';
+  const soEl=document.getElementById('bgSo');
+  if(soEl) soEl.value=soEl.value.replace(/\/BG-[A-Z-]+\/AN/,'/'+newSuffix+'/AN');
   calcAll();
 }
 
