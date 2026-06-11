@@ -1087,6 +1087,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 // ── HELPERS ──
 function fmt(n){return Number(n).toLocaleString('vi-VN');}
 function fmtFull(n){return Number(n).toLocaleString('vi-VN')+' đ';}
+function fmtD(n){return Number(n).toLocaleString('vi-VN')+' đ';}
 function toRoman(n){return(['I','II','III','IV','V','VI','VII','VIII','IX','X'])[n-1]||n;}
 // Làm tròn đến 500.000đ gần nhất
 function roundFee(n){return Math.round(n/500000)*500000;}
