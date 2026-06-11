@@ -48,7 +48,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .cs-label{flex:1;font-size:12.5px;color:#E8F5E9;font-weight:500;}
 .cs-arrow{font-size:10px;color:#4a7a4a;flex-shrink:0;transition:transform .15s;}
 .cs-arrow.open{transform:rotate(180deg);}
-.cs-panel{position:absolute;left:0;right:0;top:calc(100% + 4px);background:#0D3B0D;border:1px solid #2E7D32;border-radius:6px;z-index:300;overflow:hidden;box-shadow:0 6px 20px rgba(0,0,0,.5);display:none;}
+.cs-panel{position:fixed;background:#0D3B0D;border:1px solid #2E7D32;border-radius:6px;z-index:9999;overflow-y:auto;max-height:80vh;box-shadow:0 6px 20px rgba(0,0,0,.5);display:none;}
 .cs-panel.open{display:block;}
 .cs-group-hdr{font-size:9px;font-weight:700;color:#4a7a4a;text-transform:uppercase;letter-spacing:.8px;padding:9px 12px 4px;background:#0A3D0A;}
 .cs-group-hdr:not(:first-child){border-top:1px solid #1a4a1a;}
@@ -1005,6 +1005,15 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     <div class="field"><label>Ghi chú bổ sung</label>
       <textarea id="hdtcGhiChu" rows="2" placeholder="VD: Bên B cung cấp điện, nước thi công; Bên A chịu chi phí vận chuyển..."></textarea>
     </div>
+  </div>
+
+  <!-- ── HỢP ĐỒNG BẢO TRÌ ── -->
+  <div id="hdbtFields" style="display:none">
+    <h3>Hợp đồng bảo trì</h3>
+    <div class="field"><label>Tổng giá trị HĐ (đ)</label><input type="number" id="hdbtTong" placeholder="5000000" oninput="this.closest('#hdbtFields').querySelector('#hdbtCalc').textContent=parseInt(this.value||0).toLocaleString('vi-VN')+'đ'"></div>
+    <div class="field"><label>% Tạm ứng</label><input type="number" id="hdbtTUPct" value="50" min="10" max="100"></div>
+    <div class="field"><label>Thời gian thực hiện</label><input id="hdbtThoiGian" value="Theo lịch thỏa thuận"></div>
+    <div class="field"><label>Ghi chú</label><textarea id="hdbtGhiChu" rows="2" placeholder="Phạm vi bảo trì, vật tư thay thế..."></textarea></div>
   </div>
 
   <!-- ── HỢP ĐỒNG VẬT TƯ ── -->
@@ -3014,6 +3023,13 @@ function csToggle(e){
   const panel=document.getElementById('csPanel');
   const arrow=document.getElementById('csArrow');
   const isOpen=panel.classList.contains('open');
+  if(!isOpen){
+    const btn=e.currentTarget;
+    const r=btn.getBoundingClientRect();
+    panel.style.top=(r.bottom+4)+'px';
+    panel.style.left=r.left+'px';
+    panel.style.width=r.width+'px';
+  }
   panel.classList.toggle('open',!isOpen);
   arrow.classList.toggle('open',!isOpen);
 }
@@ -3434,6 +3450,7 @@ function autoSoTL(){
     hdvt:`${yyyy}${mm}${dd}-1/HĐMB/AN`,
     hdtk:`${yyyy}${mm}${dd}-1/HD-TK/AN`,
     hdtc:`${yyyy}${mm}${dd}-1/HD-TC/AN`,
+    hdbt:`${yyyy}${mm}${dd}-1/HD-BT/AN`,
     pks :`${yyyy}${mm}${dd}-1/PKS-ANA`,
     bbnt:`${yyyy}${mm}${dd}-1/BBNT-ANA`,
     ncc :`${dd}${mm}${yyyy}/PDH-ANA`
@@ -3481,6 +3498,7 @@ function onDocTypeChange(){
   document.getElementById('hdvtFields').style.display=type==='hdvt'?'':'none';
   document.getElementById('hdtkFields').style.display=type==='hdtk'?'':'none';
   document.getElementById('hdtcFields').style.display=type==='hdtc'?'':'none';
+  document.getElementById('hdbtFields').style.display=type==='hdbt'?'':'none';
   document.getElementById('pksFields').style.display=type==='pks'?'':'none';
   document.getElementById('bbntFields').style.display=type==='bbnt'?'':'none';
   document.getElementById('nccFields').style.display=type==='ncc'?'':'none';
@@ -3534,6 +3552,7 @@ function _genDoc(type){
   if(type==='hdvt') html=genHDVT(d);
   if(type==='hdtk') html=genHDTK(d);
   if(type==='hdtc') html=genHDTC(d);
+  if(type==='hdbt') html=genHDBT(d);
   if(type==='pks')  html=genPKS(d);
   if(type==='bbnt') html=genBBNT(d);
   if(type==='ncc')  html=genNCC(d);
@@ -4023,6 +4042,52 @@ function genHDTC(d){
     </div>
     <div class="footer">${CO.ten} | ${CO.dc} | ${CO.web}</div>
   </div>`;
+}
+
+// ── GEN HD-BT ──────────────────────────────────────────
+function genHDBT(d){
+  const tong=parseFloat(document.getElementById('hdbtTong')?.value)||0;
+  const tuPct=parseFloat(document.getElementById('hdbtTUPct')?.value)||50;
+  const tuVal=Math.round(tong*tuPct/100);
+  const thoiGian=document.getElementById('hdbtThoiGian')?.value||'Theo lịch thỏa thuận';
+  const ghiChu=document.getElementById('hdbtGhiChu')?.value||'';
+  const isDN=document.getElementById('khLoai')?.value==='doanhnghiep';
+  const khMST=document.getElementById('khMST')?.value||'';
+  const khNguoiDD=document.getElementById('khNguoiDD')?.value||'';
+  let soHD=d.soHD;
+  if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HD-BT/${p[2]}`;}
+  const fmtVND=v=>v?v.toLocaleString('vi-VN')+'đ':'—';
+  return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
+    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div class="ttl"><h1>HỢP ĐỒNG BẢO TRÌ HỆ THỐNG</h1><div class="sub">BẢO DƯỠNG &amp; BẢO TRÌ HỆ THỐNG TƯỚI NÔNG NGHIỆP</div></div>
+    ${_partyGrid(
+      _partyCard(`BÊN A (Bên cung cấp dịch vụ): ${CO.ten}`,[
+        {label:'Mã số thuế',value:CO.mst},
+        {label:'Địa chỉ',value:CO.dc},
+        {label:'Điện thoại',value:CO.dt},
+        {label:'Đại diện',value:d.nguoiLap}
+      ],'#1B5E20'),
+      _partyCard('BÊN B (Bên sử dụng dịch vụ)',[
+        {label:'Họ tên',value:`<strong>${d.khTen}</strong>`},
+        {label:isDN?'Mã số thuế':'CCCD/CMND',value:isDN?khMST:d.khCCCD},
+        {label:'Điện thoại',value:d.khSdt},
+        {label:'Địa chỉ',value:d.khDiaChi},
+        ...(isDN&&khNguoiDD?[{label:'Đại diện',value:khNguoiDD}]:[])
+      ],'#2E7D32')
+    )}
+    <table class="t-info" style="margin-bottom:8px;width:100%">
+      <tr><td>Nội dung bảo trì</td><td>Kiểm tra, vệ sinh, hiệu chỉnh toàn bộ hệ thống tưới tại vườn</td></tr>
+      <tr><td>Thời gian thực hiện</td><td>${thoiGian}</td></tr>
+      ${tong?`<tr><td>Giá trị hợp đồng</td><td><strong>${fmtVND(tong)}</strong></td></tr>`:''}
+      ${tong&&tuPct?`<tr><td>Tạm ứng (${tuPct}%)</td><td>${fmtVND(tuVal)}</td></tr><tr><td>Còn lại (${100-tuPct}%)</td><td>${fmtVND(tong-tuVal)} — sau khi nghiệm thu</td></tr>`:''}
+      ${ghiChu?`<tr><td>Ghi chú</td><td>${ghiChu}</td></tr>`:''}
+    </table>
+    <p style="font-size:11.5px;margin-bottom:6px">Hai bên đồng ý ký kết hợp đồng bảo trì hệ thống tưới với các điều khoản nêu trên. Mọi phát sinh nằm ngoài phạm vi thỏa thuận sẽ được hai bên thương lượng bổ sung bằng phụ lục hợp đồng.</p>
+    <div class="sig-row">
+      <div class="sig-col"><div class="sig-ttl">BÊN B (Bên sử dụng)</div><div class="sig-sub">(Ký, ghi rõ họ tên)</div></div>
+      <div class="sig-col"><div class="sig-ttl">BÊN A: ${CO.ten}</div><div class="sig-sub">Đại diện bên A (Bên cung cấp)</div><div class="sig-sub">GIÁM ĐỐC — (Ký, đóng dấu)</div><div class="sig-name">${CO.gd}</div></div>
+    </div>
+    <div class="footer">${CO.ten} | ${CO.dc} | ${CO.web}</div></div>`;
 }
 
 // ── CALC HD-TK ─────────────────────────────────────────
