@@ -41,14 +41,14 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .note-box{background:#0A3D0A;border-left:3px solid #FFA726;padding:8px 10px;font-size:11px;color:#FFE082;border-radius:0 4px 4px 0;margin-top:8px;line-height:1.6;}
 
 /* ── CUSTOM DOCTYPE SELECT ── */
-.cs-wrap{position:relative;margin-bottom:4px;}
+.cs-wrap{margin-bottom:4px;}
 .cs-btn{width:100%;display:flex;align-items:center;gap:8px;padding:9px 11px;background:#0A3D0A;border:1px solid #43A047;border-radius:5px;color:#fff;cursor:pointer;text-align:left;transition:border-color .15s;}
 .cs-btn:hover{border-color:#81C784;}
 .cs-badge{font-size:10px;font-weight:700;letter-spacing:.3px;background:#2E7D32;color:#A5D6A7;border-radius:3px;padding:2px 7px;white-space:nowrap;flex-shrink:0;min-width:36px;text-align:center;}
 .cs-label{flex:1;font-size:12.5px;color:#E8F5E9;font-weight:500;}
 .cs-arrow{font-size:10px;color:#4a7a4a;flex-shrink:0;transition:transform .15s;}
 .cs-arrow.open{transform:rotate(180deg);}
-.cs-panel{position:fixed;background:#0D3B0D;border:1px solid #2E7D32;border-radius:6px;z-index:9999;overflow-y:auto;max-height:80vh;box-shadow:0 6px 20px rgba(0,0,0,.5);display:none;}
+.cs-panel{background:#0D3B0D;border:1px solid #2E7D32;border-radius:0 0 6px 6px;display:none;margin-top:-1px;}
 .cs-panel.open{display:block;}
 .cs-group-hdr{font-size:9px;font-weight:700;color:#4a7a4a;text-transform:uppercase;letter-spacing:.8px;padding:9px 12px 4px;background:#0A3D0A;}
 .cs-group-hdr:not(:first-child){border-top:1px solid #1a4a1a;}
@@ -256,6 +256,55 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <span class="cs-label" id="csLabel">Báo giá Dịch vụ (KS-TK)</span>
       <span class="cs-arrow" id="csArrow">▾</span>
     </button>
+    <div class="cs-panel" id="csPanel">
+      <div class="cs-group-hdr">Báo giá</div>
+      <div class="cs-item cs-active" data-v="bg-dichvu" data-code="BG-DV" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-DV</span>
+        <span class="cs-item-name">Báo giá Dịch vụ
+          <span style="display:block;font-size:10px;color:#81C784;margin-top:1px;">TK · TC · KT — chọn trong panel</span>
+        </span>
+      </div>
+      <div class="cs-item" data-v="bg-vattu" data-code="BG-VT" onclick="csSelect(this)">
+        <span class="cs-item-code">BG-VT</span><span class="cs-item-name">Báo giá Vật tư</span>
+      </div>
+      <div class="cs-group-hdr">Hợp đồng</div>
+      <div class="cs-item" data-v="hdvt" data-code="HD-VT" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-VT</span><span class="cs-item-name">Cung Cấp Vật Tư</span>
+      </div>
+      <div class="cs-item" data-v="hdtk" data-code="HD-TK" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-TK</span><span class="cs-item-name">Khảo Sát Thiết Kế</span>
+      </div>
+      <div class="cs-item" data-v="hdtc" data-code="HD-TC" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-TC</span><span class="cs-item-name">Thi Công Lắp Đặt</span>
+      </div>
+      <div class="cs-item" data-v="hdbt" data-code="HD-BT" onclick="csSelect(this)">
+        <span class="cs-item-code">HD-BT</span><span class="cs-item-name">Bảo Trì Hệ Thống</span>
+      </div>
+      <div class="cs-group-hdr">Khảo sát &amp; Nghiệm thu</div>
+      <div class="cs-item" data-v="pks" data-code="PKS" onclick="csSelect(this)">
+        <span class="cs-item-code">PKS</span><span class="cs-item-name">Phiếu Khảo Sát Vườn</span>
+      </div>
+      <div class="cs-item" data-v="bbnt" data-code="BBNT" onclick="csSelect(this)">
+        <span class="cs-item-code">BBNT</span><span class="cs-item-name">Biên Bản Nghiệm Thu</span>
+      </div>
+      <div class="cs-group-hdr">Giao hàng &amp; Tài chính</div>
+      <div class="cs-item" data-v="ncc" data-code="PDH" onclick="csSelect(this)">
+        <span class="cs-item-code">PDH</span><span class="cs-item-name">Phiếu Đặt Hàng NCC</span>
+      </div>
+      <div class="cs-item" data-v="pgh" data-code="PGH" onclick="csSelect(this)">
+        <span class="cs-item-code">PGH</span><span class="cs-item-name">Phiếu Giao Hàng</span>
+      </div>
+      <div class="cs-item" data-v="tu" data-code="TU" onclick="csSelect(this)">
+        <span class="cs-item-code">TU</span><span class="cs-item-name">Giấy đề nghị Tạm Ứng</span>
+      </div>
+      <div class="cs-item" data-v="tt" data-code="TT" onclick="csSelect(this)">
+        <span class="cs-item-code">TT</span><span class="cs-item-name">Giấy đề nghị Thanh Toán</span>
+      </div>
+      <div class="cs-group-hdr">Hồ sơ & Quản lý</div>
+      <div class="cs-item" data-v="da" data-code="DA" onclick="csSelect(this)">
+        <span class="cs-item-code">DA</span><span class="cs-item-name">Thông tin dự án</span>
+      </div>
+    </div>
   </div>
   <!-- Hidden input để JS cũ đọc giá trị -->
   <input type="hidden" id="docType" value="bg-dichvu">
@@ -2974,13 +3023,6 @@ function csToggle(e){
   const panel=document.getElementById('csPanel');
   const arrow=document.getElementById('csArrow');
   const isOpen=panel.classList.contains('open');
-  if(!isOpen){
-    const btn=e.currentTarget;
-    const r=btn.getBoundingClientRect();
-    panel.style.top=(r.bottom+4)+'px';
-    panel.style.left=r.left+'px';
-    panel.style.width=r.width+'px';
-  }
   panel.classList.toggle('open',!isOpen);
   arrow.classList.toggle('open',!isOpen);
 }
@@ -4221,55 +4263,5 @@ function fillFromLark() {
   });
 })();
 </script>
-<!-- csPanel tách ra khỏi .panel scroll container để tránh event bị intercept -->
-<div class="cs-panel" id="csPanel">
-  <div class="cs-group-hdr">Báo giá</div>
-  <div class="cs-item cs-active" data-v="bg-dichvu" data-code="BG-DV" onclick="csSelect(this)">
-    <span class="cs-item-code">BG-DV</span>
-    <span class="cs-item-name">Báo giá Dịch vụ
-      <span style="display:block;font-size:10px;color:#81C784;margin-top:1px;">TK · TC · KT — chọn trong panel</span>
-    </span>
-  </div>
-  <div class="cs-item" data-v="bg-vattu" data-code="BG-VT" onclick="csSelect(this)">
-    <span class="cs-item-code">BG-VT</span><span class="cs-item-name">Báo giá Vật tư</span>
-  </div>
-  <div class="cs-group-hdr">Hợp đồng</div>
-  <div class="cs-item" data-v="hdvt" data-code="HD-VT" onclick="csSelect(this)">
-    <span class="cs-item-code">HD-VT</span><span class="cs-item-name">Cung Cấp Vật Tư</span>
-  </div>
-  <div class="cs-item" data-v="hdtk" data-code="HD-TK" onclick="csSelect(this)">
-    <span class="cs-item-code">HD-TK</span><span class="cs-item-name">Khảo Sát Thiết Kế</span>
-  </div>
-  <div class="cs-item" data-v="hdtc" data-code="HD-TC" onclick="csSelect(this)">
-    <span class="cs-item-code">HD-TC</span><span class="cs-item-name">Thi Công Lắp Đặt</span>
-  </div>
-  <div class="cs-item" data-v="hdbt" data-code="HD-BT" onclick="csSelect(this)">
-    <span class="cs-item-code">HD-BT</span><span class="cs-item-name">Bảo Trì Hệ Thống</span>
-  </div>
-  <div class="cs-group-hdr">Khảo sát &amp; Nghiệm thu</div>
-  <div class="cs-item" data-v="pks" data-code="PKS" onclick="csSelect(this)">
-    <span class="cs-item-code">PKS</span><span class="cs-item-name">Phiếu Khảo Sát Vườn</span>
-  </div>
-  <div class="cs-item" data-v="bbnt" data-code="BBNT" onclick="csSelect(this)">
-    <span class="cs-item-code">BBNT</span><span class="cs-item-name">Biên Bản Nghiệm Thu</span>
-  </div>
-  <div class="cs-group-hdr">Giao hàng &amp; Tài chính</div>
-  <div class="cs-item" data-v="ncc" data-code="PDH" onclick="csSelect(this)">
-    <span class="cs-item-code">PDH</span><span class="cs-item-name">Phiếu Đặt Hàng NCC</span>
-  </div>
-  <div class="cs-item" data-v="pgh" data-code="PGH" onclick="csSelect(this)">
-    <span class="cs-item-code">PGH</span><span class="cs-item-name">Phiếu Giao Hàng</span>
-  </div>
-  <div class="cs-item" data-v="tu" data-code="TU" onclick="csSelect(this)">
-    <span class="cs-item-code">TU</span><span class="cs-item-name">Giấy đề nghị Tạm Ứng</span>
-  </div>
-  <div class="cs-item" data-v="tt" data-code="TT" onclick="csSelect(this)">
-    <span class="cs-item-code">TT</span><span class="cs-item-name">Giấy đề nghị Thanh Toán</span>
-  </div>
-  <div class="cs-group-hdr">Hồ sơ & Quản lý</div>
-  <div class="cs-item" data-v="da" data-code="DA" onclick="csSelect(this)">
-    <span class="cs-item-code">DA</span><span class="cs-item-name">Thông tin dự án</span>
-  </div>
-</div>
 </body>
 </html>
