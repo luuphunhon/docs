@@ -3633,7 +3633,7 @@ function genHDVT(d){
     <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
       <div class="sub">V/v: ${moTa}</div></div>
-    <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24 tháng 11 năm 2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
+    <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên bán (Bên A): ${CO.ten}</div></div>
     <table class="t-info" style="margin-bottom:8px"><tr><td>Mã số thuế</td><td>${CO.mst}</td></tr><tr><td>Địa chỉ</td><td>${CO.dc}</td></tr><tr><td>Tài khoản số</td><td>${CO.stk} — ${CO.ngan} Chi nhánh Gia Lai</td></tr><tr><td>Đại diện</td><td>Ông ${CO.gd} &nbsp;&nbsp; Chức vụ: Giám đốc</td></tr></table>
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Bên mua (Bên B): ${isDN?d.khTen:'Ông/Bà '+d.khTen}</div></div>
@@ -4373,8 +4373,6 @@ function genHDTC(d){
     </div>
 
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">
-      - Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>
-      - Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24/11/2015;<br>
       ${soHDCu!=='—'?`- Căn cứ Hợp đồng Khảo sát Thiết kế số <b>${soHDCu}</b>;<br>`:''}
       - Căn cứ nhu cầu và khả năng của hai bên.<br>
       Hôm nay, ngày ${d.ngay}, hai bên gồm:
@@ -4553,7 +4551,7 @@ function genHDTK(d){
     <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Khảo Sát Thiết Kế</h1>
       <div class="sub">V/v: ${loaiTen}</div></div>
-    <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24/11/2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay}, hai bên gồm:</p>
+    <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay}, hai bên gồm:</p>
 
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên thực hiện dịch vụ (Bên A): ${CO.ten}</div></div>
     <table class="t-info" style="margin-bottom:8px">
