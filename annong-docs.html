@@ -3065,7 +3065,7 @@ function applyImportResult(result){
 document.addEventListener('DOMContentLoaded',()=>{
   const today=new Date().toISOString().split('T')[0];
   document.getElementById('bgNgay').value=today;
-  const d=today.replace(/-/g,'');
+  const d=today.replace(/-/g,'').slice(2); // 20260613 → 260613
   document.getElementById('bgSo').value=d+'-1/BG-KS-TK/AN';
   updateTcPanel();calcAll();onDocTypeChange();
   autoSlug();
@@ -3373,26 +3373,26 @@ function autoSoTL(){
   const d=new Date(ngay);
   const dd=String(d.getDate()).padStart(2,'0');
   const mm=String(d.getMonth()+1).padStart(2,'0');
-  const yyyy=d.getFullYear();
+  const yy=String(d.getFullYear()).slice(2); // 2026 → 26
   const map={
-    pgh :`${dd}${mm}${yyyy}/PXK-ANA`,
-    tt  :`${dd}${mm}${yyyy}/TT-ANA`,
-    tu  :`${dd}${mm}${yyyy}/TU-ANA`,
-    hdvt:`${yyyy}${mm}${dd}-1/HĐMB/AN`,
-    hdtk:`${yyyy}${mm}${dd}-1/HD-TK/AN`,
-    hdtc:`${yyyy}${mm}${dd}-1/HD-TC/AN`,
-    hdbt:`${yyyy}${mm}${dd}-1/HD-BT/AN`,
-    pks :`${yyyy}${mm}${dd}-1/PKS-ANA`,
-    bbnt:`${yyyy}${mm}${dd}-1/BBNT-ANA`,
-    'bb-kl':`${yyyy}${mm}${dd}-1/BB-KL/ANA`,
+    pgh :`${dd}${mm}${yy}/PXK-ANA`,
+    tt  :`${dd}${mm}${yy}/TT-ANA`,
+    tu  :`${dd}${mm}${yy}/TU-ANA`,
+    hdvt:`${yy}${mm}${dd}-1/HĐMB/AN`,
+    hdtk:`${yy}${mm}${dd}-1/HD-TK/AN`,
+    hdtc:`${yy}${mm}${dd}-1/HD-TC/AN`,
+    hdbt:`${yy}${mm}${dd}-1/HD-BT/AN`,
+    pks :`${yy}${mm}${dd}-1/PKS-ANA`,
+    bbnt:`${yy}${mm}${dd}-1/BBNT-ANA`,
+    'bb-kl':`${yy}${mm}${dd}-1/BB-KL/ANA`,
     'bb-bg':`01/DC&BG-ANA`,
-    ncc :`${dd}${mm}${yyyy}/PDH-ANA`
+    ncc :`${dd}${mm}${yy}/PDH-ANA`
   };
   const fallbackCode='TL-ANA';
-  const baseCode=(map[type]||`${dd}${mm}${yyyy}/${fallbackCode}`).split('/').slice(1).join('/');
-  let candidate=map[type]||`${dd}${mm}${yyyy}/${fallbackCode}`;
+  const baseCode=(map[type]||`${dd}${mm}${yy}/${fallbackCode}`).split('/').slice(1).join('/');
+  let candidate=map[type]||`${dd}${mm}${yy}/${fallbackCode}`;
   let seq=1;
-  while(usedNums.has(candidate)){seq++;candidate=`${yyyy}${mm}${dd}-${seq}/${baseCode}`;}
+  while(usedNums.has(candidate)){seq++;candidate=`${yy}${mm}${dd}-${seq}/${baseCode}`;}
   usedNums.add(candidate);
   const el=document.getElementById('soTL');if(el)el.value=candidate;
   if(type==='hdvt'){const h=document.getElementById('soHD');if(h&&!h.value)h.value=candidate;}
