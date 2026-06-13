@@ -1134,7 +1134,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     <button class="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
     <div style="display:flex;gap:4px;margin-top:6px;">
       <button class="btn-print" style="margin-top:0;flex:1;" onclick="window.print()">🖨 In / PDF</button>
-      <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .doc</button>
+      <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .rtf</button>
       <button class="btn-print" id="btnExportXlsx" style="margin-top:0;flex:1;background:#1B5E20;display:none;" onclick="exportXLSX()">📊 Xuất .xlsx</button>
     </div>
     <button id="btnLark" onclick="saveToLark()" style="width:100%;padding:8px;background:#1a73e8;color:#fff;font-weight:600;font-size:12px;border:none;border-radius:5px;cursor:pointer;margin-top:6px;">☁ Lưu vào Lark</button>
@@ -4798,46 +4798,180 @@ function fillFromLark() {
   });
 })();
 
-// ── EXPORT DOC (Word HTML format) ──────────────────────
+// ── RTF HELPERS ────────────────────────────────────────
+function _rtfU(s){
+  // encode Unicode sang RTF \uN? escape
+  return(s||'').replace(/[^\x00-\x7F]/g,c=>`\\u${c.charCodeAt(0)}?`);
+}
+function _rtfEsc(s){return _rtfU((s||'').replace(/[\\{}]/g,m=>'\\'+m).replace(/\n/g,'\\line '));}
+function _rtfBold(s){return`{\\b ${_rtfEsc(s)}}`;}
+function _rtfPar(s,opts){
+  const align=opts==='c'?'\\qc':opts==='r'?'\\qr':'\\ql';
+  return`\\pard${align}\\sb60\\sa60 ${_rtfEsc(s)}\\par\n`;
+}
+function _rtfTitle(s){return`\\pard\\qc\\sb120\\sa60{\\b\\fs28 ${_rtfEsc(s)}}\\par\n`;}
+function _rtfH2(s){return`\\pard\\ql\\sb120\\sa40{\\b\\fs24 ${_rtfEsc(s)}}\\par\n`;}
+function _rtfLine(){return`\\pard\\ql\\sb40\\sa40\\brdrb\\brdrs\\brdrw10\\brdrsp60 \\par\n`;}
+function _rtfBlank(){return`\\pard\\ql\\sa60 \\par\n`;}
+
+// RTF table — colWidths trong twips (1440 twips = 1 inch; A4 nội dung ~8800 twips)
+function _rtfTable(rows,colWidths){
+  let out='';
+  const totalW=colWidths.reduce((a,b)=>a+b,0);
+  rows.forEach(row=>{
+    if(!Array.isArray(row)){
+      // header dòng nhóm — 1 ô toàn chiều rộng
+      out+=`\\trowd\\trgaph100\\trleft0\n`;
+      out+=`\\cellx${totalW}\n`;
+      out+=`\\intbl{\\b ${_rtfEsc(row)}}\\cell\\row\n`;
+      return;
+    }
+    out+=`\\trowd\\trgaph100\\trleft0\n`;
+    let x=0;
+    colWidths.forEach(w=>{x+=w;out+=`\\clbrdrt\\brdrs\\brdrw8\\clbrdrl\\brdrs\\brdrw8\\clbrdrb\\brdrs\\brdrw8\\clbrdrr\\brdrs\\brdrw8\\cellx${x}\n`;});
+    row.forEach(cell=>{
+      const txt=cell?.bold?`{\\b ${_rtfEsc(cell.v)}}`:_rtfEsc(String(cell??''));
+      const align=cell?.center?'\\qc':cell?.right?'\\qr':'\\ql';
+      out+=`\\intbl\\pard${align}\\sb40\\sa40 ${typeof cell==='object'&&cell?.bold?`{\\b ${_rtfEsc(cell.v)}}`:_rtfEsc(String(cell??''))}\\cell\n`;
+    });
+    out+=`\\row\n`;
+  });
+  return out;
+}
+
+function _rtfSigRow(leftName,rightName){
+  const w=4200;
+  let out=`\\trowd\\trgaph100\\trleft0\\cellx${w}\\cellx${w*2+400}\n`;
+  out+=`\\intbl\\pard\\qc{\\b ${_rtfEsc(leftName)}}\\cell\n`;
+  out+=`\\intbl\\pard\\qc{\\b ${_rtfEsc(rightName)}}\\cell\\row\n`;
+  out+=`\\trowd\\trgaph100\\trleft0\\cellx${w}\\cellx${w*2+400}\n`;
+  out+=`\\intbl\\pard\\qc (Ký, ghi rõ họ tên)\\cell\n`;
+  out+=`\\intbl\\pard\\qc (Ký, ghi rõ họ tên)\\cell\\row\n`;
+  return out;
+}
+
+function _wrapRTF(body){
+  return`{\\rtf1\\ansi\\ansicpg1252\\deff0\n`+
+    `{\\fonttbl{\\f0\\froman\\fcharset0 Times New Roman;}{\\f1\\fswiss\\fcharset0 Arial;}}\n`+
+    `{\\colortbl;\\red0\\green0\\blue0;\\red27\\green94\\blue32;\\red183\\green28\\blue28;}\n`+
+    `\\widowctrl\\hyphauto\\f0\\fs24\\sl276\\slmult1\n`+
+    body+
+    `}`;
+}
+
+// ── EXPORT RTF ─────────────────────────────────────────
 function exportDOCX(){
   const preview=document.getElementById('preview');
   if(!preview||!preview.innerHTML.trim()){alert('Chưa có nội dung để xuất. Bấm Tạo tài liệu trước.');return;}
-
-  const content=preview.innerHTML;
-  const wordHTML=`<html xmlns:o='urn:schemas-microsoft-com:office:office'
-xmlns:w='urn:schemas-microsoft-com:office:word'
-xmlns='http://www.w3.org/TR/REC-html40'>
-<head><meta charset="utf-8">
-<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
-<style>
-@page WordSection1{size:210mm 297mm;margin:2cm 2cm 2cm 2cm;}
-div.WordSection1{page:WordSection1;}
-body{font-family:'Times New Roman',serif;font-size:13pt;color:#000;background:#fff;}
-table{border-collapse:collapse;width:100%;}
-td,th{border:1px solid #555;padding:4pt 6pt;font-size:11pt;vertical-align:top;}
-th{background:#E8F5E9;font-weight:bold;text-align:center;}
-h1{font-size:14pt;text-align:center;font-weight:bold;}
-h2,h3{font-size:12pt;font-weight:bold;}
-.ttl{text-align:center;}
-.page{margin-bottom:20pt;}
-.sig-row{display:flex;justify-content:space-between;}
-.preview-header{display:none;}
-p{margin:4pt 0;line-height:1.5;}
-b,strong{font-weight:bold;}
-.sec-lbl{font-weight:bold;font-size:12pt;}
-.sec-bar{display:none;}
-</style>
-</head>
-<body><div class="WordSection1">${content}</div></body></html>`;
-
-  const blob=new Blob(['﻿'+wordHTML],{type:'application/msword;charset=utf-8'});
-  const loai=document.getElementById('docType')?.value||'tai-lieu';
+  const type=document.getElementById('docType')?.value||'';
   const soTL=document.getElementById('soTL')?.value||'';
-  const fname=(soTL?soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-':'')+loai+'.doc';
+
+  let rtfBody='';
+  try{
+    if(type==='bb-kl') rtfBody=_rtfBBKL();
+    else if(type==='bb-bg') rtfBody=_rtfBBBG();
+    else rtfBody=_rtfFromPreview();
+  }catch(e){
+    console.error('RTF error',e);
+    rtfBody=_rtfFromPreview();
+  }
+
+  const blob=new Blob([_wrapRTF(rtfBody)],{type:'application/rtf;charset=utf-8'});
+  const fname=(soTL?soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-':'')+type+'.rtf';
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=fname;a.click();
   setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+
+// Fallback: strip HTML tags và export text đơn giản
+function _rtfFromPreview(){
+  const preview=document.getElementById('preview');
+  const tmp=document.createElement('div');
+  tmp.innerHTML=preview.innerHTML;
+  // ẩn các phần tử chỉ dùng cho UI
+  tmp.querySelectorAll('.preview-header,.sec-bar').forEach(el=>el.remove());
+  const lines=tmp.innerText.split('\n').filter(l=>l.trim());
+  return lines.map(l=>_rtfPar(l)).join('');
+}
+
+// RTF riêng cho BB-KL
+function _rtfBBKL(){
+  const g=id=>document.getElementById(id)?.value||'';
+  const d={
+    soHD:g('bbklSoHD'),duAn:g('bbklDuAn'),
+    ddA:g('bbklDDA'),cccdA:g('bbklCCCDA'),sdtA:g('bbklSdtA'),
+    ddB:g('bbklDDB'),cccdB:g('bbklCCCDB'),sdtB:g('bbklSdtB'),
+    ghiChu:g('bbklGhiChu'),ngay:g('ngay')||new Date().toLocaleDateString('vi-VN'),
+    soTL:g('soTL')
+  };
+  let b='';
+  b+=_rtfPar('CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM','c');
+  b+=_rtfPar('Độc lập – Tự do – Hạnh phúc','c');
+  b+=_rtfBlank();
+  b+=_rtfTitle('BIÊN BẢN XÁC NHẬN HOÀN THÀNH KHỐI LƯỢNG CÔNG VIỆC');
+  b+=_rtfPar(`DỰ ÁN: ${d.duAn.toUpperCase()}`,'c');
+  b+=_rtfPar(`Số: ${d.soTL}`,'c');
+  b+=_rtfPar(`Gia Lai, ngày ${d.ngay}`,'c');
+  b+=_rtfBlank();
+  b+=_rtfH2('I. THÀNH PHẦN THAM GIA');
+  b+=_rtfPar(`Bên A (Thi công): ${d.ddA}  |  CCCD: ${d.cccdA}  |  SĐT: ${d.sdtA}`);
+  b+=_rtfPar(`Bên B (Chủ đầu tư): ${d.ddB}  |  CCCD: ${d.cccdB}  |  SĐT: ${d.sdtB}`);
+  b+=_rtfBlank();
+  b+=_rtfH2('II. CĂN CỨ THỰC HIỆN');
+  b+=_rtfPar(`Hợp đồng số: ${d.soHD}`);
+  b+=_rtfBlank();
+  b+=_rtfH2('III. NỘI DUNG XÁC NHẬN KHỐI LƯỢNG HOÀN THÀNH');
+  // Bảng hạng mục
+  const colW=[400,2400,2800,2400,600];
+  const headerRow=[{v:'STT',bold:true,center:true},{v:'Hạng mục',bold:true},{v:'Mô tả nội dung công việc',bold:true},{v:'Ghi chú xác nhận',bold:true},{v:'Ký',bold:true,center:true}];
+  const dataRows=bbklHmRows.map((r,i)=>[
+    {v:String(i+1),center:true},r.ten,r.mo||'',r.ghiChu||'',''
+  ]);
+  b+=_rtfTable([headerRow,...dataRows],colW);
+  b+=_rtfBlank();
+  if(d.ghiChu){b+=_rtfH2('GHI CHÚ BỔ SUNG');b+=_rtfPar(d.ghiChu);}
+  b+=_rtfBlank();
+  b+=_rtfH2('IV. CAM KẾT & CHỮ KÝ');
+  b+=_rtfPar('Hai bên đã kiểm tra thực tế và thống nhất ký biên bản này.');
+  b+=_rtfBlank();
+  b+=_rtfSigRow('BÊN A (THI CÔNG)','BÊN B (CHỦ ĐẦU TƯ)');
+  b+=_rtfBlank();
+  b+=_rtfPar(d.ddA,'c');
+  return b;
+}
+
+// RTF riêng cho BB-BG
+function _rtfBBBG(){
+  const g=id=>document.getElementById(id)?.value||'';
+  const d={
+    ngayKK:g('bbgNgayKK'),diaDiem:g('bbgDiaDiem'),soHD:g('bbgSoHD'),
+    ddA:g('bbgDDA'),cccdA:g('bbgCCCDA'),sdtA:g('bbgSdtA'),
+    ddB:g('bbgDDB'),cccdB:g('bbgCCCDB'),sdtB:g('bbgSdtB'),soTL:g('soTL')
+  };
+  let b='';
+  b+=_rtfTitle('BẢNG ĐỐI CHIẾU & BÀN GIAO VẬT TƯ TẠI CÔNG TRÌNH');
+  b+=_rtfPar(`Ngày kiểm kê: ${d.ngayKK}    Địa điểm: ${d.diaDiem}`,'c');
+  b+=_rtfPar(`Số HĐ căn cứ: ${d.soHD}`,'c');
+  b+=_rtfPar(`Bên A: ${d.ddA} (${d.sdtA})  |  Bên B: ${d.ddB}`,'c');
+  b+=_rtfBlank();
+  const colW=[380,3200,560,940,940,800,900];
+  const headerRow=[{v:'STT',bold:true,center:true},{v:'Tên vật tư / Thiết bị',bold:true},{v:'ĐVT',bold:true,center:true},{v:'Đã giao CT',bold:true,center:true},{v:'Đã sử dụng',bold:true,center:true},{v:'Tồn kho',bold:true,center:true},{v:'Ghi chú',bold:true}];
+  let stt=1;
+  const rows=[headerRow];
+  bbgRows.forEach(r=>{
+    if(r.type==='header'){rows.push(r.text);}
+    else{
+      const ton=(Number(r.daGiao)||0)-(Number(r.daDung)||0);
+      rows.push([{v:String(stt++),center:true},r.ten,{v:r.dvt,center:true},{v:String(r.daGiao||0),right:true},{v:String(r.daDung||0),right:true},{v:String(ton),right:true},r.ghiChu||'']);
+    }
+  });
+  b+=_rtfTable(rows,colW);
+  b+=_rtfBlank();b+=_rtfBlank();
+  b+=_rtfSigRow('BÊN A (THI CÔNG)','BÊN B (CHỦ ĐẦU TƯ / QUẢN LÝ FARM)');
+  b+=_rtfBlank();
+  b+=_rtfPar(d.ddA,'c');
+  return b;
 }
 
 // ── EXPORT XLSX (BB-BG) ────────────────────────────────
