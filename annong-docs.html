@@ -3618,7 +3618,7 @@ function genHDVT(d){
   const tuVal=Math.round(tong*tuPct/100);
   const _htt=document.getElementById('hdvtHTT')?.classList.contains('active')??true;
   const _dmt=document.getElementById('hdvtDMT')?.classList.contains('active')??false;
-  const _hangMuc=_htt&&_dmt?'vật tư hệ thống tưới và vật tư điện mặt trời':_dmt?'vật tư điện mặt trời':'vật tư hệ thống tưới';
+  const _hangMuc=_htt&&_dmt?'vật tư hệ thống tưới và điện mặt trời':_dmt?'vật tư điện mặt trời':'vật tư hệ thống tưới';
   const moTa=document.getElementById('hdMoTa')?.value||('Cung cấp '+_hangMuc);
   const isDN=document.getElementById('khLoai')?.value==='doanhnghiep';
   const cccdNgay=document.getElementById('hdCCCDNgay')?.value||'—';
@@ -3630,7 +3630,7 @@ function genHDVT(d){
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HĐMB/${p[2]}`;}
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
       <div class="sub">V/v: ${moTa}</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24 tháng 11 năm 2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
@@ -3837,7 +3837,7 @@ function genBBNT(d){
   const baoHanh=document.getElementById('bbntBaoHanh')?.value||'12 tháng kể từ ngày nghiệm thu';
   const ddKhach=document.getElementById('bbntDDKhach')?.value||d.khTen;
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Biên Bản Nghiệm Thu</h1>
       <div class="sub" style="font-size:12.5px;font-weight:600;">Hệ thống tưới ${ha}ha ${cay} — ${diaDiem}</div>
       <div class="sub">Căn cứ HĐ số: ${soHD}</div></div>
@@ -4136,7 +4136,7 @@ function genBBKL(d){
   const ghiChuLines=ghiChu?ghiChu.split('\n').map(l=>`<p style="font-size:12px;line-height:1.8;margin:0">${l||'&nbsp;'}</p>`).join('')
     :'<p style="color:#aaa;font-style:italic;font-size:12px">Không có ghi chú bổ sung</p>';
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:6px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:6px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
     <div class="ttl">
       <h1 style="font-size:15px;line-height:1.4">BIÊN BẢN XÁC NHẬN HOÀN THÀNH KHỐI LƯỢNG CÔNG VIỆC</h1>
       <div class="sub" style="font-size:12.5px;font-weight:600;">DỰ ÁN ${duAn.toUpperCase()}</div>
@@ -4269,7 +4269,7 @@ function genBBBG(d){
   if(!tableRows) tableRows=`<tr><td colspan="7" style="text-align:center;color:#aaa;font-style:italic;padding:12px">Chưa có vật tư</td></tr>`;
 
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:4px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:4px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
     <div style="display:flex;justify-content:space-between;font-size:11px;color:#555;margin-bottom:6px">
       <span>Số: ${d.soTL}</span>
       <i>Gia Lai, ngày ${d.ngay}</i>
@@ -4366,7 +4366,7 @@ function genHDTC(d){
   const moTa=`Thi công lắp đặt hệ thống tưới${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
 
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl">
       <h1 style="font-size:16px;">Hợp Đồng Thi Công Lắp Đặt</h1>
       <div class="sub">V/v: ${moTa}</div>
@@ -4483,7 +4483,7 @@ function genHDBT(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HD-BT/${p[2]}`;}
   const fmtVND=v=>v?v.toLocaleString('vi-VN')+'đ':'—';
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Bảo Trì Hệ Thống</h1><div class="sub">V/v: Bảo dưỡng &amp; bảo trì hệ thống tưới nông nghiệp</div></div>
     ${_partyGrid(
       _partyCard(`BÊN A (Bên cung cấp dịch vụ): ${CO.ten}`,[
@@ -4550,7 +4550,7 @@ function genHDTK(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/${hdMa}/${p[2]}`;}
   const moTa=`${loaiTen}${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
-    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
+    <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Khảo Sát Thiết Kế</h1>
       <div class="sub">V/v: ${loaiTen}</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24/11/2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay}, hai bên gồm:</p>
