@@ -4847,47 +4847,56 @@ function exportXLSX(){
 
   const wb=XLSX.utils.book_new();
   const ws_data=[];
+  const merges=[];
+  const C=7; // số cột: STT|Tên|ĐVT|Đã giao|Đã dùng|Tồn|Ghi chú
 
-  // Header thông tin
   const ngayKK=document.getElementById('bbgNgayKK')?.value||'';
   const diaDiem=document.getElementById('bbgDiaDiem')?.value||'';
   const soHD=document.getElementById('bbgSoHD')?.value||'';
   const ddA=document.getElementById('bbgDDA')?.value||'';
   const ddB=document.getElementById('bbgDDB')?.value||'';
-  ws_data.push(['BẢNG ĐỐI CHIẾU & BÀN GIAO VẬT TƯ TẠI CÔNG TRÌNH']);
-  ws_data.push(['Ngày kiểm kê:',ngayKK,'','Địa điểm:',diaDiem]);
-  ws_data.push(['Số HĐ căn cứ:',soHD,'','Bên A (TC):',ddA,'Bên B (QL):',ddB]);
-  ws_data.push([]);
-  ws_data.push(['STT','Tên vật tư / thiết bị','ĐVT','Đã giao CT','Đã sử dụng','Tồn kho','Ghi chú']);
+
+  // Tiêu đề — merge A1:G1
+  ws_data.push(['BANG DOI CHIEU & BAN GIAO VAT TU TAI CONG TRINH','','','','','','']);
+  merges.push({s:{r:0,c:0},e:{r:0,c:C-1}});
+
+  ws_data.push(['Ngay kiem ke:',ngayKK,'','Dia diem:',diaDiem,'','']);
+  ws_data.push(['So HD can cu:',soHD,'','Ben A (TC):',ddA,'Ben B (QL):',ddB]);
+  ws_data.push(['','','','','','','']); // dòng trống
+
+  // Header bảng (row index 4)
+  ws_data.push(['STT','Ten vat tu / thiet bi','DVT','Da giao CT','Da su dung','Ton kho','Ghi chu']);
 
   let stt=1;
   bbgRows.forEach(r=>{
+    const rowIdx=ws_data.length;
     if(r.type==='header'){
-      ws_data.push([r.text]);
+      // Dòng nhóm — merge toàn bộ cột
+      ws_data.push([r.text,'','','','','','']);
+      merges.push({s:{r:rowIdx,c:0},e:{r:rowIdx,c:C-1}});
     } else {
       const ton=(Number(r.daGiao)||0)-(Number(r.daDung)||0);
-      ws_data.push([stt++,r.ten,r.dvt,r.daGiao,r.daDung||0,ton,r.ghiChu||'']);
+      ws_data.push([stt++,r.ten,r.dvt,Number(r.daGiao)||0,Number(r.daDung)||0,ton,r.ghiChu||'']);
     }
   });
-  ws_data.push([]);
+
+  // Dòng ký tên
   ws_data.push(['','','','','','','']);
-  ws_data.push(['Bên A (Thi công)','','','','Bên B (Chủ đầu tư / Quản lý farm)']);
-  ws_data.push([ddA,'','','',ddB]);
+  ws_data.push(['','','','','','','']);
+  ws_data.push(['Ben A (Thi cong)','','','','Ben B (Chu dau tu / Quan ly farm)','','']);
+  merges.push({s:{r:ws_data.length-1,c:0},e:{r:ws_data.length-1,c:2}});
+  merges.push({s:{r:ws_data.length-1,c:4},e:{r:ws_data.length-1,c:6}});
+  ws_data.push([ddA,'','','',ddB,'','']);
 
   const ws=XLSX.utils.aoa_to_sheet(ws_data);
+  ws['!cols']=[{wch:5},{wch:52},{wch:8},{wch:13},{wch:13},{wch:10},{wch:22}];
+  ws['!merges']=merges;
 
-  // Căn chỉnh cột
-  ws['!cols']=[{wch:5},{wch:50},{wch:8},{wch:12},{wch:12},{wch:10},{wch:20}];
-
-  // Merge ô tiêu đề
-  ws['!merges']=[
-    {s:{r:0,c:0},e:{r:0,c:6}},
-  ];
-
-  XLSX.utils.book_append_sheet(wb,'Đối chiếu vật tư',ws);
+  // Sheet name phải ASCII (Excel giới hạn 31 ký tự, không dấu tiếng Việt trong một số version)
+  XLSX.utils.book_append_sheet(wb,ws,'Doi chieu vat tu');
 
   const soTL=document.getElementById('soTL')?.value||'BB-BG';
-  const fname=(soTL.replace(/[\/\\:*?"<>|]/g,'-'))+'-bang-doi-chieu-vat-tu.xlsx';
+  const fname=soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-doi-chieu-vat-tu.xlsx';
   XLSX.writeFile(wb,fname);
 }
 </script>
