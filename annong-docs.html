@@ -68,13 +68,13 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 /* HEADER */
 .hdr{display:grid;grid-template-columns:1fr auto;gap:0;align-items:start;padding-bottom:10px;border-bottom:2.5px solid #2E7D32;margin-bottom:14px;}
 .hdr-co{font-size:14px;font-weight:700;color:#1B5E20;margin-bottom:5px;}
-.hdr-addr{font-size:10.5px;color:#555;margin-bottom:0;line-height:1.5;}
+.hdr-addr{font-size:10.5px;color:#444;margin-bottom:0;line-height:1.5;}
 .hdr-contact{font-size:10.5px;color:#444;margin-top:1px;line-height:1.5;}
 .hdr-boxes{display:flex;}
 .hdr-box{border:1px solid #C8E6C9;border-radius:4px;padding:7px 11px;background:#F9FBE7;text-align:center;min-width:95px;}
 .hdr-box+.hdr-box{border-left:none;border-radius:0 4px 4px 0;}
 .hdr-box:first-child{border-radius:4px 0 0 4px;}
-.hdr-box .bl{font-size:9.5px;color:#555;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
+.hdr-box .bl{font-size:9.5px;color:#444;text-transform:uppercase;letter-spacing:.3px;margin-bottom:3px;}
 .hdr-box .bv{font-size:12px;font-weight:700;color:#1B5E20;line-height:1.3;}
 
 /* TITLE */
@@ -115,13 +115,13 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .t-svc td.c{text-align:center;white-space:nowrap;}
 .t-svc td.r{text-align:right;white-space:nowrap;}
 .sn{font-weight:600;margin-bottom:2px;font-size:12px;}
-.sd{font-size:11px;color:#5a5a5a;line-height:1.5;}
+.sd{font-size:11px;color:#333;line-height:1.5;}
 .opt-lbl{font-size:10px;font-weight:700;color:#5C6BC0;background:#E8EAF6;border-radius:3px;padding:1px 5px;margin-bottom:2px;display:inline-block;}
 
 .t-svc tfoot tr.sub-row td{background:#33691E;color:#fff;font-weight:700;font-size:11.5px;padding:6px 8px;border:1px solid #1B5E20;text-align:right;}
 .t-svc tfoot tr.vat-row td{background:#E8F5E9;color:#1B5E20;font-weight:600;font-size:11.5px;padding:5px 8px;border:1px solid #C8E6C9;text-align:right;}
 .t-svc tfoot tr.grand-row td{background:#1B5E20;color:#fff;font-weight:700;font-size:13px;padding:8px;border:1px solid #1B5E20;text-align:right;}
-.in-words{font-size:11px;color:#555;font-style:italic;margin:4px 0 0;}
+.in-words{font-size:11px;color:#333;font-style:italic;margin:4px 0 0;}
 
 .t-pay{width:100%;border-collapse:collapse;}
 .t-pay th{background:#2E7D32;color:#fff;font-size:11px;font-weight:600;padding:6px 8px;text-align:center;border:1px solid #1B5E20;}
@@ -144,10 +144,10 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .sig-area{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px;page-break-inside:avoid;break-inside:avoid;}
 .sig-col{border:1px solid #C8E6C9;border-radius:5px;padding:10px 12px;text-align:center;background:#FAFAFA;page-break-inside:avoid;break-inside:avoid;}
 .sig-col .sig-ttl{font-weight:700;color:#1B5E20;font-size:12px;margin-bottom:2px;}
-.sig-col .sig-sub{font-size:11px;color:#777;margin-bottom:52px;}
+.sig-col .sig-sub{font-size:11px;color:#444;margin-bottom:52px;}
 .sig-col .sig-name{font-size:11.5px;font-weight:600;color:#1B5E20;}
 
-.footer{border-top:1.5px solid #C8E6C9;margin-top:14px;padding-top:6px;text-align:center;font-size:10.5px;color:#888;}
+.footer{border-top:1.5px solid #C8E6C9;margin-top:14px;padding-top:6px;text-align:center;font-size:10.5px;color:#444;}
 .footer span{color:#2E7D32;font-weight:500;}
 
 .kh-collapsed{display:none!important;}
@@ -216,18 +216,16 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   .preview{margin-left:0;padding:0;}
   .page{margin:0;box-shadow:none;width:100%;}
   body{background:#fff;}
-  /* Tăng độ đậm cho text mờ khi in */
-  .ttl .sub{color:#222!important;}
-  .hdr-addr,.hdr-box .bl{color:#333!important;}
-  .sig-col .sig-sub{color:#333!important;}
-  .footer{color:#444!important;}
-  .in-words{color:#333!important;font-style:normal!important;}
-  .sd{color:#222!important;}
-  .notice{color:#222!important;}
-  .t-info td:first-child{color:#333!important;}
-  .t-vt td,.t-svc td,.t-pay td,.t-terms td{color:#111!important;}
-  .t-pay tr.ps td{color:#333!important;}
-  p,li{color:#111!important;}
+  /* Giữ chữ trắng trên nền tối khi in có background graphics */
+  .sub-row td,.grand-row td,
+  .t-svc thead th,.t-vt thead th,.t-pay th,
+  tr[style*="background:#2E7D32"] td,
+  tr[style*="background:#1B5E20"] td{color:#fff!important;}
+  /* vat-row nền nhạt → chữ tối */
+  .vat-row td{color:#1B5E20!important;}
+  /* Làm đậm text mờ */
+  .hdr-addr,.hdr-box .bl,.sig-col .sig-sub,.footer,
+  .in-words,.sd,.notice,.ttl .sub{color:#222!important;}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
