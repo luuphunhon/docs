@@ -1132,7 +1132,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   <div id="vtModePanel" style="display:none">
     <h3>Danh mục vật tư</h3>
     <div class="note-box" style="margin-bottom:8px;">
-      <strong>+ Hạng mục</strong> → tiêu đề nhóm (VD: I. BÉC TƯỚI)<br>
+      <strong>+ Hạng mục</strong> → tiêu đề nhóm (VD: I. BÉC TƯỚI / I. TẤM PIN NLMT)<br>
       <strong>+ Dòng vật tư</strong> → sản phẩm chi tiết<br>
       <span style="color:#A5D6A7;">Thành tiền = SL × Đơn giá. Thuế tính riêng theo dòng.</span>
     </div>
@@ -1836,6 +1836,24 @@ function generateVatTu(){
   
 }
 
+// ── DEFAULT HEADERS BG-VT ──
+const VT_HEADERS_HTT=['BÉC TƯỚI & PHỤ KIỆN','ỐNG DẪN NƯỚC','PHỤ KIỆN ĐƯỜNG ỐNG','TRẠM LỌC','PHỤ KIỆN TRẠM BƠM','MÁY BƠM & TỦ ĐIỆN'];
+const VT_HEADERS_DMT=['TẤM PIN NLMT','BIẾN TẦN & INVERTER','PIN LƯU TRỮ ĐIỆN','TỦ ĐIỆN & PHỤKIỆN ĐIỆN','DÂY DẪN & CÁP DC/AC','CHỐNG SÉT & BẢO VỆ'];
+
+function _bgvtOnlyHeaders(){
+  return vtItems.length>0&&vtItems.every(r=>r.type==='header'&&r.items?.length===0)
+    ||vtItems.every(r=>r.type==='header'&&!vtItems.some(r2=>r2.type==='item'));
+}
+
+function loadBgvtDefaults(){
+  const htt=document.getElementById('bgvtHTT')?.classList.contains('active')??true;
+  const dmt=document.getElementById('bgvtDMT')?.classList.contains('active')??false;
+  vtItems=[];vtIdCnt=0;
+  const headers=[...(htt?VT_HEADERS_HTT:[]),...(dmt?VT_HEADERS_DMT:[])];
+  headers.forEach(t=>vtItems.push({id:vtIdCnt++,type:'header',text:t}));
+  renderVTPanel();
+}
+
 // ── TOGGLE BG-VT (HTT / DMT) ──
 function toggleBgvt(type){
   const btn=document.getElementById('bgvt'+type);
@@ -1843,6 +1861,9 @@ function toggleBgvt(type){
   const anyOther=['HTT','DMT'].filter(t=>t!==type&&document.getElementById('bgvt'+t).classList.contains('active')).length>0;
   if(isActive&&!anyOther) return;
   btn.classList.toggle('active');
+  // Nếu chưa có sản phẩm nào → reset headers theo toggle mới
+  const hasItems=vtItems.some(r=>r.type==='item'&&r.ten);
+  if(!hasItems) loadBgvtDefaults();
 }
 
 // ── TOGGLE HD-VT (HTT / DMT) ──
@@ -3466,11 +3487,7 @@ function onDocTypeChange(){
       // Thay suffix cũ bằng suffix mới (giữ nguyên phần ngày và số)
       soEl.value=soEl.value.replace(/\/BG-[A-Z-]+\/AN/,'/'+newSuffix+'/AN');
     }
-    if(isVT&&!vtItems.length){
-      ['BÉC TƯỚI VÀ PHỤ KIỆN','ỐNG DẪN NƯỚC','PHỤ KIỆN ĐƯỜNG ỐNG','TRẠM LỌC','PHỤ KIỆN TRẠM BƠM','MÁY BƠM & TỦ ĐIỆN']
-        .forEach(t=>vtItems.push({id:vtIdCnt++,type:'header',text:t}));
-      renderVTPanel();
-    }
+    if(isVT&&!vtItems.length) loadBgvtDefaults();
     if(isVT) renderVTPanel();
   } else {
     // Non-BG: auto-fill soTL nếu trống
