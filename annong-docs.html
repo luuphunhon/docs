@@ -5031,7 +5031,15 @@ function exportXLSX(){
 
   const soTL=document.getElementById('soTL')?.value||'BB-BG';
   const fname=soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-doi-chieu-vat-tu.xlsx';
-  XLSX.writeFile(wb,fname);
+
+  // Dùng Blob URL thay vì XLSX.writeFile để hoạt động trên mobile Safari
+  const wbout=XLSX.write(wb,{bookType:'xlsx',type:'array'});
+  const blob=new Blob([wbout],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=fname;
+  document.body.appendChild(a);a.click();
+  setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},3000);
 }
 </script>
 </body>
