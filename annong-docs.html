@@ -202,13 +202,84 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .vt-g2{display:grid;grid-template-columns:1fr 66px;gap:4px;margin-top:4px;}
 .vt-flabel{font-size:9px;color:#4a7a4a;margin-bottom:1px;}
 
-@media screen and (max-width:500px){
-  .panel{width:100%;height:auto;position:relative;overflow-y:visible;padding-bottom:80px;}
-  .preview{margin-left:0;padding:10px;}
-  .page{width:100%;}
-  /* Chỉ mobile mới sticky */
-  .btn-sticky{position:fixed;bottom:0;left:0;right:0;background:#1B5E20;padding:8px 16px 12px;box-shadow:0 -2px 8px rgba(0,0,0,.3);z-index:100;transition:opacity .35s cubic-bezier(.4,0,.2,1),transform .35s cubic-bezier(.4,0,.2,1);}
-  .btn-sticky.scrolled-down{opacity:0;pointer-events:none;transform:translateY(100%);}
+/* ── MOBILE TAB BAR ── */
+#m-tabbar{display:none;}
+#m-export-sheet{display:none;}
+
+@media screen and (max-width:600px){
+  /* Panel = tab Nhập: full screen, trừ tab bar 56px */
+  .panel{
+    width:100%;height:calc(100vh - 56px);
+    position:fixed;top:0;left:0;
+    overflow-y:auto;-webkit-overflow-scrolling:touch;
+    padding:16px 14px 24px;
+    z-index:10;
+    transition:opacity .2s,transform .2s;
+  }
+  .panel.m-hidden{opacity:0;pointer-events:none;transform:translateX(-8px);}
+
+  /* Preview = tab Xem */
+  .preview{
+    margin-left:0;padding:10px 8px 72px;
+    transition:opacity .2s;
+  }
+  .preview.m-hidden{display:none;}
+
+  /* Trang tài liệu co vừa màn hình */
+  .page{width:100%;min-width:0;font-size:10px;}
+
+  /* Ẩn btn-sticky cũ (thay bằng tab Xuất) */
+  .btn-sticky{display:none!important;}
+
+  /* row2 về 1 cột trên mobile nhỏ */
+  .row2{grid-template-columns:1fr;}
+  .sig-area{grid-template-columns:1fr;}
+
+  /* Tab bar */
+  #m-tabbar{
+    display:flex;
+    position:fixed;bottom:0;left:0;right:0;
+    height:56px;
+    background:#1B5E20;
+    border-top:1px solid #2E7D32;
+    z-index:200;
+  }
+  .m-tab{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:2px;background:transparent;border:none;cursor:pointer;
+    color:#81C784;padding:6px 4px;
+    transition:color .15s,background .15s;
+  }
+  .m-tab.active{color:#fff;background:#2E7D32;}
+  .m-tab-ico{font-size:18px;line-height:1;}
+  .m-tab-lbl{font-size:10px;font-weight:500;letter-spacing:.3px;}
+
+  /* Export bottom sheet */
+  #m-export-sheet{position:fixed;inset:0;z-index:300;}
+  #m-export-sheet.open{display:block!important;}
+  #m-export-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5);}
+  #m-export-panel{
+    position:absolute;bottom:0;left:0;right:0;
+    background:#1B5E20;
+    border-radius:16px 16px 0 0;
+    padding:16px 16px 32px;
+    animation:slideUp .25s ease;
+  }
+  @keyframes slideUp{from{transform:translateY(100%);}to{transform:translateY(0);}}
+  #m-export-title{font-size:13px;font-weight:700;color:#A5D6A7;text-align:center;margin-bottom:14px;letter-spacing:.4px;}
+  .m-export-btn{
+    width:100%;padding:13px;margin-bottom:8px;
+    background:#0A3D0A;border:1px solid #2E7D32;
+    border-radius:8px;color:#fff;font-size:13px;
+    cursor:pointer;text-align:left;
+  }
+  .m-export-btn:active{background:#2E7D32;}
+  .m-export-cancel{background:transparent;color:#81C784;border-color:#2E7D32;text-align:center;margin-top:4px;}
+
+  /* Scale bảng xuống cho vừa màn hình */
+  .t-vt,.t-svc,.t-pay,.t-info{font-size:9px;}
+  .hdr{font-size:9px;}
+  .hdr-addr,.hdr-box .bl{font-size:8.5px;}
 }
 @page{margin:10mm 12mm;size:A4;}
 @media print{
@@ -1173,7 +1244,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   <div class="note-box">💡 Kéo xuống → nhấn <strong>Tạo tài liệu</strong> → xem preview bên phải. In bằng Ctrl+P.</div>
 
   <div class="btn-sticky">
-    <button class="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
+    <button class="btn-gen" id="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
     <div style="display:flex;gap:4px;margin-top:6px;">
       <button class="btn-print" style="margin-top:0;flex:1;" onclick="window.print()">🖨 In / PDF</button>
       <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .docx</button>
@@ -1946,6 +2017,10 @@ function toggleSvc(type){
 
 // ── GENERATE ──
 function generate(){
+  // Mobile: tự chuyển sang tab Xem sau khi generate
+  if(window.innerWidth<=600){
+    setTimeout(()=>switchMTab('xem'),150);
+  }
   const loaiBG=document.getElementById('docType')?.value||'bg-dichvu';
   if(loaiBG==='bg-vattu'){generateVatTu();return;}
   if(loaiBG==='da'){generateDA();return;}
@@ -4713,6 +4788,59 @@ function fillFromLark() {
   document.getElementById('larkStatus').textContent = `✅ Đã điền từ: ${p.ten}`;
 }
 
+// ── MOBILE TAB SWITCHING ─────────────────────────────
+function switchMTab(tab){
+  if(window.innerWidth>600)return;
+  const panel=document.querySelector('.panel');
+  const preview=document.getElementById('preview');
+  const exportSheet=document.getElementById('m-export-sheet');
+  document.querySelectorAll('.m-tab').forEach(b=>b.classList.remove('active'));
+  document.getElementById('m-tab-'+tab)?.classList.add('active');
+  if(tab==='nhap'){
+    panel.classList.remove('m-hidden');
+    preview.classList.add('m-hidden');
+  } else if(tab==='xem'){
+    panel.classList.add('m-hidden');
+    preview.classList.remove('m-hidden');
+    // Nếu preview trống thì tự generate
+    const page=preview.querySelector('.page');
+    if(!page||!page.innerHTML.trim()){
+      const genBtn=document.getElementById('btn-gen');
+      if(genBtn)genBtn.click();
+    }
+  } else if(tab==='xuat'){
+    exportSheet.classList.add('open');
+    exportSheet.style.display='block';
+    // Giữ tab xem active nếu đang xem
+    const prev=document.querySelector('.m-tab.active');
+    if(!prev)document.getElementById('m-tab-xem')?.classList.add('active');
+  }
+}
+function closeMExport(){
+  const s=document.getElementById('m-export-sheet');
+  s.classList.remove('open');
+  s.style.display='none';
+}
+// Khi resize từ desktop → mobile: đặt tab mặc định
+window.addEventListener('resize',()=>{
+  if(window.innerWidth<=600){
+    const panel=document.querySelector('.panel');
+    const preview=document.getElementById('preview');
+    if(!panel.classList.contains('m-hidden')&&!preview.classList.contains('m-hidden')){
+      preview.classList.add('m-hidden');
+    }
+  } else {
+    document.querySelector('.panel')?.classList.remove('m-hidden');
+    document.getElementById('preview')?.classList.remove('m-hidden');
+  }
+});
+// Init mobile state
+(function(){
+  if(window.innerWidth<=600){
+    document.getElementById('preview')?.classList.add('m-hidden');
+  }
+})();
+
 // ── SCROLL-AWARE QUICK ACTION BUTTONS (mobile only) ────
 (function(){
   let lastY=0,ticking=false;
@@ -4953,5 +5081,41 @@ function exportXLSX(){
   setTimeout(()=>{document.body.removeChild(a);URL.revokeObjectURL(url);},3000);
 }
 </script>
+<!-- ══ MOBILE TAB BAR (chỉ hiện trên điện thoại) ══ -->
+<nav id="m-tabbar">
+  <button class="m-tab active" id="m-tab-nhap" onclick="switchMTab('nhap')">
+    <span class="m-tab-ico">✏️</span>
+    <span class="m-tab-lbl">Nhập</span>
+  </button>
+  <button class="m-tab" id="m-tab-xem" onclick="switchMTab('xem')">
+    <span class="m-tab-ico">📄</span>
+    <span class="m-tab-lbl">Xem</span>
+  </button>
+  <button class="m-tab" id="m-tab-xuat" onclick="switchMTab('xuat')">
+    <span class="m-tab-ico">⬇️</span>
+    <span class="m-tab-lbl">Xuất</span>
+  </button>
+</nav>
+
+<!-- ══ MOBILE EXPORT SHEET ══ -->
+<div id="m-export-sheet" style="display:none">
+  <div id="m-export-backdrop" onclick="closeMExport()"></div>
+  <div id="m-export-panel">
+    <div id="m-export-title">Xuất tài liệu</div>
+    <button class="m-export-btn" onclick="closeMExport();setTimeout(()=>{generate();if(window.innerWidth<=600)switchMTab('xem');},100)">
+      🔄 Tạo lại tài liệu
+    </button>
+    <button class="m-export-btn" onclick="closeMExport();setTimeout(()=>window.print(),300)">
+      🖨 In / Lưu PDF
+    </button>
+    <button class="m-export-btn" onclick="closeMExport();setTimeout(()=>exportXLSX(),100)">
+      📊 Xuất Excel (.xlsx)
+    </button>
+    <button class="m-export-btn" onclick="closeMExport();setTimeout(()=>exportDOCX(),100)">
+      📝 Xuất Word (.docx)
+    </button>
+    <button class="m-export-btn m-export-cancel" onclick="closeMExport()">Huỷ</button>
+  </div>
+</div>
 </body>
 </html>
