@@ -1080,6 +1080,16 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── HỢP ĐỒNG VẬT TƯ ── -->
   <div id="hdvtFields" style="display:none">
+    <h3>Hạng mục vật tư</h3>
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;">
+      <button type="button" class="svc-btn active" id="hdvtHTT" onclick="toggleHdvt('HTT')">
+        <strong>HTT</strong><br>Vật tư<br>Hệ thống tưới
+      </button>
+      <button type="button" class="svc-btn" id="hdvtDMT" onclick="toggleHdvt('DMT')">
+        <strong>DMT</strong><br>Vật tư<br>Điện mặt trời
+      </button>
+    </div>
     <h3>Thông tin hợp đồng</h3>
     <div class="field"><label>Mô tả nội dung HĐ</label>
       <textarea id="hdMoTa" rows="2" placeholder="Cung cấp vật tư hệ thống tưới tại..."></textarea></div>
@@ -1800,6 +1810,15 @@ function generateVatTu(){
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
   
+}
+
+// ── TOGGLE HD-VT (HTT / DMT) ──
+function toggleHdvt(type){
+  const btn=document.getElementById('hdvt'+type);
+  const isActive=btn.classList.contains('active');
+  const anyOther=['HTT','DMT'].filter(t=>t!==type&&document.getElementById('hdvt'+t).classList.contains('active')).length>0;
+  if(isActive&&!anyOther) return; // không tắt hạng mục cuối cùng
+  btn.classList.toggle('active');
 }
 
 // ── TOGGLE SERVICE (BG-DV) ──
@@ -3374,7 +3393,7 @@ function onDocTypeChange(){
   // BG panels
   document.getElementById('bgSo').closest('.field').style.display=(isBG&&!isDA)?'':'none';
   document.getElementById('bgDVPanel').style.display=type==='bg-dichvu'?'':'none';
-  document.getElementById('vtModePanel').style.display=isVT?'block':'none';
+  document.getElementById('vtModePanel').style.display=(isVT||type==='hdvt')?'block':'none';
   document.getElementById('daFields').style.display=isDA?'':'none';
   // Toggle KH info — mở rộng cho HD/PGH/BBNT/NCC vì cần nhập đủ thông tin khách
   const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','bb-kl','bb-bg','ncc','pks'].includes(type);
@@ -3546,7 +3565,10 @@ function genHDVT(d){
   const tong=parseFloat(document.getElementById('hdTong')?.value)||0;
   const tuPct=parseFloat(document.getElementById('hdTUPct')?.value)||30;
   const tuVal=Math.round(tong*tuPct/100);
-  const moTa=document.getElementById('hdMoTa')?.value||'Cung cấp vật tư hệ thống tưới';
+  const _htt=document.getElementById('hdvtHTT')?.classList.contains('active')??true;
+  const _dmt=document.getElementById('hdvtDMT')?.classList.contains('active')??false;
+  const _hangMuc=_htt&&_dmt?'vật tư hệ thống tưới và vật tư điện mặt trời':_dmt?'vật tư điện mặt trời':'vật tư hệ thống tưới';
+  const moTa=document.getElementById('hdMoTa')?.value||('Cung cấp '+_hangMuc);
   const isDN=document.getElementById('khLoai')?.value==='doanhnghiep';
   const cccdNgay=document.getElementById('hdCCCDNgay')?.value||'—';
   const tkKH=document.getElementById('hdTKKH')?.value||'';
