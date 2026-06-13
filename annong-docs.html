@@ -81,7 +81,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 .ttl{text-align:center;margin-bottom:12px;}
 .ttl h1{font-size:18px;font-weight:700;color:#1B5E20;text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px;}
 .ttl h2{font-size:12px;font-weight:600;color:#388E3C;text-transform:uppercase;margin-bottom:3px;}
-.ttl .sub{font-size:12px;color:#555;font-style:italic;}
+.ttl .sub{font-size:12.5px;color:#555;}
 
 /* SECTION */
 .sec{display:flex;align-items:center;gap:7px;margin:12px 0 6px;}
@@ -3515,7 +3515,7 @@ function genPGH(d){
     :`<tr><td class="c">1</td><td colspan="5" style="color:#aaa;font-style:italic">Chưa nhập hàng hóa</td></tr>`;
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
     <div style="text-align:right;font-size:12px;font-style:italic;color:#444;margin-bottom:6px">Gia Lai, ngày ${d.ngay}</div>
-    <div class="ttl"><h1 style="font-size:17px;">Phiếu Xuất Kho – Biên Bản Bàn Giao Hàng Hóa</h1>
+    <div class="ttl"><h1 style="font-size:16px;">Phiếu Xuất Kho – Biên Bản Bàn Giao Hàng Hóa</h1>
       <div class="sub">Số: ${d.soTL} &nbsp;|&nbsp; Đợt giao: ${dot}</div></div>
     <p style="font-size:12px;margin-bottom:8px">Căn cứ Hợp đồng mua bán số <b>${d.soHD}</b> giữa công ty Cổ phần An Nông Agritech và ông/bà <b>${d.khTen}</b>, hai bên cùng thống nhất giao nhận hàng hóa với thông tin sau:</p>
     ${_partyGrid(
@@ -3549,7 +3549,7 @@ function genTT(d){
   const canTT=parseFloat(document.getElementById('ttSoTien')?.value)||(dot1+dot23-daTU);
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
     <div style="text-align:right;font-size:12px;font-style:italic;color:#444;margin-bottom:10px">Gia Lai, Ngày ${d.ngay}</div>
-    <div class="ttl"><h1 style="font-size:17px;">Giấy Đề Nghị Thanh Toán</h1></div>
+    <div class="ttl"><h1 style="font-size:16px;">Giấy Đề Nghị Thanh Toán</h1></div>
     <p style="font-size:12.5px;margin-bottom:10px">Kính gửi: Khách hàng <b>${d.khTen}</b></p>
     <table class="t-info" style="margin-bottom:12px"><tr><td>CCCD/CMND</td><td>${d.khCCCD}</td></tr><tr><td>Địa chỉ</td><td>${d.khDiaChi}</td></tr><tr><td>Số điện thoại</td><td>${d.khSdt}</td></tr></table>
     <p style="font-size:12.5px;margin-bottom:10px">Nay <b>${CO.ten}</b> đề nghị quý khách hàng thanh toán giá trị đơn hàng đã giao theo hợp đồng số <b>${d.soHD}</b> như sau:</p>
@@ -3572,7 +3572,7 @@ function genTU(d){
   const lyDo=document.getElementById('tuLyDo')?.value||'Mua vật tư hệ thống tưới';
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
     <div style="text-align:right;font-size:12px;font-style:italic;color:#444;margin-bottom:10px">Gia Lai, Ngày ${d.ngay}</div>
-    <div class="ttl"><h1 style="font-size:17px;">Giấy Đề Nghị Tạm Ứng</h1><div class="sub">Số: ${d.soTL}</div></div>
+    <div class="ttl"><h1 style="font-size:16px;">Giấy Đề Nghị Tạm Ứng</h1><div class="sub">Số: ${d.soTL}</div></div>
     <p style="font-size:12.5px;margin-bottom:10px">Kính gửi: Khách hàng <b>${d.khTen}</b></p>
     <table class="t-info" style="margin-bottom:12px"><tr><td>CCCD/CMND</td><td>${d.khCCCD}</td></tr><tr><td>Địa chỉ</td><td>${d.khDiaChi}</td></tr><tr><td>Số điện thoại</td><td>${d.khSdt}</td></tr></table>
     <p style="font-size:12.5px;margin-bottom:10px">Nay <b>${CO.ten}</b> đề nghị quý khách hàng tạm ứng theo hợp đồng số <b>${d.soHD}</b> như sau:</p>
@@ -3604,8 +3604,8 @@ function genHDVT(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HĐMB/${p[2]}`;}
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
-    <div class="ttl"><h1 style="font-size:15px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
-      <div class="sub" style="font-size:12.5px;font-style:normal;color:#444;">V/v: ${moTa}</div></div>
+    <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
+      <div class="sub">V/v: ${moTa}</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24 tháng 11 năm 2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên bán (Bên A): ${CO.ten}</div></div>
     <table class="t-info" style="margin-bottom:8px"><tr><td>Mã số thuế</td><td>${CO.mst}</td></tr><tr><td>Địa chỉ</td><td>${CO.dc}</td></tr><tr><td>Tài khoản số</td><td>${CO.stk} — ${CO.ngan} Chi nhánh Gia Lai</td></tr><tr><td>Đại diện</td><td>Ông ${CO.gd} &nbsp;&nbsp; Chức vụ: Giám đốc</td></tr></table>
@@ -4342,7 +4342,7 @@ function genHDTC(d){
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl">
       <h1 style="font-size:16px;">Hợp Đồng Thi Công Lắp Đặt</h1>
-      <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${moTa})</div>
+      <div class="sub">V/v: ${moTa}</div>
     </div>
 
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">
@@ -4457,7 +4457,7 @@ function genHDBT(d){
   const fmtVND=v=>v?v.toLocaleString('vi-VN')+'đ':'—';
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
-    <div class="ttl"><h1>HỢP ĐỒNG BẢO TRÌ HỆ THỐNG</h1><div class="sub">BẢO DƯỠNG &amp; BẢO TRÌ HỆ THỐNG TƯỚI NÔNG NGHIỆP</div></div>
+    <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Bảo Trì Hệ Thống</h1><div class="sub">V/v: Bảo dưỡng &amp; bảo trì hệ thống tưới nông nghiệp</div></div>
     ${_partyGrid(
       _partyCard(`BÊN A (Bên cung cấp dịch vụ): ${CO.ten}`,[
         {label:'Mã số thuế',value:CO.mst},
@@ -4525,7 +4525,7 @@ function genHDTK(d){
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
     <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Khảo Sát Thiết Kế</h1>
-      <div class="sub" style="font-size:13px;font-weight:600;">(V/v: ${loaiTen})</div></div>
+      <div class="sub">V/v: ${loaiTen}</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24/11/2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay}, hai bên gồm:</p>
 
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên thực hiện dịch vụ (Bên A): ${CO.ten}</div></div>
