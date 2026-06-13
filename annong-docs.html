@@ -219,7 +219,6 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
@@ -1135,7 +1134,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     <button class="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
     <div style="display:flex;gap:4px;margin-top:6px;">
       <button class="btn-print" style="margin-top:0;flex:1;" onclick="window.print()">🖨 In / PDF</button>
-      <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .docx</button>
+      <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .doc</button>
       <button class="btn-print" id="btnExportXlsx" style="margin-top:0;flex:1;background:#1B5E20;display:none;" onclick="exportXLSX()">📊 Xuất .xlsx</button>
     </div>
     <button id="btnLark" onclick="saveToLark()" style="width:100%;padding:8px;background:#1a73e8;color:#fff;font-weight:600;font-size:12px;border:none;border-radius:5px;cursor:pointer;margin-top:6px;">☁ Lưu vào Lark</button>
@@ -4799,37 +4798,42 @@ function fillFromLark() {
   });
 })();
 
-// ── EXPORT DOCX ────────────────────────────────────────
+// ── EXPORT DOC (Word HTML format) ──────────────────────
 function exportDOCX(){
-  if(typeof htmlDocx==='undefined'){alert('Thư viện html-docx chưa tải. Kiểm tra kết nối mạng.');return;}
   const preview=document.getElementById('preview');
   if(!preview||!preview.innerHTML.trim()){alert('Chưa có nội dung để xuất. Bấm Tạo tài liệu trước.');return;}
 
-  // Thu thập CSS in của trang để nhúng vào docx
-  const printCSS=Array.from(document.styleSheets).map(ss=>{
-    try{return Array.from(ss.cssRules).map(r=>r.cssText).join('\n');}catch{return '';}
-  }).join('\n');
+  const content=preview.innerHTML;
+  const wordHTML=`<html xmlns:o='urn:schemas-microsoft-com:office:office'
+xmlns:w='urn:schemas-microsoft-com:office:word'
+xmlns='http://www.w3.org/TR/REC-html40'>
+<head><meta charset="utf-8">
+<!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
+<style>
+@page WordSection1{size:210mm 297mm;margin:2cm 2cm 2cm 2cm;}
+div.WordSection1{page:WordSection1;}
+body{font-family:'Times New Roman',serif;font-size:13pt;color:#000;background:#fff;}
+table{border-collapse:collapse;width:100%;}
+td,th{border:1px solid #555;padding:4pt 6pt;font-size:11pt;vertical-align:top;}
+th{background:#E8F5E9;font-weight:bold;text-align:center;}
+h1{font-size:14pt;text-align:center;font-weight:bold;}
+h2,h3{font-size:12pt;font-weight:bold;}
+.ttl{text-align:center;}
+.page{margin-bottom:20pt;}
+.sig-row{display:flex;justify-content:space-between;}
+.preview-header{display:none;}
+p{margin:4pt 0;line-height:1.5;}
+b,strong{font-weight:bold;}
+.sec-lbl{font-weight:bold;font-size:12pt;}
+.sec-bar{display:none;}
+</style>
+</head>
+<body><div class="WordSection1">${content}</div></body></html>`;
 
-  const html=`<!DOCTYPE html><html><head><meta charset="utf-8">
-    <style>
-      body{font-family:'Times New Roman',serif;font-size:13pt;color:#000;margin:0;}
-      table{border-collapse:collapse;width:100%;}
-      td,th{border:1px solid #333;padding:4px 6px;font-size:11pt;}
-      th{background:#f0f0f0;font-weight:bold;}
-      h1{font-size:14pt;text-align:center;}
-      h2{font-size:12pt;}
-      .ttl{text-align:center;margin:10px 0;}
-      .page{page-break-after:always;}
-      .sig-row{display:flex;justify-content:space-between;}
-      @page{margin:2cm;}
-      ${printCSS}
-    </style>
-  </head><body>${preview.innerHTML}</body></html>`;
-
-  const blob=htmlDocx.asBlob(html,{orientation:'portrait',margins:{top:1080,right:1080,bottom:1080,left:1080}});
+  const blob=new Blob(['﻿'+wordHTML],{type:'application/msword;charset=utf-8'});
   const loai=document.getElementById('docType')?.value||'tai-lieu';
   const soTL=document.getElementById('soTL')?.value||'';
-  const fname=(soTL?soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-':'')+loai+'.docx';
+  const fname=(soTL?soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-':'')+loai+'.doc';
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob);
   a.download=fname;a.click();
