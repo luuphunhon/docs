@@ -280,6 +280,20 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   .t-vt,.t-svc,.t-pay,.t-info{font-size:9px;}
   .hdr{font-size:9px;}
   .hdr-addr,.hdr-box .bl{font-size:8.5px;}
+
+  /* ── ACCORDION ── */
+  .panel h3.acc-hdr{
+    display:flex;align-items:center;justify-content:space-between;
+    cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent;
+  }
+  .acc-chev{
+    font-size:22px;color:#81C784;line-height:1;
+    transition:transform .2s ease;flex-shrink:0;margin-left:8px;
+  }
+  .acc-chev.acc-closed{transform:rotate(-90deg);}
+  .acc-body.acc-closed{display:none;}
+  /* Enlarge crm-arrow trên mobile */
+  .crm-section-hdr .crm-arrow{font-size:20px!important;}
 }
 @page{margin:10mm 12mm;size:A4;}
 @media print{
@@ -4821,6 +4835,48 @@ function closeMExport(){
   s.classList.remove('open');
   s.style.display='none';
 }
+
+function initAccordion(){
+  if(window.innerWidth>600)return;
+  const panel=document.querySelector('.panel');
+  if(!panel)return;
+  // Chỉ lấy h3 là direct child của panel
+  const h3s=[...panel.children].filter(el=>el.tagName==='H3');
+  h3s.forEach(h3=>{
+    // Gom tất cả sibling phía sau h3 (đến h3 tiếp theo) vào acc-body
+    const body=document.createElement('div');
+    body.className='acc-body';
+    h3.after(body);
+    let sib=body.nextElementSibling;
+    while(sib&&sib.tagName!=='H3'){
+      body.appendChild(sib);
+      sib=body.nextElementSibling;
+    }
+    if(!body.children.length){h3.remove();return;}
+
+    // Gắn chevron lớn vào h3
+    h3.classList.add('acc-hdr');
+    const chev=document.createElement('span');
+    chev.className='acc-chev';
+    chev.textContent='▾';
+    h3.appendChild(chev);
+
+    // Default: đóng "Nhập từ file" và "Tải từ Lark" — ít dùng hơn
+    const txt=h3.textContent;
+    const defaultClosed=txt.includes('Nhập từ file')||txt.includes('Tải từ Lark');
+    if(defaultClosed){
+      body.classList.add('acc-closed');
+      chev.classList.add('acc-closed');
+    }
+
+    h3.addEventListener('click',()=>{
+      const closing=!body.classList.contains('acc-closed');
+      body.classList.toggle('acc-closed');
+      chev.classList.toggle('acc-closed',closing);
+    });
+  });
+}
+
 // Khi resize từ desktop → mobile: đặt tab mặc định
 window.addEventListener('resize',()=>{
   if(window.innerWidth<=600){
@@ -4838,6 +4894,7 @@ window.addEventListener('resize',()=>{
 (function(){
   if(window.innerWidth<=600){
     document.getElementById('preview')?.classList.add('m-hidden');
+    initAccordion();
   }
 })();
 
