@@ -3604,8 +3604,8 @@ function genHDVT(d){
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HĐMB/${p[2]}`;}
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:11px;color:#555;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b><br><i>Gia Lai, ngày ${d.ngay}</i></div>
-    <div class="ttl"><h1 style="font-size:17px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
-      <div class="sub">(V/v: ${moTa})</div></div>
+    <div class="ttl"><h1 style="font-size:15px;">Hợp Đồng Cung Cấp Vật Tư &amp; Thiết Bị</h1>
+      <div class="sub" style="font-size:12.5px;font-style:normal;color:#444;">V/v: ${moTa}</div></div>
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">- Căn cứ Luật thương mại số 36/2005/QH11 ngày 14/06/2005;<br>- Căn cứ Bộ luật dân sự số 91/2015/QH13 ngày 24 tháng 11 năm 2015;<br>- Căn cứ nhu cầu và khả năng của hai bên.<br>Hôm nay, ngày ${d.ngay} tại Công ty Cổ phần An Nông Agritech chúng tôi gồm:</p>
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Bên bán (Bên A): ${CO.ten}</div></div>
     <table class="t-info" style="margin-bottom:8px"><tr><td>Mã số thuế</td><td>${CO.mst}</td></tr><tr><td>Địa chỉ</td><td>${CO.dc}</td></tr><tr><td>Tài khoản số</td><td>${CO.stk} — ${CO.ngan} Chi nhánh Gia Lai</td></tr><tr><td>Đại diện</td><td>Ông ${CO.gd} &nbsp;&nbsp; Chức vụ: Giám đốc</td></tr></table>
