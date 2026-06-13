@@ -1104,6 +1104,20 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <textarea id="hdGhiChu" rows="2" placeholder="Giai đoạn 1 (26ha) theo quy hoạch tổng thể 50ha"></textarea></div>
   </div>
 
+  <!-- ── TOGGLE HẠNG MỤC BG-VT ── -->
+  <div id="bgvtTogglePanel" style="display:none">
+    <h3>Hạng mục báo giá</h3>
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;">
+      <button type="button" class="svc-btn active" id="bgvtHTT" onclick="toggleBgvt('HTT')">
+        <strong>HTT</strong><br>Vật tư<br>Hệ thống tưới
+      </button>
+      <button type="button" class="svc-btn" id="bgvtDMT" onclick="toggleBgvt('DMT')">
+        <strong>DMT</strong><br>Vật tư<br>Điện mặt trời
+      </button>
+    </div>
+  </div>
+
   <!-- ── PHẦN VẬT TƯ (ẩn khi chọn Dịch vụ) ── -->
   <div id="vtModePanel" style="display:none">
     <h3>Danh mục vật tư</h3>
@@ -1741,7 +1755,7 @@ function generateVatTu(){
 
   <div class="ttl">
     <h1>Báo Giá Cung Cấp Vật Tư</h1>
-    <h2>VẬT TƯ THIẾT BỊ HỆ THỐNG TƯỚI</h2>
+    <h2>${(()=>{const h=document.getElementById('bgvtHTT')?.classList.contains('active')??true;const d=document.getElementById('bgvtDMT')?.classList.contains('active')??false;return h&&d?'VẬT TƯ HỆ THỐNG TƯỚI &amp; ĐIỆN MẶT TRỜI':d?'VẬT TƯ ĐIỆN MẶT TRỜI':'VẬT TƯ HỆ THỐNG TƯỚI';})()}</h2>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">Thông Tin Khách Hàng</div></div>
@@ -1810,6 +1824,15 @@ function generateVatTu(){
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
   
+}
+
+// ── TOGGLE BG-VT (HTT / DMT) ──
+function toggleBgvt(type){
+  const btn=document.getElementById('bgvt'+type);
+  const isActive=btn.classList.contains('active');
+  const anyOther=['HTT','DMT'].filter(t=>t!==type&&document.getElementById('bgvt'+t).classList.contains('active')).length>0;
+  if(isActive&&!anyOther) return;
+  btn.classList.toggle('active');
 }
 
 // ── TOGGLE HD-VT (HTT / DMT) ──
@@ -3393,6 +3416,7 @@ function onDocTypeChange(){
   // BG panels
   document.getElementById('bgSo').closest('.field').style.display=(isBG&&!isDA)?'':'none';
   document.getElementById('bgDVPanel').style.display=type==='bg-dichvu'?'':'none';
+  document.getElementById('bgvtTogglePanel').style.display=isVT?'block':'none';
   document.getElementById('vtModePanel').style.display=(isVT||type==='hdvt')?'block':'none';
   document.getElementById('daFields').style.display=isDA?'':'none';
   // Toggle KH info — mở rộng cho HD/PGH/BBNT/NCC vì cần nhập đủ thông tin khách
