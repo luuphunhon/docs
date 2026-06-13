@@ -290,8 +290,8 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="cs-item" data-v="bb-kl" data-code="BB-KL" onclick="csSelect(this)">
         <span class="cs-item-code">BB-KL</span><span class="cs-item-name">BB Xác Nhận Khối Lượng</span>
       </div>
-      <div class="cs-item" data-v="bb-dc" data-code="BB-DC" onclick="csSelect(this)">
-        <span class="cs-item-code">BB-DC</span><span class="cs-item-name">Bảng Đối Chiếu Vật Tư</span>
+      <div class="cs-item" data-v="bb-bg" data-code="BB-BG" onclick="csSelect(this)">
+        <span class="cs-item-code">BB-BG</span><span class="cs-item-name">Bảng Đối Chiếu Vật Tư</span>
       </div>
       <div class="cs-group-hdr">Giao hàng &amp; Tài chính</div>
       <div class="cs-item" data-v="ncc" data-code="PDH" onclick="csSelect(this)">
@@ -927,46 +927,40 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="field"><label>SĐT</label><input id="bbklSdtB" placeholder="0909600090"></div>
     </div>
     <h3>Xác nhận từng hạng mục</h3>
-    <div class="note-box">Ghi chú xác nhận thực tế tại từng hạng mục (để trống = chưa xác nhận)</div>
-    <div style="margin-top:8px">
-      <div class="field"><label>1. HTT Khu 1</label><textarea id="bbklHm1" rows="2" placeholder="VD: Hoàn thành 13.5ha, đã vận hành thử..."></textarea></div>
-      <div class="field"><label>2. HTT Khu 2</label><textarea id="bbklHm2" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>3. HTT Khu 3</label><textarea id="bbklHm3" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>4. HTT Khu 4</label><textarea id="bbklHm4" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>5. HTT Khu 5</label><textarea id="bbklHm5" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>6. Cụm trạm bơm số 01</label><textarea id="bbklHm6" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>7. Cụm trạm bơm số 02</label><textarea id="bbklHm7" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>8. Cụm trạm bơm số 03</label><textarea id="bbklHm8" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>9. Đường ống tích thủy</label><textarea id="bbklHm9" rows="2" placeholder="..."></textarea></div>
-      <div class="field"><label>10. Hệ thống năng lượng mặt trời</label><textarea id="bbklHm10" rows="2" placeholder="..."></textarea></div>
+    <div class="note-box">Tên hạng mục + ghi chú xác nhận thực tế. Để trống ghi chú = chưa xác nhận.</div>
+    <div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0">
+      <button class="btn-sm" onclick="bbklLoadHoangAnh()">📋 Nạp Hoàng Anh 50ha</button>
+      <button class="btn-sm" onclick="bbklAddRow()">+ Thêm hạng mục</button>
+      <button class="btn-sm" style="background:#5D4037" onclick="bbklClearRows()">🗑 Xóa hết</button>
     </div>
-    <div class="field"><label>Ghi chú / bổ sung thực tế</label><textarea id="bbklGhiChu" rows="3" placeholder="Nội dung bổ sung nếu có..."></textarea></div>
+    <div id="bbklHmWrap" style="max-height:320px;overflow-y:auto;border:1px solid #2E7D32;border-radius:4px;padding:4px;background:#0A3D0A;"></div>
+    <div class="field" style="margin-top:8px"><label>Ghi chú / bổ sung thực tế</label><textarea id="bbklGhiChu" rows="3" placeholder="Nội dung bổ sung nếu có..."></textarea></div>
   </div>
 
   <!-- ── BẢNG ĐỐI CHIẾU VẬT TƯ ── -->
-  <div id="bbdcFields" style="display:none">
+  <div id="bbgFields" style="display:none">
     <h3>Bảng đối chiếu &amp; bàn giao vật tư</h3>
-    <div class="field"><label>Ngày kiểm kê</label><input type="date" id="bbdcNgayKK"></div>
-    <div class="field"><label>Địa điểm kiểm kê</label><input id="bbdcDiaDiem" value="Farm Ia Pia, Gia Lai"></div>
-    <div class="field"><label>Số hợp đồng căn cứ</label><input id="bbdcSoHD" placeholder="08052026/HĐTKTC/2026"></div>
+    <div class="field"><label>Ngày kiểm kê</label><input type="date" id="bbgNgayKK"></div>
+    <div class="field"><label>Địa điểm kiểm kê</label><input id="bbgDiaDiem" value="Farm Ia Pia, Gia Lai"></div>
+    <div class="field"><label>Số hợp đồng căn cứ</label><input id="bbgSoHD" placeholder="08052026/HĐTKTC/2026"></div>
     <h3>Đại diện Bên A (thi công)</h3>
-    <div class="field"><label>Họ tên</label><input id="bbdcDDA" value="Nguyễn Văn Thành"></div>
+    <div class="field"><label>Họ tên</label><input id="bbgDDA" value="Nguyễn Văn Thành"></div>
     <div class="row2">
-      <div class="field"><label>CCCD</label><input id="bbdcCCCDA" value="038084024604"></div>
-      <div class="field"><label>SĐT</label><input id="bbdcSdtA" value="0877705456"></div>
+      <div class="field"><label>CCCD</label><input id="bbgCCCDA" value="038084024604"></div>
+      <div class="field"><label>SĐT</label><input id="bbgSdtA" value="0877705456"></div>
     </div>
     <h3>Đại diện Bên B (chủ đầu tư / quản lý farm)</h3>
-    <div class="field"><label>Họ tên</label><input id="bbdcDDB" placeholder="Nguyễn Trường Sơn"></div>
+    <div class="field"><label>Họ tên</label><input id="bbgDDB" placeholder="Nguyễn Trường Sơn"></div>
     <div class="row2">
-      <div class="field"><label>CCCD</label><input id="bbdcCCCDB" placeholder="030088024114"></div>
-      <div class="field"><label>SĐT</label><input id="bbdcSdtB" placeholder="0909600090"></div>
+      <div class="field"><label>CCCD</label><input id="bbgCCCDB" placeholder="030088024114"></div>
+      <div class="field"><label>SĐT</label><input id="bbgSdtB" placeholder="0909600090"></div>
     </div>
     <h3>Danh mục vật tư</h3>
     <button type="button" onclick="loadHoangAnh50ha()" style="width:100%;padding:7px;background:#1565C0;color:#fff;font-size:11.5px;font-weight:700;border:none;border-radius:4px;cursor:pointer;margin-bottom:6px;">📋 Nạp danh sách Hoàng Anh 50ha</button>
-    <div id="bbdcItemsWrap" style="max-height:340px;overflow-y:auto;border:1px solid #2E7D32;border-radius:4px;padding:4px;background:#0A3D0A;"></div>
+    <div id="bbgItemsWrap" style="max-height:340px;overflow-y:auto;border:1px solid #2E7D32;border-radius:4px;padding:4px;background:#0A3D0A;"></div>
     <div style="display:flex;gap:6px;margin-top:6px">
-      <button type="button" onclick="addBbdcRow()" style="flex:1;padding:5px;background:#2E7D32;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">+ Thêm dòng</button>
-      <button type="button" onclick="clearBbdcRows()" style="flex:1;padding:5px;background:#5D0000;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">🗑 Xoá tất cả</button>
+      <button type="button" onclick="addBbgRow()" style="flex:1;padding:5px;background:#2E7D32;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">+ Thêm dòng</button>
+      <button type="button" onclick="clearBbgRows()" style="flex:1;padding:5px;background:#5D0000;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">🗑 Xoá tất cả</button>
     </div>
     <div class="note-box" style="margin-top:8px">Điền "Đã sử dụng" → Tồn kho tự tính. Cột "Đã giao CT" từ pre-fill hoặc nhập tay.</div>
   </div>
@@ -1859,7 +1853,7 @@ function generate(){
   if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
   if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
   if(loaiBG==='bg-kt'){generateBGKT();pmAutoSave();return;}
-  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','bb-kl','bb-dc','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
+  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','bb-kl','bb-bg','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
 
   // BG-DV: đọc toggle state để route đúng generator
   const _svcTK=document.getElementById('svcTK')?.classList.contains('active')??true;
@@ -3149,7 +3143,7 @@ function autoSlug(){
   ].filter(Boolean);
   el.value=parts.join('-');
 }
-const LOAI_MAP_ALL={'da':'DA','bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','bb-kl':'BB-KL','bb-dc':'BB-DC','ncc':'PDH'};
+const LOAI_MAP_ALL={'da':'DA','bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','bb-kl':'BB-KL','bb-bg':'BB-BG','ncc':'PDH'};
 
 function getBGDocTitle(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
@@ -3194,9 +3188,8 @@ function pmCollect(){
     'hdMoTa','hdTong','hdTUPct','hdThoiGianGH','hdGhiChu','hdCCCDNgay','hdTKKH',
     'pksHa','pksCay','pksDiaDiem','pksNguonNuoc','pksTinhTrang','pksDiaTe','pksDien','pksYeuCau','pksNguoiKS','pksNgayKS',
     'bbntSoHD','bbntHa','bbntCay','bbntDiaDiem','bbntThoiGian','bbntKetQua','bbntKhacPhuc','bbntBaoHanh','bbntDDKhach',
-    'bbklSoHD','bbklDuAn','bbklDDA','bbklCCCDA','bbklSdtA','bbklDDB','bbklCCCDB','bbklSdtB',
-    'bbklHm1','bbklHm2','bbklHm3','bbklHm4','bbklHm5','bbklHm6','bbklHm7','bbklHm8','bbklHm9','bbklHm10','bbklGhiChu',
-    'bbdcNgayKK','bbdcDiaDiem','bbdcSoHD','bbdcDDA','bbdcCCCDA','bbdcSdtA','bbdcDDB','bbdcCCCDB','bbdcSdtB',
+    'bbklSoHD','bbklDuAn','bbklDDA','bbklCCCDA','bbklSdtA','bbklDDB','bbklCCCDB','bbklSdtB','bbklGhiChu',
+    'bbgNgayKK','bbgDiaDiem','bbgSoHD','bbgDDA','bbgCCCDA','bbgSdtA','bbgDDB','bbgCCCDB','bbgSdtB',
     'nccTen','nccSdt','nccDiaChi','nccDuAn','nccNgayGiao','nccNoiNhan','nccGhiChu',
     'dotGiao','bienSo','ngayGiao','ttTong','ttDaTU','ttDot1','ttDot23','ttSoTien','tuLyDo'];
   const vals={};
@@ -3204,6 +3197,8 @@ function pmCollect(){
   [...fields,...daExtraFields].forEach(f=>{const el=document.getElementById(f);if(el)vals[f]=el.value;});
   return{id:_pmId,name,type,vals,
     vtItems:JSON.parse(JSON.stringify(vtItems)),vtIdCnt,
+    bbklHmRows:JSON.parse(JSON.stringify(bbklHmRows)),bbklHmIdCnt,
+    bbgRows:JSON.parse(JSON.stringify(bbgRows)),bbgIdCnt,
     learnedUnits:JSON.parse(JSON.stringify(learnedUnits)),
     savedAt:new Date().toISOString()};
 }
@@ -3218,6 +3213,8 @@ function pmRestore(s,silent){
   // Restore vtItems
   vtItems=s.vtItems?JSON.parse(JSON.stringify(s.vtItems)):[];
   vtIdCnt=s.vtIdCnt||vtItems.reduce((m,r)=>Math.max(m,r.id+1),0);
+  if(s.bbklHmRows){bbklHmRows=JSON.parse(JSON.stringify(s.bbklHmRows));bbklHmIdCnt=s.bbklHmIdCnt||0;renderBbklHmRows();}
+  if(s.bbgRows){bbgRows=JSON.parse(JSON.stringify(s.bbgRows));bbgIdCnt=s.bbgIdCnt||0;renderBbgRows();}
   if(s.learnedUnits)learnedUnits=JSON.parse(JSON.stringify(s.learnedUnits));
   onDocTypeChange();
   if(!silent&&document.getElementById('pmStatus'))
@@ -3518,7 +3515,7 @@ function autoSoTL(){
     pks :`${yyyy}${mm}${dd}-1/PKS-ANA`,
     bbnt:`${yyyy}${mm}${dd}-1/BBNT-ANA`,
     'bb-kl':`${yyyy}${mm}${dd}-1/BB-KL/ANA`,
-    'bb-dc':`01/DC&BG-ANA`,
+    'bb-bg':`01/DC&BG-ANA`,
     ncc :`${dd}${mm}${yyyy}/PDH-ANA`
   };
   const fallbackCode='TL-ANA';
@@ -3552,7 +3549,7 @@ function onDocTypeChange(){
   document.getElementById('vtModePanel').style.display=isVT?'block':'none';
   document.getElementById('daFields').style.display=isDA?'':'none';
   // Toggle KH info — mở rộng cho HD/PGH/BBNT/NCC vì cần nhập đủ thông tin khách
-  const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','bb-kl','bb-dc','ncc','pks'].includes(type);
+  const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','bb-kl','bb-bg','ncc','pks'].includes(type);
   setKhMode(needKhExpanded);
 
   // Non-BG panels
@@ -3568,8 +3565,9 @@ function onDocTypeChange(){
   document.getElementById('pksFields').style.display=type==='pks'?'':'none';
   document.getElementById('bbntFields').style.display=type==='bbnt'?'':'none';
   document.getElementById('bbklFields').style.display=type==='bb-kl'?'':'none';
-  document.getElementById('bbdcFields').style.display=type==='bb-dc'?'':'none';
-  if(type==='bb-dc'&&bbdcRows.length===0){loadHoangAnh50ha();}
+  document.getElementById('bbgFields').style.display=type==='bb-bg'?'':'none';
+  if(type==='bb-kl'){if(bbklHmRows.length===0){bbklLoadHoangAnh();}else{renderBbklHmRows();}}
+  if(type==='bb-bg'&&bbgRows.length===0){loadHoangAnh50ha();}
   document.getElementById('nccFields').style.display=type==='ncc'?'':'none';
   if(type==='ncc'&&document.querySelectorAll('#nccItemRows .item-row').length===0){addNccItem();addNccItem();addNccItem();}
 
@@ -3625,7 +3623,7 @@ function _genDoc(type){
   if(type==='pks')  html=genPKS(d);
   if(type==='bbnt')  html=genBBNT(d);
   if(type==='bb-kl') html=genBBKL(d);
-  if(type==='bb-dc') html=genBBDC(d);
+  if(type==='bb-bg') html=genBBBG(d);
   if(type==='ncc')   html=genNCC(d);
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
@@ -3987,7 +3985,7 @@ function genBBNT(d){
   </div>`;
 }
 
-// ── BB-DC: DATA & ROW MANAGEMENT ───────────────────────
+// ── BB-BG: DATA & ROW MANAGEMENT ───────────────────────
 const HOANG_ANH_VATTU=[
   {nhom:'(I) BÉC TƯỚI VÀ PHỤ KIỆN',items:[
     {ten:'Ống nhựa PE phi 7mm 1 ly (200m/cuộn) BH 5năm',dvt:'Mét',daGiao:18000},
@@ -4083,61 +4081,61 @@ const HOANG_ANH_VATTU=[
   ]},
 ];
 
-let bbdcRows=[];
-let bbdcIdCnt=0;
+let bbgRows=[];
+let bbgIdCnt=0;
 
 function loadHoangAnh50ha(){
-  bbdcRows=[];
-  bbdcIdCnt=0;
+  bbgRows=[];
+  bbgIdCnt=0;
   HOANG_ANH_VATTU.forEach(nhom=>{
-    bbdcRows.push({id:bbdcIdCnt++,type:'header',text:nhom.nhom});
+    bbgRows.push({id:bbgIdCnt++,type:'header',text:nhom.nhom});
     nhom.items.forEach(it=>{
-      bbdcRows.push({id:bbdcIdCnt++,type:'item',ten:it.ten,dvt:it.dvt,daGiao:it.daGiao,daDung:'',ghiChu:''});
+      bbgRows.push({id:bbgIdCnt++,type:'item',ten:it.ten,dvt:it.dvt,daGiao:it.daGiao,daDung:'',ghiChu:''});
     });
   });
-  renderBbdcRows();
+  renderBbgRows();
   generate();
 }
 
-function addBbdcRow(){
-  bbdcRows.push({id:bbdcIdCnt++,type:'item',ten:'',dvt:'Cái',daGiao:0,daDung:'',ghiChu:''});
-  renderBbdcRows();
+function addBbgRow(){
+  bbgRows.push({id:bbgIdCnt++,type:'item',ten:'',dvt:'Cái',daGiao:0,daDung:'',ghiChu:''});
+  renderBbgRows();
   generate();
 }
 
-function clearBbdcRows(){
+function clearBbgRows(){
   if(!confirm('Xoá toàn bộ danh sách vật tư?'))return;
-  bbdcRows=[];renderBbdcRows();generate();
+  bbgRows=[];renderBbgRows();generate();
 }
 
-function removeBbdcRow(id){
-  bbdcRows=bbdcRows.filter(r=>r.id!==id);
-  renderBbdcRows();generate();
+function removeBbgRow(id){
+  bbgRows=bbgRows.filter(r=>r.id!==id);
+  renderBbgRows();generate();
 }
 
-function bbdcUpdate(id,field,val){
-  const r=bbdcRows.find(r=>r.id===id);
+function bbgUpdate(id,field,val){
+  const r=bbgRows.find(r=>r.id===id);
   if(r){r[field]=val;}
   // update tồn display
   if(field==='daGiao'||field==='daDung'){
-    const r2=bbdcRows.find(r=>r.id===id);
+    const r2=bbgRows.find(r=>r.id===id);
     if(r2&&r2.type==='item'){
       const ton=(parseFloat(r2.daGiao)||0)-(parseFloat(r2.daDung)||0);
-      const el=document.getElementById('bbdc-ton-'+id);
+      const el=document.getElementById('bbg-ton-'+id);
       if(el)el.textContent=ton.toLocaleString('vi-VN');
     }
   }
   generate();
 }
 
-function renderBbdcRows(){
-  const wrap=document.getElementById('bbdcItemsWrap');
+function renderBbgRows(){
+  const wrap=document.getElementById('bbgItemsWrap');
   if(!wrap)return;
-  if(!bbdcRows.length){wrap.innerHTML='<div style="color:#4a7a4a;font-size:11px;padding:8px;text-align:center">Chưa có vật tư. Bấm "Nạp Hoàng Anh 50ha" hoặc "+ Thêm dòng"</div>';return;}
+  if(!bbgRows.length){wrap.innerHTML='<div style="color:#4a7a4a;font-size:11px;padding:8px;text-align:center">Chưa có vật tư. Bấm "Nạp Hoàng Anh 50ha" hoặc "+ Thêm dòng"</div>';return;}
   const inp=(style)=>`style="width:100%;padding:2px 4px;border:1px solid #2E7D32;border-radius:2px;background:#071f07;color:#fff;font-size:10px;${style||''}"`;
   let html='';
   let stt=0;
-  bbdcRows.forEach(r=>{
+  bbgRows.forEach(r=>{
     if(r.type==='header'){
       html+=`<div style="background:#143D14;color:#81C784;font-size:9px;font-weight:700;padding:4px 6px;margin-top:4px;border-radius:3px;">${r.text}</div>`;
     } else {
@@ -4146,20 +4144,74 @@ function renderBbdcRows(){
       html+=`<div style="border-bottom:1px solid #1a4a1a;padding:3px 4px;">
         <div style="display:flex;gap:4px;align-items:center;margin-bottom:2px;">
           <span style="color:#4a7a4a;font-size:9px;min-width:16px">${stt}</span>
-          <input ${inp('flex:1')} value="${r.ten.replace(/"/g,'&quot;')}" placeholder="Tên vật tư" onchange="bbdcUpdate(${r.id},'ten',this.value)" oninput="bbdcUpdate(${r.id},'ten',this.value)">
-          <input ${inp('width:36px')} value="${r.dvt}" placeholder="ĐVT" onchange="bbdcUpdate(${r.id},'dvt',this.value)">
-          <button onclick="removeBbdcRow(${r.id})" style="background:#5D0000;color:#fff;border:none;border-radius:2px;padding:1px 5px;cursor:pointer;font-size:10px;">×</button>
+          <input ${inp('flex:1')} value="${r.ten.replace(/"/g,'&quot;')}" placeholder="Tên vật tư" onchange="bbgUpdate(${r.id},'ten',this.value)" oninput="bbgUpdate(${r.id},'ten',this.value)">
+          <input ${inp('width:36px')} value="${r.dvt}" placeholder="ĐVT" onchange="bbgUpdate(${r.id},'dvt',this.value)">
+          <button onclick="removeBbgRow(${r.id})" style="background:#5D0000;color:#fff;border:none;border-radius:2px;padding:1px 5px;cursor:pointer;font-size:10px;">×</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
-          <div><div style="color:#4a7a4a;font-size:8px">Đã giao CT</div><input type="number" ${inp('')} value="${r.daGiao}" onchange="bbdcUpdate(${r.id},'daGiao',this.value)"></div>
-          <div><div style="color:#81C784;font-size:8px">Đã sử dụng</div><input type="number" ${inp('border-color:#81C784')} value="${r.daDung}" placeholder="0" onchange="bbdcUpdate(${r.id},'daDung',this.value)"></div>
-          <div><div style="color:#FFE082;font-size:8px">Tồn kho</div><div id="bbdc-ton-${r.id}" style="color:#FFE082;font-size:10px;padding:3px 4px;">${ton.toLocaleString('vi-VN')}</div></div>
+          <div><div style="color:#4a7a4a;font-size:8px">Đã giao CT</div><input type="number" ${inp('')} value="${r.daGiao}" onchange="bbgUpdate(${r.id},'daGiao',this.value)"></div>
+          <div><div style="color:#81C784;font-size:8px">Đã sử dụng</div><input type="number" ${inp('border-color:#81C784')} value="${r.daDung}" placeholder="0" onchange="bbgUpdate(${r.id},'daDung',this.value)"></div>
+          <div><div style="color:#FFE082;font-size:8px">Tồn kho</div><div id="bbg-ton-${r.id}" style="color:#FFE082;font-size:10px;padding:3px 4px;">${ton.toLocaleString('vi-VN')}</div></div>
         </div>
-        <div style="margin-top:2px"><input ${inp('width:100%')} value="${(r.ghiChu||'').replace(/"/g,'&quot;')}" placeholder="Ghi chú..." onchange="bbdcUpdate(${r.id},'ghiChu',this.value)"></div>
+        <div style="margin-top:2px"><input ${inp('width:100%')} value="${(r.ghiChu||'').replace(/"/g,'&quot;')}" placeholder="Ghi chú..." onchange="bbgUpdate(${r.id},'ghiChu',this.value)"></div>
       </div>`;
     }
   });
   wrap.innerHTML=html;
+}
+
+// ── BB-KL: DATA & ROW MANAGEMENT ──────────────────────
+const BBKL_HOANG_ANH=[
+  {ten:'HTT Khu 1',mo:'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế'},
+  {ten:'HTT Khu 2',mo:'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế'},
+  {ten:'HTT Khu 3',mo:'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế'},
+  {ten:'HTT Khu 4',mo:'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế'},
+  {ten:'HTT Khu 5',mo:'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế'},
+  {ten:'Cụm trạm bơm số 01',mo:'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan'},
+  {ten:'Cụm trạm bơm số 02',mo:'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan'},
+  {ten:'Cụm trạm bơm số 03',mo:'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan'},
+  {ten:'Đường ống tích thủy',mo:'Tuyến ống tích thủy, phụ kiện đấu nối và các hạng mục liên quan theo phạm vi thi công thực tế'},
+  {ten:'Hệ thống năng lượng mặt trời',mo:'Tấm pin NLMT, inverter, tủ điện, dây dẫn, khung giá đỡ, đấu nối, cài đặt và kiểm tra vận hành'},
+];
+let bbklHmRows=[];
+let bbklHmIdCnt=0;
+function bbklLoadHoangAnh(){
+  bbklHmRows=BBKL_HOANG_ANH.map(h=>({id:bbklHmIdCnt++,ten:h.ten,mo:h.mo,ghiChu:''}));
+  renderBbklHmRows();generate();
+}
+function bbklAddRow(){
+  bbklHmRows.push({id:bbklHmIdCnt++,ten:'',mo:'',ghiChu:''});
+  renderBbklHmRows();
+}
+function bbklClearRows(){
+  if(!confirm('Xóa toàn bộ hạng mục?'))return;
+  bbklHmRows=[];renderBbklHmRows();generate();
+}
+function bbklRemoveRow(id){
+  bbklHmRows=bbklHmRows.filter(r=>r.id!==id);renderBbklHmRows();generate();
+}
+function bbklUpdateRow(id,field,val){
+  const r=bbklHmRows.find(r=>r.id===id);if(r)r[field]=val;generate();
+}
+function renderBbklHmRows(){
+  const wrap=document.getElementById('bbklHmWrap');if(!wrap)return;
+  if(!bbklHmRows.length){
+    wrap.innerHTML='<div style="color:#4a7a4a;font-size:11px;padding:8px;text-align:center">Chưa có hạng mục. Bấm "Nạp Hoàng Anh 50ha" hoặc "+ Thêm hạng mục"</div>';return;
+  }
+  const inp=s=>`style="background:#0D3B0D;border:1px solid #2E7D32;border-radius:3px;color:#E8F5E9;font-size:11px;padding:3px 5px;${s}"`;
+  wrap.innerHTML=bbklHmRows.map((r,i)=>`
+    <div style="border:1px solid #1B5E20;border-radius:4px;margin-bottom:4px;padding:5px;background:#0D2B0D;">
+      <div style="display:flex;gap:4px;align-items:center;margin-bottom:3px">
+        <span style="color:#81C784;font-size:10px;min-width:16px">${i+1}.</span>
+        <input ${inp('flex:1')} value="${r.ten.replace(/"/g,'&quot;')}" placeholder="Tên hạng mục"
+          oninput="bbklUpdateRow(${r.id},'ten',this.value)">
+        <button onclick="bbklRemoveRow(${r.id})" style="background:#5D4037;border:none;border-radius:3px;color:#fff;font-size:10px;padding:2px 6px;cursor:pointer">✕</button>
+      </div>
+      <input ${inp('width:100%;box-sizing:border-box;margin-bottom:3px')} value="${(r.mo||'').replace(/"/g,'&quot;')}" placeholder="Mô tả hạng mục (hiện trong biên bản)"
+        oninput="bbklUpdateRow(${r.id},'mo',this.value)">
+      <input ${inp('width:100%;box-sizing:border-box;border-color:#81C784')} value="${(r.ghiChu||'').replace(/"/g,'&quot;')}" placeholder="Ghi chú xác nhận thực tế (để trống = chưa xác nhận)"
+        oninput="bbklUpdateRow(${r.id},'ghiChu',this.value)">
+    </div>`).join('');
 }
 
 // ── GEN BB-KL ──────────────────────────────────────────
@@ -4173,25 +4225,9 @@ function genBBKL(d){
   const cccdB=document.getElementById('bbklCCCDB')?.value||d.khCCCD;
   const sdtB=document.getElementById('bbklSdtB')?.value||d.khSdt;
   const ghiChu=document.getElementById('bbklGhiChu')?.value||'';
-  const hmNames=['HTT Khu 1','HTT Khu 2','HTT Khu 3','HTT Khu 4','HTT Khu 5',
-    'Cụm trạm bơm số 01','Cụm trạm bơm số 02','Cụm trạm bơm số 03',
-    'Đường ống tích thủy','Hệ thống năng lượng mặt trời'];
-  const hmDesc=[
-    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
-    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
-    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
-    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
-    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
-    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
-    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
-    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
-    'Tuyến ống tích thủy, phụ kiện đấu nối và các hạng mục liên quan theo phạm vi thi công thực tế',
-    'Tấm pin NLMT, inverter, tủ điện, dây dẫn, khung giá đỡ, đấu nối, cài đặt và kiểm tra vận hành',
-  ];
-  const hmRows=hmNames.map((nm,i)=>{
-    const gc=document.getElementById('bbklHm'+(i+1))?.value||'';
-    return `<tr><td class="c">${i+1}</td><td><b>${nm}</b></td><td style="font-size:11px;color:#555">${hmDesc[i]}</td><td style="font-size:11.5px;color:#1B5E20">${gc}</td><td class="c" style="font-size:10px;color:#999">________</td></tr>`;
-  }).join('');
+  const hmRows=bbklHmRows.map((r,i)=>
+    `<tr><td class="c">${i+1}</td><td><b>${r.ten||'—'}</b></td><td style="font-size:11px;color:#555">${r.mo||''}</td><td style="font-size:11.5px;color:#1B5E20">${r.ghiChu||''}</td><td class="c" style="font-size:10px;color:#999">________</td></tr>`
+  ).join('')||'<tr><td colspan="5" style="text-align:center;color:#999;font-size:11px">Chưa có hạng mục</td></tr>';
   const ghiChuLines=ghiChu?ghiChu.split('\n').map(l=>`<p style="font-size:12px;line-height:1.8;margin:0">${l||'&nbsp;'}</p>`).join('')
     :'<p style="color:#aaa;font-style:italic;font-size:12px">Không có ghi chú bổ sung</p>';
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
@@ -4290,22 +4326,22 @@ function genBBKL(d){
   </div>`;
 }
 
-// ── GEN BB-DC ──────────────────────────────────────────
-function genBBDC(d){
-  const ngayKKRaw=document.getElementById('bbdcNgayKK')?.value||'';
+// ── GEN BB-BG ──────────────────────────────────────────
+function genBBBG(d){
+  const ngayKKRaw=document.getElementById('bbgNgayKK')?.value||'';
   const ngayKK=ngayKKRaw?new Date(ngayKKRaw).toLocaleDateString('vi-VN'):`ngày......tháng......năm......`;
-  const diaDiem=document.getElementById('bbdcDiaDiem')?.value||'Farm Ia Pia, Gia Lai';
-  const soHD=document.getElementById('bbdcSoHD')?.value||d.soHD;
-  const ddA=document.getElementById('bbdcDDA')?.value||d.nguoiLap;
-  const cccdA=document.getElementById('bbdcCCCDA')?.value||'—';
-  const sdtA=document.getElementById('bbdcSdtA')?.value||CO.dt;
-  const ddB=document.getElementById('bbdcDDB')?.value||d.khTen;
-  const cccdB=document.getElementById('bbdcCCCDB')?.value||d.khCCCD;
-  const sdtB=document.getElementById('bbdcSdtB')?.value||d.khSdt;
+  const diaDiem=document.getElementById('bbgDiaDiem')?.value||'Farm Ia Pia, Gia Lai';
+  const soHD=document.getElementById('bbgSoHD')?.value||d.soHD;
+  const ddA=document.getElementById('bbgDDA')?.value||d.nguoiLap;
+  const cccdA=document.getElementById('bbgCCCDA')?.value||'—';
+  const sdtA=document.getElementById('bbgSdtA')?.value||CO.dt;
+  const ddB=document.getElementById('bbgDDB')?.value||d.khTen;
+  const cccdB=document.getElementById('bbgCCCDB')?.value||d.khCCCD;
+  const sdtB=document.getElementById('bbgSdtB')?.value||d.khSdt;
 
   let stt=0;
   let tableRows='';
-  bbdcRows.forEach(r=>{
+  bbgRows.forEach(r=>{
     if(r.type==='header'){
       tableRows+=`<tr style="background:#E8F5E9"><td colspan="7" style="font-weight:700;font-size:11.5px;color:#1B5E20;padding:5px 8px;">${r.text}</td></tr>`;
     } else {
