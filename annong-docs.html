@@ -219,6 +219,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html-docx-js@0.3.1/dist/html-docx.js"></script>
 </head>
 <body>
 
@@ -1132,7 +1133,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <div class="btn-sticky">
     <button class="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
-    <button class="btn-print" onclick="window.print()" style="margin-top:6px;">🖨 In / Xuất PDF</button>
+    <div style="display:flex;gap:4px;margin-top:6px;">
+      <button class="btn-print" style="margin-top:0;flex:1;" onclick="window.print()">🖨 In / PDF</button>
+      <button class="btn-print" id="btnExportDocx" style="margin-top:0;flex:1;background:#6A1B9A;" onclick="exportDOCX()">📄 Xuất .docx</button>
+      <button class="btn-print" id="btnExportXlsx" style="margin-top:0;flex:1;background:#1B5E20;display:none;" onclick="exportXLSX()">📊 Xuất .xlsx</button>
+    </div>
     <button id="btnLark" onclick="saveToLark()" style="width:100%;padding:8px;background:#1a73e8;color:#fff;font-weight:600;font-size:12px;border:none;border-radius:5px;cursor:pointer;margin-top:6px;">☁ Lưu vào Lark</button>
   </div>
 </div>
@@ -3568,6 +3573,10 @@ function onDocTypeChange(){
   document.getElementById('bbgFields').style.display=type==='bb-bg'?'':'none';
   if(type==='bb-kl'){if(bbklHmRows.length===0){bbklLoadHoangAnh();}else{renderBbklHmRows();}}
   if(type==='bb-bg'&&bbgRows.length===0){loadHoangAnh50ha();}
+  const xlsxBtn=document.getElementById('btnExportXlsx');
+  const docxBtn=document.getElementById('btnExportDocx');
+  if(xlsxBtn)xlsxBtn.style.display=type==='bb-bg'?'':'none';
+  if(docxBtn)docxBtn.style.display=type==='bb-bg'?'none':'';
   document.getElementById('nccFields').style.display=type==='ncc'?'':'none';
   if(type==='ncc'&&document.querySelectorAll('#nccItemRows .item-row').length===0){addNccItem();addNccItem();addNccItem();}
 
@@ -4789,6 +4798,94 @@ function fillFromLark() {
     if(!isMobile()) document.querySelector('.btn-sticky')?.classList.remove('scrolled-down');
   });
 })();
+
+// ── EXPORT DOCX ────────────────────────────────────────
+function exportDOCX(){
+  if(typeof htmlDocx==='undefined'){alert('Thư viện html-docx chưa tải. Kiểm tra kết nối mạng.');return;}
+  const preview=document.getElementById('preview');
+  if(!preview||!preview.innerHTML.trim()){alert('Chưa có nội dung để xuất. Bấm Tạo tài liệu trước.');return;}
+
+  // Thu thập CSS in của trang để nhúng vào docx
+  const printCSS=Array.from(document.styleSheets).map(ss=>{
+    try{return Array.from(ss.cssRules).map(r=>r.cssText).join('\n');}catch{return '';}
+  }).join('\n');
+
+  const html=`<!DOCTYPE html><html><head><meta charset="utf-8">
+    <style>
+      body{font-family:'Times New Roman',serif;font-size:13pt;color:#000;margin:0;}
+      table{border-collapse:collapse;width:100%;}
+      td,th{border:1px solid #333;padding:4px 6px;font-size:11pt;}
+      th{background:#f0f0f0;font-weight:bold;}
+      h1{font-size:14pt;text-align:center;}
+      h2{font-size:12pt;}
+      .ttl{text-align:center;margin:10px 0;}
+      .page{page-break-after:always;}
+      .sig-row{display:flex;justify-content:space-between;}
+      @page{margin:2cm;}
+      ${printCSS}
+    </style>
+  </head><body>${preview.innerHTML}</body></html>`;
+
+  const blob=htmlDocx.asBlob(html,{orientation:'portrait',margins:{top:1080,right:1080,bottom:1080,left:1080}});
+  const loai=document.getElementById('docType')?.value||'tai-lieu';
+  const soTL=document.getElementById('soTL')?.value||'';
+  const fname=(soTL?soTL.replace(/[\/\\:*?"<>|]/g,'-')+'-':'')+loai+'.docx';
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=fname;a.click();
+  setTimeout(()=>URL.revokeObjectURL(a.href),5000);
+}
+
+// ── EXPORT XLSX (BB-BG) ────────────────────────────────
+function exportXLSX(){
+  if(typeof XLSX==='undefined'){alert('Thư viện XLSX chưa tải.');return;}
+  if(!bbgRows.length){alert('Chưa có dữ liệu vật tư. Bấm "Nạp Hoàng Anh 50ha" hoặc thêm dòng.');return;}
+
+  const wb=XLSX.utils.book_new();
+  const ws_data=[];
+
+  // Header thông tin
+  const ngayKK=document.getElementById('bbgNgayKK')?.value||'';
+  const diaDiem=document.getElementById('bbgDiaDiem')?.value||'';
+  const soHD=document.getElementById('bbgSoHD')?.value||'';
+  const ddA=document.getElementById('bbgDDA')?.value||'';
+  const ddB=document.getElementById('bbgDDB')?.value||'';
+  ws_data.push(['BẢNG ĐỐI CHIẾU & BÀN GIAO VẬT TƯ TẠI CÔNG TRÌNH']);
+  ws_data.push(['Ngày kiểm kê:',ngayKK,'','Địa điểm:',diaDiem]);
+  ws_data.push(['Số HĐ căn cứ:',soHD,'','Bên A (TC):',ddA,'Bên B (QL):',ddB]);
+  ws_data.push([]);
+  ws_data.push(['STT','Tên vật tư / thiết bị','ĐVT','Đã giao CT','Đã sử dụng','Tồn kho','Ghi chú']);
+
+  let stt=1;
+  bbgRows.forEach(r=>{
+    if(r.type==='header'){
+      ws_data.push([r.text]);
+    } else {
+      const ton=(Number(r.daGiao)||0)-(Number(r.daDung)||0);
+      ws_data.push([stt++,r.ten,r.dvt,r.daGiao,r.daDung||0,ton,r.ghiChu||'']);
+    }
+  });
+  ws_data.push([]);
+  ws_data.push(['','','','','','','']);
+  ws_data.push(['Bên A (Thi công)','','','','Bên B (Chủ đầu tư / Quản lý farm)']);
+  ws_data.push([ddA,'','','',ddB]);
+
+  const ws=XLSX.utils.aoa_to_sheet(ws_data);
+
+  // Căn chỉnh cột
+  ws['!cols']=[{wch:5},{wch:50},{wch:8},{wch:12},{wch:12},{wch:10},{wch:20}];
+
+  // Merge ô tiêu đề
+  ws['!merges']=[
+    {s:{r:0,c:0},e:{r:0,c:6}},
+  ];
+
+  XLSX.utils.book_append_sheet(wb,'Đối chiếu vật tư',ws);
+
+  const soTL=document.getElementById('soTL')?.value||'BB-BG';
+  const fname=(soTL.replace(/[\/\\:*?"<>|]/g,'-'))+'-bang-doi-chieu-vat-tu.xlsx';
+  XLSX.writeFile(wb,fname);
+}
 </script>
 </body>
 </html>
