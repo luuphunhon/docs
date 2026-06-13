@@ -1113,12 +1113,6 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <div class="note-box">💡 Kéo xuống → nhấn <strong>Tạo tài liệu</strong> → xem preview bên phải. In bằng Ctrl+P.</div>
 
-  <!-- QUẢN LÝ DỰ ÁN (ẩn UI, JS vẫn chạy ngầm auto-save localStorage) -->
-  <div style="display:none">
-    <select id="pmSelect"><option value="">— Chọn dự án đã lưu —</option></select>
-    <div id="pmStatus"></div>
-  </div>
-
   <div class="btn-sticky">
     <button class="btn-gen" onclick="generate()">▶ Tạo tài liệu</button>
     <div style="display:flex;gap:4px;margin-top:6px;">
@@ -1805,7 +1799,7 @@ function generateVatTu(){
 </div>`;
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
-  pmAutoSave();
+  
 }
 
 // ── TOGGLE SERVICE (BG-DV) ──
@@ -1841,20 +1835,20 @@ function toggleSvc(type){
 function generate(){
   const loaiBG=document.getElementById('docType')?.value||'bg-dichvu';
   if(loaiBG==='bg-vattu'){generateVatTu();return;}
-  if(loaiBG==='da'){generateDA();pmAutoSave();return;}
+  if(loaiBG==='da'){generateDA();return;}
   // Backward compat cho project đã lưu với loại cũ
-  if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
-  if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
-  if(loaiBG==='bg-kt'){generateBGKT();pmAutoSave();return;}
-  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','bb-kl','bb-bg','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
+  if(loaiBG==='bg-tk'){generateBGTK();return;}
+  if(loaiBG==='bg-tc'){generateBGTC();return;}
+  if(loaiBG==='bg-kt'){generateBGKT();return;}
+  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','bb-kl','bb-bg','ncc'].includes(loaiBG)){_genDoc(loaiBG);return;}
 
   // BG-DV: đọc toggle state để route đúng generator
   const _svcTK=document.getElementById('svcTK')?.classList.contains('active')??true;
   const _svcTC=document.getElementById('svcTC')?.classList.contains('active')??false;
   const _svcKT=document.getElementById('svcKT')?.classList.contains('active')??false;
-  if(!_svcTK&&_svcTC&&!_svcKT){generateBGTC();pmAutoSave();return;}
-  if(!_svcTK&&!_svcTC&&_svcKT){generateBGKT();pmAutoSave();return;}
-  if(_svcTK&&!_svcTC&&!_svcKT){generateBGTK();pmAutoSave();return;}
+  if(!_svcTK&&_svcTC&&!_svcKT){generateBGTC();return;}
+  if(!_svcTK&&!_svcTC&&_svcKT){generateBGKT();return;}
+  if(_svcTK&&!_svcTC&&!_svcKT){generateBGTK();return;}
   // TK+TC, TK+KT, TK+TC+KT → combined template bên dưới (đọc tcCo / hdktCo)
 
   const ha=parseFloat(document.getElementById('dtHa').value)||7;
@@ -2089,7 +2083,7 @@ function generate(){
 
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
-  pmAutoSave();
+  
 }
 
 // ══════════════════════════════════════════════════════
@@ -3027,35 +3021,17 @@ function applyImportResult(result){
 
 // ── INIT ──
 document.addEventListener('DOMContentLoaded',()=>{
-  // Thử khôi phục draft từ localStorage
-  const draftRaw=localStorage.getItem(PM_DRAFT);
-  let restored=false;
-  if(draftRaw){
-    try{
-      const draft=JSON.parse(draftRaw);
-      if(draft&&(draft.vals?.khTen||draft.vtItems?.some(r=>r.type==='item'&&r.ten))){
-        _pmId=draft.id||null;
-        pmRestore(draft,true);
-        restored=true;
-        if(document.getElementById('pmStatus'))
-          document.getElementById('pmStatus').textContent='♻ Đã khôi phục phiên làm việc trước';
-      }
-    }catch{}
-  }
-  if(!restored){
-    const today=new Date().toISOString().split('T')[0];
-    document.getElementById('bgNgay').value=today;
-    const d=today.replace(/-/g,'');
-    document.getElementById('bgSo').value=d+'-1/BG-KS-TK/AN';
-    updateTcPanel();calcAll();onDocTypeChange();
-autoSlug();
-  }
+  const today=new Date().toISOString().split('T')[0];
+  document.getElementById('bgNgay').value=today;
+  const d=today.replace(/-/g,'');
+  document.getElementById('bgSo').value=d+'-1/BG-KS-TK/AN';
+  updateTcPanel();calcAll();onDocTypeChange();
+  autoSlug();
   // Live calc listeners
   document.querySelectorAll('input,select').forEach(el=>{
     el.addEventListener('change',()=>{updateTcPanel();calcAll();});
     el.addEventListener('input',()=>{updateTcPanel();calcAll();});
   });
-  pmRefreshSelect();
   autoSlug();
 
   // Enter → cập nhật file in (áp dụng toàn bộ input trong panel)
@@ -3160,144 +3136,6 @@ function hasUnsavedData(){
 }
 
 // ══════════════════════════════════════════════════════
-// QUẢN LÝ DỰ ÁN — localStorage
-// ══════════════════════════════════════════════════════
-const PM_DRAFT='annong_draft';
-const PM_PRJ='annong_prj_';
-let _pmId=null;
-
-function _pmV(id){return document.getElementById(id)?.value||'';}
-
-function pmCollect(){
-  const type=_pmV('docType')||'bg-dichvu';
-  const slug=_pmV('duAnSlug');
-  const name=(slug||_pmV('khTen')||'Dự án')+' ('+new Date().toLocaleDateString('vi-VN')+')';
-  const fields=['docType','bgSo','bgNgay','nguoiLap','khTen','khSdt','khDiaChi',
-    'duAnSlug','trangThai','soTL','soHD','khLoai','khCCCD','khMST','khNguoiDD',
-    'dtHa','cayTrong','tcMatDo','tcCaCaoKC','tcSauRiengKC','diaHinhNote','tcDiaTeVal',
-    'vtDonGia','coTramBom','vtSoTram','vtBomPerTram','ksSoKs','ksPhuPhi',
-    'tcCo','tcSinhHoat','hdktCo','hdktNgay','hdktPhuTa','phuPhiLao','vtGhiChu',
-    'hdtkLoai','hdtkHa','hdtkCay','hdtkVTUocTinh','hdtkTong','hdtkTUPct','hdtkThoiGian','hdtkDiaDiem','hdtkGhiChu',
-    'hdMoTa','hdTong','hdTUPct','hdThoiGianGH','hdGhiChu','hdCCCDNgay','hdTKKH',
-    'pksHa','pksCay','pksDiaDiem','pksNguonNuoc','pksTinhTrang','pksDiaTe','pksDien','pksYeuCau','pksNguoiKS','pksNgayKS',
-    'bbntSoHD','bbntHa','bbntCay','bbntDiaDiem','bbntThoiGian','bbntKetQua','bbntKhacPhuc','bbntBaoHanh','bbntDDKhach',
-    'bbklSoHD','bbklDuAn','bbklDDA','bbklCCCDA','bbklSdtA','bbklDDB','bbklCCCDB','bbklSdtB','bbklGhiChu',
-    'bbgNgayKK','bbgDiaDiem','bbgSoHD','bbgDDA','bbgCCCDA','bbgSdtA','bbgDDB','bbgCCCDB','bbgSdtB',
-    'nccTen','nccSdt','nccDiaChi','nccDuAn','nccNgayGiao','nccNoiNhan','nccGhiChu',
-    'dotGiao','bienSo','ngayGiao','ttTong','ttDaTU','ttDot1','ttDot23','ttSoTien','tuLyDo'];
-  const vals={};
-  const daExtraFields=['daNguonNuoc','daTrangThai','daNguoiPhuTrach','daGhiChu','daKhZalo','daKhDiaChiNha','daKhCCCD','daLoaiKhachWiki','daNguoiLienHe','daViTriLienHe','daDienTichVuon','daDienTichHTT','daDoTuoiCay','daTinhTrang','daTuoiHienTai','daAngSach','crmMaKH','crmLoaiKH','crmGioiTinh','crmDoTuoi','crmNoiSong','crmNgheNghiep','crmTaiChinh','crmNoXau','crmPhapLy','crmQuyetDinh','crmKyThuat','crmKenhLH','crmTinhCach','crmMoRong','crmBanThem','crmGioiThieu','crmRuiRo','crmGhiChuRuiRo'];
-  [...fields,...daExtraFields].forEach(f=>{const el=document.getElementById(f);if(el)vals[f]=el.value;});
-  return{id:_pmId,name,type,vals,
-    vtItems:JSON.parse(JSON.stringify(vtItems)),vtIdCnt,
-    bbklHmRows:JSON.parse(JSON.stringify(bbklHmRows)),bbklHmIdCnt,
-    bbgRows:JSON.parse(JSON.stringify(bbgRows)),bbgIdCnt,
-    learnedUnits:JSON.parse(JSON.stringify(learnedUnits)),
-    savedAt:new Date().toISOString()};
-}
-
-function pmRestore(s,silent){
-  if(!s)return;
-  // Set docType trước để onDocTypeChange biết loại
-  const typeEl=document.getElementById('docType');
-  if(typeEl&&s.vals?.docType)typeEl.value=s.vals.docType;
-  // Restore tất cả fields
-  if(s.vals)Object.entries(s.vals).forEach(([k,v])=>{const el=document.getElementById(k);if(el)el.value=v;});
-  // Restore vtItems
-  vtItems=s.vtItems?JSON.parse(JSON.stringify(s.vtItems)):[];
-  vtIdCnt=s.vtIdCnt||vtItems.reduce((m,r)=>Math.max(m,r.id+1),0);
-  if(s.bbklHmRows){bbklHmRows=JSON.parse(JSON.stringify(s.bbklHmRows));bbklHmIdCnt=s.bbklHmIdCnt||0;renderBbklHmRows();}
-  if(s.bbgRows){bbgRows=JSON.parse(JSON.stringify(s.bbgRows));bbgIdCnt=s.bbgIdCnt||0;renderBbgRows();}
-  if(s.learnedUnits)learnedUnits=JSON.parse(JSON.stringify(s.learnedUnits));
-  onDocTypeChange();
-  if(!silent&&document.getElementById('pmStatus'))
-    document.getElementById('pmStatus').textContent='✅ Đã tải: '+s.name;
-}
-
-function pmGetAll(){
-  return Object.keys(localStorage)
-    .filter(k=>k.startsWith(PM_PRJ))
-    .map(k=>{try{return JSON.parse(localStorage.getItem(k));}catch{return null;}})
-    .filter(Boolean).sort((a,b)=>b.savedAt.localeCompare(a.savedAt));
-}
-
-function pmRefreshSelect(){
-  const sel=document.getElementById('pmSelect');if(!sel)return;
-  const all=pmGetAll();
-  sel.innerHTML='<option value="">— Chọn dự án đã lưu —</option>';
-  all.forEach(p=>{
-    const o=document.createElement('option');
-    o.value=p.id;o.textContent=p.name;
-    if(p.id===_pmId)o.selected=true;
-    sel.appendChild(o);
-  });
-}
-
-function pmSave(){
-  if(!_pmId)_pmId='prj_'+Date.now();
-  const s=pmCollect();s.id=_pmId;
-  localStorage.setItem(PM_PRJ+_pmId,JSON.stringify(s));
-  localStorage.setItem(PM_DRAFT,JSON.stringify(s));
-  pmRefreshSelect();
-  if(document.getElementById('pmStatus'))
-    document.getElementById('pmStatus').textContent='✅ Đã lưu: '+s.name;
-}
-
-function pmLoad(){
-  const id=document.getElementById('pmSelect')?.value;
-  if(!id){if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='⚠ Chưa chọn dự án';return;}
-  if(hasUnsavedData()&&!confirm('Đang có dữ liệu chưa lưu. Tải dự án này sẽ ghi đè.\n\nTiếp tục?'))return;
-  const raw=localStorage.getItem(PM_PRJ+id);if(!raw)return;
-  _pmId=id;pmRestore(JSON.parse(raw),false);
-}
-
-function pmDelete(){
-  const id=document.getElementById('pmSelect')?.value;
-  if(!id){if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='⚠ Chưa chọn dự án';return;}
-  const raw=localStorage.getItem(PM_PRJ+id);
-  const name=raw?JSON.parse(raw).name:'dự án này';
-  if(!confirm('Xóa "'+name+'"?\n\nKhông thể khôi phục.'))return;
-  localStorage.removeItem(PM_PRJ+id);
-  if(_pmId===id)_pmId=null;
-  pmRefreshSelect();
-  if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='🗑 Đã xóa: '+name;
-}
-
-function pmExport(){
-  const all=pmGetAll();
-  if(!all.length){if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='⚠ Chưa có dự án nào';return;}
-  const blob=new Blob([JSON.stringify(all,null,2)],{type:'application/json'});
-  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
-  a.download='annong-du-an-'+new Date().toISOString().slice(0,10)+'.json';a.click();
-  if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='⬇ Đã xuất '+all.length+' dự án';
-}
-
-function pmImport(event){
-  const file=event.target.files[0];if(!file)return;
-  const reader=new FileReader();
-  reader.onload=e=>{
-    try{
-      const data=JSON.parse(e.target.result);
-      const list=Array.isArray(data)?data:[data];
-      let count=0;
-      list.forEach(s=>{
-        if(s&&s.name){if(!s.id||!s.id.startsWith('prj_'))s.id='prj_'+Date.now()+'_'+(count++);
-          localStorage.setItem(PM_PRJ+s.id,JSON.stringify(s));count++;}
-      });
-      pmRefreshSelect();
-      if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='⬆ Đã nhập '+Math.floor(count/2)+' dự án';
-    }catch{if(document.getElementById('pmStatus'))document.getElementById('pmStatus').textContent='❌ File JSON không hợp lệ';}
-  };
-  reader.readAsText(file);event.target.value='';
-}
-
-function pmAutoSave(){
-  if(!hasUnsavedData())return;
-  const s=pmCollect();
-  localStorage.setItem(PM_DRAFT,JSON.stringify(s));
-  if(_pmId)localStorage.setItem(PM_PRJ+_pmId,JSON.stringify(s));
-}
-// ══════════════════════════════════════════════════════
 // LƯU VÀO LARK BASE
 // Sau khi deploy Google Apps Script → dán URL vào đây:
 const LARK_PROXY_URL = 'https://script.google.com/macros/s/AKfycbz-U1V-WHNeb-wjGc0gued-iqTJKvGHUjVunn_Kn9LRbHUxtWn1-RpAUZgVqOGCEPZqTw/exec';
@@ -3357,13 +3195,10 @@ async function saveToLark() {
       "NhomKhach"    : "Tiềm năng"
     };
 
-    // ── Sinh SoDuAn tự động nếu chưa có: DA-YYYY-NNN ────
-    // NNN = 3 chữ số cuối của timestamp (đủ phân biệt trong ngày)
+    // ── Sinh SoDuAn tự động: DA-YYYY-NNN ────
     const soDuAnAuto = (() => {
-      const stored = localStorage.getItem('lastSoDuAn_' + soBG);
-      if (stored) return stored;
       const yyyy = new Date().getFullYear();
-      const seq  = String(Date.now()).slice(-4); // 4 số cuối timestamp
+      const seq  = String(Date.now()).slice(-4);
       return `DA-${yyyy}-${seq}`;
     })();
 
@@ -3624,7 +3459,7 @@ function _genDoc(type){
   if(type==='ncc')   html=genNCC(d);
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
-  pmAutoSave();
+  
 }
 
 // ── GEN PGH ────────────────────────────────────────────
