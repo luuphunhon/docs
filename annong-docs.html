@@ -287,6 +287,12 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
       <div class="cs-item" data-v="bbnt" data-code="BBNT" onclick="csSelect(this)">
         <span class="cs-item-code">BBNT</span><span class="cs-item-name">Biên Bản Nghiệm Thu</span>
       </div>
+      <div class="cs-item" data-v="bb-kl" data-code="BB-KL" onclick="csSelect(this)">
+        <span class="cs-item-code">BB-KL</span><span class="cs-item-name">BB Xác Nhận Khối Lượng</span>
+      </div>
+      <div class="cs-item" data-v="bb-dc" data-code="BB-DC" onclick="csSelect(this)">
+        <span class="cs-item-code">BB-DC</span><span class="cs-item-name">Bảng Đối Chiếu Vật Tư</span>
+      </div>
       <div class="cs-group-hdr">Giao hàng &amp; Tài chính</div>
       <div class="cs-item" data-v="ncc" data-code="PDH" onclick="csSelect(this)">
         <span class="cs-item-code">PDH</span><span class="cs-item-name">Phiếu Đặt Hàng NCC</span>
@@ -901,6 +907,68 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
     </div>
     <div class="field"><label>Thời hạn bảo hành</label><input id="bbntBaoHanh" value="12 tháng kể từ ngày nghiệm thu"></div>
     <div class="field"><label>Đại diện bên B ký (họ tên/chức vụ)</label><input id="bbntDDKhach" placeholder="Nguyễn Văn A — Chủ vườn"></div>
+  </div>
+
+  <!-- ── BB XÁC NHẬN KHỐI LƯỢNG ── -->
+  <div id="bbklFields" style="display:none">
+    <h3>Biên bản xác nhận khối lượng</h3>
+    <div class="field"><label>Số hợp đồng căn cứ</label><input id="bbklSoHD" placeholder="08052026/HĐTKTC/2026"></div>
+    <div class="field"><label>Dự án / Địa điểm</label><input id="bbklDuAn" value="Farm 50 ha tại Ia Pia - Gia Lai"></div>
+    <h3>Đại diện Bên A (thi công)</h3>
+    <div class="field"><label>Họ tên</label><input id="bbklDDA" value="Nguyễn Văn Thành"></div>
+    <div class="row2">
+      <div class="field"><label>CCCD</label><input id="bbklCCCDA" value="038084024604"></div>
+      <div class="field"><label>SĐT</label><input id="bbklSdtA" value="0877705456"></div>
+    </div>
+    <h3>Đại diện Bên B (chủ đầu tư)</h3>
+    <div class="field"><label>Họ tên</label><input id="bbklDDB" placeholder="Nguyễn Trường Sơn"></div>
+    <div class="row2">
+      <div class="field"><label>CCCD</label><input id="bbklCCCDB" placeholder="030088024114"></div>
+      <div class="field"><label>SĐT</label><input id="bbklSdtB" placeholder="0909600090"></div>
+    </div>
+    <h3>Xác nhận từng hạng mục</h3>
+    <div class="note-box">Ghi chú xác nhận thực tế tại từng hạng mục (để trống = chưa xác nhận)</div>
+    <div style="margin-top:8px">
+      <div class="field"><label>1. HTT Khu 1</label><textarea id="bbklHm1" rows="2" placeholder="VD: Hoàn thành 13.5ha, đã vận hành thử..."></textarea></div>
+      <div class="field"><label>2. HTT Khu 2</label><textarea id="bbklHm2" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>3. HTT Khu 3</label><textarea id="bbklHm3" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>4. HTT Khu 4</label><textarea id="bbklHm4" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>5. HTT Khu 5</label><textarea id="bbklHm5" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>6. Cụm trạm bơm số 01</label><textarea id="bbklHm6" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>7. Cụm trạm bơm số 02</label><textarea id="bbklHm7" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>8. Cụm trạm bơm số 03</label><textarea id="bbklHm8" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>9. Đường ống tích thủy</label><textarea id="bbklHm9" rows="2" placeholder="..."></textarea></div>
+      <div class="field"><label>10. Hệ thống năng lượng mặt trời</label><textarea id="bbklHm10" rows="2" placeholder="..."></textarea></div>
+    </div>
+    <div class="field"><label>Ghi chú / bổ sung thực tế</label><textarea id="bbklGhiChu" rows="3" placeholder="Nội dung bổ sung nếu có..."></textarea></div>
+  </div>
+
+  <!-- ── BẢNG ĐỐI CHIẾU VẬT TƯ ── -->
+  <div id="bbdcFields" style="display:none">
+    <h3>Bảng đối chiếu &amp; bàn giao vật tư</h3>
+    <div class="field"><label>Ngày kiểm kê</label><input type="date" id="bbdcNgayKK"></div>
+    <div class="field"><label>Địa điểm kiểm kê</label><input id="bbdcDiaDiem" value="Farm Ia Pia, Gia Lai"></div>
+    <div class="field"><label>Số hợp đồng căn cứ</label><input id="bbdcSoHD" placeholder="08052026/HĐTKTC/2026"></div>
+    <h3>Đại diện Bên A (thi công)</h3>
+    <div class="field"><label>Họ tên</label><input id="bbdcDDA" value="Nguyễn Văn Thành"></div>
+    <div class="row2">
+      <div class="field"><label>CCCD</label><input id="bbdcCCCDA" value="038084024604"></div>
+      <div class="field"><label>SĐT</label><input id="bbdcSdtA" value="0877705456"></div>
+    </div>
+    <h3>Đại diện Bên B (chủ đầu tư / quản lý farm)</h3>
+    <div class="field"><label>Họ tên</label><input id="bbdcDDB" placeholder="Nguyễn Trường Sơn"></div>
+    <div class="row2">
+      <div class="field"><label>CCCD</label><input id="bbdcCCCDB" placeholder="030088024114"></div>
+      <div class="field"><label>SĐT</label><input id="bbdcSdtB" placeholder="0909600090"></div>
+    </div>
+    <h3>Danh mục vật tư</h3>
+    <button type="button" onclick="loadHoangAnh50ha()" style="width:100%;padding:7px;background:#1565C0;color:#fff;font-size:11.5px;font-weight:700;border:none;border-radius:4px;cursor:pointer;margin-bottom:6px;">📋 Nạp danh sách Hoàng Anh 50ha</button>
+    <div id="bbdcItemsWrap" style="max-height:340px;overflow-y:auto;border:1px solid #2E7D32;border-radius:4px;padding:4px;background:#0A3D0A;"></div>
+    <div style="display:flex;gap:6px;margin-top:6px">
+      <button type="button" onclick="addBbdcRow()" style="flex:1;padding:5px;background:#2E7D32;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">+ Thêm dòng</button>
+      <button type="button" onclick="clearBbdcRows()" style="flex:1;padding:5px;background:#5D0000;color:#fff;font-size:11px;border:none;border-radius:3px;cursor:pointer;">🗑 Xoá tất cả</button>
+    </div>
+    <div class="note-box" style="margin-top:8px">Điền "Đã sử dụng" → Tồn kho tự tính. Cột "Đã giao CT" từ pre-fill hoặc nhập tay.</div>
   </div>
 
   <!-- ── PHIẾU ĐẶT HÀNG NCC ── -->
@@ -1791,7 +1859,7 @@ function generate(){
   if(loaiBG==='bg-tk'){generateBGTK();pmAutoSave();return;}
   if(loaiBG==='bg-tc'){generateBGTC();pmAutoSave();return;}
   if(loaiBG==='bg-kt'){generateBGKT();pmAutoSave();return;}
-  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
+  if(['pgh','tu','tt','hdvt','hdtk','hdtc','hdbt','pks','bbnt','bb-kl','bb-dc','ncc'].includes(loaiBG)){_genDoc(loaiBG);pmAutoSave();return;}
 
   // BG-DV: đọc toggle state để route đúng generator
   const _svcTK=document.getElementById('svcTK')?.classList.contains('active')??true;
@@ -3081,7 +3149,7 @@ function autoSlug(){
   ].filter(Boolean);
   el.value=parts.join('-');
 }
-const LOAI_MAP_ALL={'da':'DA','bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','ncc':'PDH'};
+const LOAI_MAP_ALL={'da':'DA','bg-dichvu':'BG','bg-vattu':'BG','bg-tk':'BG-TK','bg-tc':'BG-TC','bg-kt':'BG-KT','hdvt':'HD-VT','hdtk':'HD-TK','hdtc':'HD-TC','hdbt':'HD-BT','pgh':'PGH','tu':'TU','tt':'TT','pks':'PKS','bbnt':'BBNT','bb-kl':'BB-KL','bb-dc':'BB-DC','ncc':'PDH'};
 
 function getBGDocTitle(){
   const type=document.getElementById('docType')?.value||'bg-dichvu';
@@ -3126,6 +3194,9 @@ function pmCollect(){
     'hdMoTa','hdTong','hdTUPct','hdThoiGianGH','hdGhiChu','hdCCCDNgay','hdTKKH',
     'pksHa','pksCay','pksDiaDiem','pksNguonNuoc','pksTinhTrang','pksDiaTe','pksDien','pksYeuCau','pksNguoiKS','pksNgayKS',
     'bbntSoHD','bbntHa','bbntCay','bbntDiaDiem','bbntThoiGian','bbntKetQua','bbntKhacPhuc','bbntBaoHanh','bbntDDKhach',
+    'bbklSoHD','bbklDuAn','bbklDDA','bbklCCCDA','bbklSdtA','bbklDDB','bbklCCCDB','bbklSdtB',
+    'bbklHm1','bbklHm2','bbklHm3','bbklHm4','bbklHm5','bbklHm6','bbklHm7','bbklHm8','bbklHm9','bbklHm10','bbklGhiChu',
+    'bbdcNgayKK','bbdcDiaDiem','bbdcSoHD','bbdcDDA','bbdcCCCDA','bbdcSdtA','bbdcDDB','bbdcCCCDB','bbdcSdtB',
     'nccTen','nccSdt','nccDiaChi','nccDuAn','nccNgayGiao','nccNoiNhan','nccGhiChu',
     'dotGiao','bienSo','ngayGiao','ttTong','ttDaTU','ttDot1','ttDot23','ttSoTien','tuLyDo'];
   const vals={};
@@ -3446,6 +3517,8 @@ function autoSoTL(){
     hdbt:`${yyyy}${mm}${dd}-1/HD-BT/AN`,
     pks :`${yyyy}${mm}${dd}-1/PKS-ANA`,
     bbnt:`${yyyy}${mm}${dd}-1/BBNT-ANA`,
+    'bb-kl':`${yyyy}${mm}${dd}-1/BB-KL/ANA`,
+    'bb-dc':`01/DC&BG-ANA`,
     ncc :`${dd}${mm}${yyyy}/PDH-ANA`
   };
   const fallbackCode='TL-ANA';
@@ -3479,7 +3552,7 @@ function onDocTypeChange(){
   document.getElementById('vtModePanel').style.display=isVT?'block':'none';
   document.getElementById('daFields').style.display=isDA?'':'none';
   // Toggle KH info — mở rộng cho HD/PGH/BBNT/NCC vì cần nhập đủ thông tin khách
-  const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','ncc','pks'].includes(type);
+  const needKhExpanded=isDA||['hdvt','hdtk','hdtc','hdbt','pgh','tu','tt','bbnt','bb-kl','bb-dc','ncc','pks'].includes(type);
   setKhMode(needKhExpanded);
 
   // Non-BG panels
@@ -3494,6 +3567,9 @@ function onDocTypeChange(){
   document.getElementById('hdbtFields').style.display=type==='hdbt'?'':'none';
   document.getElementById('pksFields').style.display=type==='pks'?'':'none';
   document.getElementById('bbntFields').style.display=type==='bbnt'?'':'none';
+  document.getElementById('bbklFields').style.display=type==='bb-kl'?'':'none';
+  document.getElementById('bbdcFields').style.display=type==='bb-dc'?'':'none';
+  if(type==='bb-dc'&&bbdcRows.length===0){loadHoangAnh50ha();}
   document.getElementById('nccFields').style.display=type==='ncc'?'':'none';
   if(type==='ncc'&&document.querySelectorAll('#nccItemRows .item-row').length===0){addNccItem();addNccItem();addNccItem();}
 
@@ -3547,8 +3623,10 @@ function _genDoc(type){
   if(type==='hdtc') html=genHDTC(d);
   if(type==='hdbt') html=genHDBT(d);
   if(type==='pks')  html=genPKS(d);
-  if(type==='bbnt') html=genBBNT(d);
-  if(type==='ncc')  html=genNCC(d);
+  if(type==='bbnt')  html=genBBNT(d);
+  if(type==='bb-kl') html=genBBKL(d);
+  if(type==='bb-dc') html=genBBDC(d);
+  if(type==='ncc')   html=genNCC(d);
   document.getElementById('preview').innerHTML=html;
   document.title=getBGDocTitle();
   pmAutoSave();
@@ -3904,6 +3982,419 @@ function genBBNT(d){
     <div class="sig-area" style="grid-template-columns:1fr 1fr">
       <div class="sig-col"><div class="sig-ttl">Đại diện bên B</div><div class="sig-sub">(Ký, ghi rõ họ tên)</div><div class="sig-name">${ddKhach}</div></div>
       <div class="sig-col"><div class="sig-ttl">Đại diện bên A — Giám đốc</div><div class="sig-sub">(Ký, đóng dấu)</div><div class="sig-name">${CO.gd}</div></div>
+    </div>
+    <div class="footer">${CO.ten} | ${CO.dc} | ${CO.web}</div>
+  </div>`;
+}
+
+// ── BB-DC: DATA & ROW MANAGEMENT ───────────────────────
+const HOANG_ANH_VATTU=[
+  {nhom:'(I) BÉC TƯỚI VÀ PHỤ KIỆN',items:[
+    {ten:'Ống nhựa PE phi 7mm 1 ly (200m/cuộn) BH 5năm',dvt:'Mét',daGiao:18000},
+    {ten:'Ống nhựa PE 25mm 1.2 ly (200m/cuộn) màu đen W5',dvt:'Mét',daGiao:60000},
+    {ten:'Béc Vinabe V2 C6 - 60',dvt:'Cái',daGiao:25000},
+    {ten:'Béc tưới nhỏ giọt 8 tia',dvt:'Cái',daGiao:3000},
+    {ten:'Nối 6mm xanh dương',dvt:'Cái',daGiao:25000},
+    {ten:'Cây cắm gắn béc tưới kẹp chéo 2 bên dài 35cm (Mã C35)',dvt:'Cái',daGiao:25000},
+    {ten:'Van thẳng 25 - loại lớn',dvt:'Cái',daGiao:1300},
+    {ten:'Đai ren ngược 16mm',dvt:'Cái',daGiao:2600},
+    {ten:'Nối ren ngoài 27mm ra ống LDPE 25mm',dvt:'Cái',daGiao:1300},
+    {ten:'Vòng số 8 bít ống 25mm',dvt:'Cái',daGiao:1300},
+    {ten:'Nối thẳng 2 đầu ống 25mm x 25mm',dvt:'Cái',daGiao:1500},
+  ]},
+  {nhom:'(II) ỐNG DẪN NƯỚC HDPE',items:[
+    {ten:'Ống u.PVC BS DN 168 x 7,3mm PN9 - 4m (ống dẫn nước vào hồ số 2)',dvt:'Mét',daGiao:200},
+    {ten:'Ống HDPE 100 D160 PN8 8m (đường ống trạm bơm)',dvt:'Mét',daGiao:80},
+    {ten:'Ống HDPE 100 D160 PN6 8m (đường ống cấp nước lên hồ)',dvt:'Mét',daGiao:432},
+    {ten:'Ống HDPE 100 D140 PN6 6m (400m đường ống cấp nước lên hồ)',dvt:'Mét',daGiao:2100},
+    {ten:'Ống HDPE 100 D110 PN6 6m',dvt:'Mét',daGiao:400},
+    {ten:'Ống HDPE 100 D90 PN8 50m',dvt:'Mét',daGiao:1450},
+    {ten:'Ống HDPE 100 D75 PN8 50m',dvt:'Mét',daGiao:1600},
+    {ten:'Ống HDPE 100 D63 PN08 50m',dvt:'Mét',daGiao:2300},
+  ]},
+  {nhom:'(III) PHỤ KIỆN HDPE',items:[
+    {ten:'Nút bịt HDPE 75',dvt:'Cái',daGiao:15},
+    {ten:'Nút bịt HDPE 63',dvt:'Cái',daGiao:40},
+    {ten:'Măng sông HDPE 90 x 90',dvt:'Cái',daGiao:30},
+    {ten:'Măng sông HDPE 75 x 75',dvt:'Cái',daGiao:30},
+    {ten:'Măng sông HDPE 63 x 63',dvt:'Cái',daGiao:60},
+    {ten:'Tê đều HDPE 90 x 90',dvt:'Cái',daGiao:7},
+    {ten:'Tê đều hàn HDPE D140',dvt:'Cái',daGiao:28},
+    {ten:'Tê đều hàn HDPE D110',dvt:'Cái',daGiao:3},
+    {ten:'Côn thu HDPE 90 x 63',dvt:'Cái',daGiao:16},
+    {ten:'Côn thu HDPE 90 x 75',dvt:'Cái',daGiao:17},
+    {ten:'Côn thu HDPE 75 x 63',dvt:'Cái',daGiao:15},
+    {ten:'Côn thu hàn HDPE 140 x 110',dvt:'Cái',daGiao:4},
+    {ten:'Côn thu hàn HDPE 140 x 90',dvt:'Cái',daGiao:15},
+    {ten:'Côn thu hàn HDPE 140 x 75',dvt:'Cái',daGiao:8},
+    {ten:'Côn thu hàn HDPE 140 x 63',dvt:'Cái',daGiao:3},
+    {ten:'Côn thu hàn HDPE 110 x 90',dvt:'Cái',daGiao:5},
+    {ten:'Côn thu hàn HDPE 110 x 75',dvt:'Cái',daGiao:2},
+    {ten:'Côn thu hàn HDPE 110 x 63',dvt:'Cái',daGiao:3},
+    {ten:'Cút đều HDPE 90 x 90',dvt:'Cái',daGiao:10},
+    {ten:'Cút đều HDPE 75 x 75',dvt:'Cái',daGiao:4},
+    {ten:'Cút đều HDPE 63 x 63',dvt:'Cái',daGiao:5},
+    {ten:'Cút đều hàn HDPE D140',dvt:'Cái',daGiao:6},
+    {ten:'Cút đều hàn HDPE D110',dvt:'Cái',daGiao:1},
+    {ten:'Chếch đều hàn HDPE D140',dvt:'Cái',daGiao:36},
+    {ten:'Chếch đều hàn HDPE D110',dvt:'Cái',daGiao:24},
+    {ten:'Đai khởi thủy đôi nhựa 63 x 3/4',dvt:'Cái',daGiao:369},
+    {ten:'Đai khởi thủy đôi nhựa 75 x 3/4',dvt:'Cái',daGiao:217},
+    {ten:'Đai khởi thủy đôi nhựa 90 x 3/4',dvt:'Cái',daGiao:120},
+    {ten:"Đai khởi thủy HDPE 110 x 3/4''",dvt:'Cái',daGiao:6},
+    {ten:"Đai khởi thủy HDPE 140 x 3/4''",dvt:'Cái',daGiao:11},
+    {ten:'Mặt bích PN10 DN125',dvt:'Cái',daGiao:28},
+    {ten:'Mặt bích HDPE D140',dvt:'Cái',daGiao:28},
+    {ten:'Van tay bướm PVC YWIN DN125mm',dvt:'Cái',daGiao:14},
+    {ten:'Mặt bích PN10 DN100',dvt:'Cái',daGiao:12},
+    {ten:'Mặt bích HDPE D110',dvt:'Cái',daGiao:12},
+    {ten:'Van tay bướm PVC YWIN DN100mm',dvt:'Cái',daGiao:6},
+    {ten:'Bulon 15 x 150 + tán',dvt:'Bộ',daGiao:80},
+    {ten:'Bulon 15 x 100 + tán',dvt:'Cái',daGiao:100},
+    {ten:'Van xả khí ren 34',dvt:'Cái',daGiao:17},
+    {ten:'Băng tan nhỏ',dvt:'Cuộn',daGiao:1300},
+  ]},
+  {nhom:'(IV) PHỤ KIỆN 3 TRẠM BƠM',items:[
+    {ten:'Côn thu hàn HDPE D160 x 140',dvt:'Cái',daGiao:4},
+    {ten:'Chếch hàn HDPE D160',dvt:'Cái',daGiao:24},
+    {ten:'Cút đều hàn HDPE D160',dvt:'Cái',daGiao:8},
+    {ten:'Đai khởi thủy HDPE 160 x 1',dvt:'Cái',daGiao:8},
+    {ten:'Đai khởi thủy HDPE 160 x 2',dvt:'Cái',daGiao:13},
+    {ten:'Mặt bích PN10 DN150',dvt:'Cái',daGiao:20},
+    {ten:'Mặt bích HDPE D160',dvt:'Cái',daGiao:20},
+    {ten:'Van tay bướm PVC YWIN DN150mm',dvt:'Cái',daGiao:8},
+    {ten:'Ron cao su DN50',dvt:'Cái',daGiao:40},
+    {ten:'Gối cao su máy bơm',dvt:'Cái',daGiao:4},
+    {ten:'Rọ bơm mặt bích PN16 DN150',dvt:'Cái',daGiao:4},
+    {ten:'Van một chiều cánh bướm D150',dvt:'Cái',daGiao:2},
+    {ten:'Van xả khí ren 60',dvt:'Cái',daGiao:5},
+  ]},
+  {nhom:'(V) 3 TRẠM LỌC XẢ NGƯỢC 150M³',items:[
+    {ten:'Lọc đôi 114 - dài',dvt:'Cái',daGiao:6},
+    {ten:'Tê đều hàn HDPE D110 (trạm lọc)',dvt:'Cái',daGiao:6},
+    {ten:'Tê thu hàn HDPE D160 x 110',dvt:'Cái',daGiao:18},
+    {ten:'Mặt bích ren trong 114',dvt:'Cái',daGiao:12},
+    {ten:'Mặt bích HDPE D110 (trạm lọc)',dvt:'Cái',daGiao:12},
+    {ten:'Mặt bích PN10 DN100 (trạm lọc)',dvt:'Cái',daGiao:12},
+    {ten:'Nút bịt hàn HDPE D160',dvt:'Cái',daGiao:9},
+    {ten:'Đai khởi thủy HDPE 160 x 1/2',dvt:'Cái',daGiao:9},
+    {ten:'Đồng hồ đo áp PG5',dvt:'Cái',daGiao:6},
+    {ten:'Chân thao gắn đồng hồ đo áp ren trong 21mm x 13mm',dvt:'Cái',daGiao:9},
+  ]},
+];
+
+let bbdcRows=[];
+let bbdcIdCnt=0;
+
+function loadHoangAnh50ha(){
+  bbdcRows=[];
+  bbdcIdCnt=0;
+  HOANG_ANH_VATTU.forEach(nhom=>{
+    bbdcRows.push({id:bbdcIdCnt++,type:'header',text:nhom.nhom});
+    nhom.items.forEach(it=>{
+      bbdcRows.push({id:bbdcIdCnt++,type:'item',ten:it.ten,dvt:it.dvt,daGiao:it.daGiao,daDung:'',ghiChu:''});
+    });
+  });
+  renderBbdcRows();
+  generate();
+}
+
+function addBbdcRow(){
+  bbdcRows.push({id:bbdcIdCnt++,type:'item',ten:'',dvt:'Cái',daGiao:0,daDung:'',ghiChu:''});
+  renderBbdcRows();
+  generate();
+}
+
+function clearBbdcRows(){
+  if(!confirm('Xoá toàn bộ danh sách vật tư?'))return;
+  bbdcRows=[];renderBbdcRows();generate();
+}
+
+function removeBbdcRow(id){
+  bbdcRows=bbdcRows.filter(r=>r.id!==id);
+  renderBbdcRows();generate();
+}
+
+function bbdcUpdate(id,field,val){
+  const r=bbdcRows.find(r=>r.id===id);
+  if(r){r[field]=val;}
+  // update tồn display
+  if(field==='daGiao'||field==='daDung'){
+    const r2=bbdcRows.find(r=>r.id===id);
+    if(r2&&r2.type==='item'){
+      const ton=(parseFloat(r2.daGiao)||0)-(parseFloat(r2.daDung)||0);
+      const el=document.getElementById('bbdc-ton-'+id);
+      if(el)el.textContent=ton.toLocaleString('vi-VN');
+    }
+  }
+  generate();
+}
+
+function renderBbdcRows(){
+  const wrap=document.getElementById('bbdcItemsWrap');
+  if(!wrap)return;
+  if(!bbdcRows.length){wrap.innerHTML='<div style="color:#4a7a4a;font-size:11px;padding:8px;text-align:center">Chưa có vật tư. Bấm "Nạp Hoàng Anh 50ha" hoặc "+ Thêm dòng"</div>';return;}
+  const inp=(style)=>`style="width:100%;padding:2px 4px;border:1px solid #2E7D32;border-radius:2px;background:#071f07;color:#fff;font-size:10px;${style||''}"`;
+  let html='';
+  let stt=0;
+  bbdcRows.forEach(r=>{
+    if(r.type==='header'){
+      html+=`<div style="background:#143D14;color:#81C784;font-size:9px;font-weight:700;padding:4px 6px;margin-top:4px;border-radius:3px;">${r.text}</div>`;
+    } else {
+      stt++;
+      const ton=(parseFloat(r.daGiao)||0)-(parseFloat(r.daDung)||0);
+      html+=`<div style="border-bottom:1px solid #1a4a1a;padding:3px 4px;">
+        <div style="display:flex;gap:4px;align-items:center;margin-bottom:2px;">
+          <span style="color:#4a7a4a;font-size:9px;min-width:16px">${stt}</span>
+          <input ${inp('flex:1')} value="${r.ten.replace(/"/g,'&quot;')}" placeholder="Tên vật tư" onchange="bbdcUpdate(${r.id},'ten',this.value)" oninput="bbdcUpdate(${r.id},'ten',this.value)">
+          <input ${inp('width:36px')} value="${r.dvt}" placeholder="ĐVT" onchange="bbdcUpdate(${r.id},'dvt',this.value)">
+          <button onclick="removeBbdcRow(${r.id})" style="background:#5D0000;color:#fff;border:none;border-radius:2px;padding:1px 5px;cursor:pointer;font-size:10px;">×</button>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;">
+          <div><div style="color:#4a7a4a;font-size:8px">Đã giao CT</div><input type="number" ${inp('')} value="${r.daGiao}" onchange="bbdcUpdate(${r.id},'daGiao',this.value)"></div>
+          <div><div style="color:#81C784;font-size:8px">Đã sử dụng</div><input type="number" ${inp('border-color:#81C784')} value="${r.daDung}" placeholder="0" onchange="bbdcUpdate(${r.id},'daDung',this.value)"></div>
+          <div><div style="color:#FFE082;font-size:8px">Tồn kho</div><div id="bbdc-ton-${r.id}" style="color:#FFE082;font-size:10px;padding:3px 4px;">${ton.toLocaleString('vi-VN')}</div></div>
+        </div>
+        <div style="margin-top:2px"><input ${inp('width:100%')} value="${(r.ghiChu||'').replace(/"/g,'&quot;')}" placeholder="Ghi chú..." onchange="bbdcUpdate(${r.id},'ghiChu',this.value)"></div>
+      </div>`;
+    }
+  });
+  wrap.innerHTML=html;
+}
+
+// ── GEN BB-KL ──────────────────────────────────────────
+function genBBKL(d){
+  const soHD=document.getElementById('bbklSoHD')?.value||d.soHD;
+  const duAn=document.getElementById('bbklDuAn')?.value||'Farm 50ha tại Ia Pia – Gia Lai';
+  const ddA=document.getElementById('bbklDDA')?.value||d.nguoiLap;
+  const cccdA=document.getElementById('bbklCCCDA')?.value||'—';
+  const sdtA=document.getElementById('bbklSdtA')?.value||CO.dt;
+  const ddB=document.getElementById('bbklDDB')?.value||d.khTen;
+  const cccdB=document.getElementById('bbklCCCDB')?.value||d.khCCCD;
+  const sdtB=document.getElementById('bbklSdtB')?.value||d.khSdt;
+  const ghiChu=document.getElementById('bbklGhiChu')?.value||'';
+  const hmNames=['HTT Khu 1','HTT Khu 2','HTT Khu 3','HTT Khu 4','HTT Khu 5',
+    'Cụm trạm bơm số 01','Cụm trạm bơm số 02','Cụm trạm bơm số 03',
+    'Đường ống tích thủy','Hệ thống năng lượng mặt trời'];
+  const hmDesc=[
+    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
+    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
+    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
+    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
+    'Đường ống, van, béc tưới, phụ kiện và các hạng mục đấu nối theo phạm vi thi công thực tế',
+    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
+    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
+    'Bao gồm bơm, hệ thống lọc, van, đồng hồ, phụ kiện đấu nối và các hạng mục đấu nối liên quan',
+    'Tuyến ống tích thủy, phụ kiện đấu nối và các hạng mục liên quan theo phạm vi thi công thực tế',
+    'Tấm pin NLMT, inverter, tủ điện, dây dẫn, khung giá đỡ, đấu nối, cài đặt và kiểm tra vận hành',
+  ];
+  const hmRows=hmNames.map((nm,i)=>{
+    const gc=document.getElementById('bbklHm'+(i+1))?.value||'';
+    return `<tr><td class="c">${i+1}</td><td><b>${nm}</b></td><td style="font-size:11px;color:#555">${hmDesc[i]}</td><td style="font-size:11.5px;color:#1B5E20">${gc}</td><td class="c" style="font-size:10px;color:#999">________</td></tr>`;
+  }).join('');
+  const ghiChuLines=ghiChu?ghiChu.split('\n').map(l=>`<p style="font-size:12px;line-height:1.8;margin:0">${l||'&nbsp;'}</p>`).join('')
+    :'<p style="color:#aaa;font-style:italic;font-size:12px">Không có ghi chú bổ sung</p>';
+  return `<div class="page">${headerHTML(d.soTL,d.ngay)}
+    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:6px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
+    <div class="ttl">
+      <h1 style="font-size:15px;line-height:1.4">BIÊN BẢN XÁC NHẬN HOÀN THÀNH KHỐI LƯỢNG CÔNG VIỆC</h1>
+      <div class="sub" style="font-size:12.5px;font-weight:600;">DỰ ÁN ${duAn.toUpperCase()}</div>
+      <div class="sub"><i>Gia Lai, ngày ${d.ngay}</i></div>
+    </div>
+    <p style="font-size:12px;line-height:1.7;margin-bottom:10px">Hôm nay, tại công trình <b>${duAn}</b>, hai bên thống nhất lập biên bản xác nhận các hạng mục công việc đã hoàn thành, bàn giao cho Chủ đầu tư tiếp nhận, quản lý và bảo quản.</p>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thành phần tham gia</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">1. BÊN A – ĐƠN VỊ THI CÔNG<br>${CO.ten}</div>
+        <table class="t-info">
+          <tr><td>Đại diện</td><td><b>${ddA}</b></td></tr>
+          <tr><td>Chức vụ</td><td>Đại diện thi công lắp đặt</td></tr>
+          <tr><td>CCCD</td><td>${cccdA}</td></tr>
+          <tr><td>Điện thoại</td><td>${sdtA}</td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">2. BÊN B – ĐẠI DIỆN CHỦ ĐẦU TƯ</div>
+        <table class="t-info">
+          <tr><td>Họ và tên</td><td><b>${ddB}</b></td></tr>
+          <tr><td>Chức vụ</td><td>Đại diện Chủ đầu tư / Quản lý farm</td></tr>
+          <tr><td>CCCD</td><td>${cccdB}</td></tr>
+          <tr><td>Điện thoại</td><td>${sdtB}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">II. Căn cứ lập biên bản</div></div>
+    <ul style="font-size:12px;line-height:1.8;padding-left:18px;margin-bottom:10px">
+      <li>Thuyết minh phương án thiết kế và thuyết minh điều chỉnh đã được thống nhất giữa hai bên.</li>
+      <li>Bản vẽ cập nhật phạm vi hệ thống tưới, mật độ cây trồng, phân khu và hiện trạng triển khai thực tế.</li>
+      <li>Hợp đồng tư vấn thiết kế và thi công số <b>${soHD}</b> đã ký giữa hai bên.</li>
+      <li>Hiện trạng khối lượng thi công thực tế tại công trình.</li>
+      <li>Bảng đối chiếu vật tư, thiết bị đã giao – đã sử dụng – tồn kho tại công trình được hai bên kiểm tra, xác nhận.</li>
+    </ul>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">III. Nội dung xác nhận hoàn thành và bàn giao</div></div>
+    <p style="font-size:11.5px;color:#555;margin-bottom:6px">Hai bên thống nhất kiểm tra, xác nhận tình trạng thực tế các hạng mục tại thời điểm lập biên bản:</p>
+    <table class="t-vt" style="margin-bottom:8px;font-size:11.5px">
+      <thead><tr>
+        <th style="width:4%">STT</th>
+        <th style="width:18%">Hạng mục</th>
+        <th style="width:32%">Nội dung khối lượng</th>
+        <th style="width:30%">Xác nhận thực tế / Ghi chú</th>
+        <th style="width:16%">Đại diện CĐT ký</th>
+      </tr></thead>
+      <tbody>${hmRows}</tbody>
+    </table>
+    <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:4px;padding:6px 10px;font-size:10.5px;color:#795548;margin-bottom:10px">
+      <b>Ghi chú:</b> Nội dung cột "Xác nhận thực tế" dùng để ghi diện tích thực tế, tình trạng hoàn thành, phần chưa thi công/chưa bàn giao. Chỉ có giá trị khi có chữ ký xác nhận.
+    </div>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">IV. Ghi chú / Bổ sung thực tế</div></div>
+    <div style="border:1px solid #ddd;border-radius:4px;padding:8px 12px;min-height:80px;margin-bottom:10px">
+      ${ghiChuLines}
+    </div>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">V. Nguyên tắc bàn giao, quản lý và bảo quản</div></div>
+    <ul style="font-size:11.5px;line-height:1.8;padding-left:16px;margin-bottom:10px">
+      <li>Việc bàn giao thực hiện trên cơ sở kiểm tra hiện trạng thi công thực tế và bảng đối chiếu vật tư, thiết bị tại công trình.</li>
+      <li>Các hạng mục hoàn thành tại Mục III được Bên A bàn giao cho Bên B tiếp nhận, quản lý, trông coi và bảo quản kể từ thời điểm ký xác nhận.</li>
+      <li>Bên B có trách nhiệm vận hành, sử dụng hệ thống đúng theo hướng dẫn của Bên A. Tự ý tháo dỡ, di dời, đấu nối thêm hoặc vận hành sai hướng dẫn — Bên B chịu trách nhiệm toàn bộ.</li>
+      <li>Bên A tiếp tục chịu trách nhiệm kỹ thuật và bảo hành theo phạm vi và điều kiện đã thỏa thuận trong hợp đồng.</li>
+    </ul>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">VI. Phạm vi không bao gồm trong biên bản này</div></div>
+    <p style="font-size:11.5px;line-height:1.8;margin-bottom:10px">Biên bản này <b>không xác nhận</b> các hạng mục ngoài phạm vi công việc của Bên A như: hồ chứa nước, đào đắp hồ, bờ hồ, mái taluy, đập tích thủy, san gạt mặt bằng, đường nội bộ, cầu cống, mương thoát nước và các hạng mục hạ tầng xây dựng khác.</p>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">VII. Giá trị thanh toán và công nợ</div></div>
+    <p style="font-size:11.5px;line-height:1.8;margin-bottom:10px">Biên bản này <b>không thay thế</b> bảng đối chiếu công nợ, hồ sơ thanh toán hoặc hồ sơ quyết toán. Giá trị thanh toán, công nợ, khấu trừ tạm ứng và các khoản phát sinh sẽ được xác nhận bằng hồ sơ thanh toán riêng.</p>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">VIII. Kết luận và xác nhận</div></div>
+    <p style="font-size:11.5px;line-height:1.8;margin-bottom:8px">Hai bên thống nhất các nội dung xác nhận nêu trên là căn cứ để ghi nhận tình trạng thực tế tại công trình. Biên bản được lập thành <b>02 bản</b> có giá trị như nhau, mỗi bên giữ 01 bản.</p>
+
+    <div class="sig-area" style="grid-template-columns:1fr 1fr">
+      <div class="sig-col">
+        <div class="sig-ttl">ĐẠI DIỆN BÊN A</div>
+        <div class="sig-sub">${CO.ten}</div>
+        <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+        <div class="sig-name">${ddA}</div>
+      </div>
+      <div class="sig-col">
+        <div class="sig-ttl">ĐẠI DIỆN BÊN B</div>
+        <div class="sig-sub">Chủ đầu tư / Quản lý farm</div>
+        <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+        <div class="sig-name">${ddB}</div>
+      </div>
+    </div>
+    <div class="footer">${CO.ten} | ${CO.dc} | ${CO.web}</div>
+  </div>`;
+}
+
+// ── GEN BB-DC ──────────────────────────────────────────
+function genBBDC(d){
+  const ngayKKRaw=document.getElementById('bbdcNgayKK')?.value||'';
+  const ngayKK=ngayKKRaw?new Date(ngayKKRaw).toLocaleDateString('vi-VN'):`ngày......tháng......năm......`;
+  const diaDiem=document.getElementById('bbdcDiaDiem')?.value||'Farm Ia Pia, Gia Lai';
+  const soHD=document.getElementById('bbdcSoHD')?.value||d.soHD;
+  const ddA=document.getElementById('bbdcDDA')?.value||d.nguoiLap;
+  const cccdA=document.getElementById('bbdcCCCDA')?.value||'—';
+  const sdtA=document.getElementById('bbdcSdtA')?.value||CO.dt;
+  const ddB=document.getElementById('bbdcDDB')?.value||d.khTen;
+  const cccdB=document.getElementById('bbdcCCCDB')?.value||d.khCCCD;
+  const sdtB=document.getElementById('bbdcSdtB')?.value||d.khSdt;
+
+  let stt=0;
+  let tableRows='';
+  bbdcRows.forEach(r=>{
+    if(r.type==='header'){
+      tableRows+=`<tr style="background:#E8F5E9"><td colspan="7" style="font-weight:700;font-size:11.5px;color:#1B5E20;padding:5px 8px;">${r.text}</td></tr>`;
+    } else {
+      stt++;
+      const daGiao=parseFloat(r.daGiao)||0;
+      const daDung=parseFloat(r.daDung)||0;
+      const ton=daGiao-daDung;
+      const tonStyle=ton<0?'color:#c62828;font-weight:700':'';
+      tableRows+=`<tr>
+        <td class="c">${stt}</td>
+        <td>${r.ten||'—'}</td>
+        <td class="c">${r.dvt||'—'}</td>
+        <td class="c">${daGiao?daGiao.toLocaleString('vi-VN'):'—'}</td>
+        <td class="c">${daDung?daDung.toLocaleString('vi-VN'):'—'}</td>
+        <td class="c" style="${tonStyle}">${ton.toLocaleString('vi-VN')}</td>
+        <td style="font-size:10.5px">${r.ghiChu||''}</td>
+      </tr>`;
+    }
+  });
+  if(!tableRows) tableRows=`<tr><td colspan="7" style="text-align:center;color:#aaa;font-style:italic;padding:12px">Chưa có vật tư</td></tr>`;
+
+  return `<div class="page">${headerHTML(d.soTL,d.ngay)}
+    <div style="text-align:center;font-size:11px;color:#555;margin-bottom:4px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
+    <div style="display:flex;justify-content:space-between;font-size:11px;color:#555;margin-bottom:6px">
+      <span>Số: ${d.soTL}</span>
+      <i>Gia Lai, ngày ${d.ngay}</i>
+    </div>
+    <div class="ttl">
+      <h1 style="font-size:15px;line-height:1.4">BẢNG ĐỐI CHIẾU VÀ BÀN GIAO VẬT TƯ TẠI CÔNG TRÌNH</h1>
+    </div>
+    <p style="font-size:12px;line-height:1.7;margin-bottom:10px">Căn cứ Hợp đồng tư vấn thiết kế và thi công số <b>${soHD}</b> giữa ${CO.ten} và Chủ đầu tư. Hôm nay hai bên tiến hành kiểm kê, đối chiếu vật tư đã sử dụng và vật tư còn tồn kho tại công trình <b>${diaDiem}</b>.</p>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">A. Thông tin hai bên</div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">ĐẠI DIỆN THI CÔNG LẮP ĐẶT (BÊN A)<br>${CO.ten}</div>
+        <table class="t-info">
+          <tr><td>Đại diện</td><td><b>${ddA}</b></td></tr>
+          <tr><td>CCCD</td><td>${cccdA}</td></tr>
+          <tr><td>Điện thoại</td><td>${sdtA}</td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;color:#1B5E20;margin-bottom:4px">ĐẠI DIỆN CHỦ ĐẦU TƯ (BÊN B)</div>
+        <table class="t-info">
+          <tr><td>Đại diện</td><td><b>${ddB}</b></td></tr>
+          <tr><td>CCCD</td><td>${cccdB}</td></tr>
+          <tr><td>Điện thoại</td><td>${sdtB}</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">B. Thông tin kiểm kê và đối chiếu</div></div>
+    <table class="t-info" style="margin-bottom:10px">
+      <tr><td>Ngày kiểm kê</td><td>${ngayKK}</td></tr>
+      <tr><td>Địa điểm kiểm kê</td><td>${diaDiem}</td></tr>
+    </table>
+
+    <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">C. Danh mục vật tư đối chiếu</div></div>
+    <table class="t-vt" style="margin-bottom:10px;font-size:11px">
+      <thead><tr>
+        <th style="width:4%">STT</th>
+        <th class="left" style="width:32%">Tên hàng hóa / Vật tư</th>
+        <th style="width:6%">ĐVT</th>
+        <th style="width:12%">Đã giao CT</th>
+        <th style="width:12%">Đã sử dụng</th>
+        <th style="width:12%">Tồn kho</th>
+        <th class="left" style="width:22%">Ghi chú</th>
+      </tr></thead>
+      <tbody>${tableRows}</tbody>
+    </table>
+
+    <div style="background:#FFF8E1;border:1px solid #FFE082;border-radius:4px;padding:8px 12px;font-size:11.5px;margin-bottom:12px">
+      <b>Ghi chú:</b> Hai bên đã tiến hành kiểm kê và đối chiếu toàn bộ vật tư tại công trình. Số lượng tồn kho là căn cứ quản lý vật tư và tiếp tục triển khai các hạng mục còn lại. <b>Vật tư tồn kho được bàn giao lại cho Chủ đầu tư quản lý kể từ thời điểm ký xác nhận.</b>
+    </div>
+
+    <div class="sig-area" style="grid-template-columns:1fr 1fr">
+      <div class="sig-col">
+        <div class="sig-ttl">ĐẠI DIỆN BÊN A</div>
+        <div class="sig-sub">${CO.ten}</div>
+        <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+        <div class="sig-name">${ddA}</div>
+      </div>
+      <div class="sig-col">
+        <div class="sig-ttl">ĐẠI DIỆN BÊN B</div>
+        <div class="sig-sub">Chủ đầu tư / Quản lý farm</div>
+        <div class="sig-sub">(Ký, ghi rõ họ tên)</div>
+        <div class="sig-name">${ddB}</div>
+      </div>
     </div>
     <div class="footer">${CO.ten} | ${CO.dc} | ${CO.web}</div>
   </div>`;
