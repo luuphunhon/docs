@@ -851,6 +851,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── PHIẾU KHẢO SÁT ── -->
   <div id="pksFields" style="display:none">
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+      <button type="button" class="svc-btn active" id="pksHTT" onclick="toggleDoc('pks','HTT')"><strong>HTT</strong><br>Hệ thống tưới</button>
+      <button type="button" class="svc-btn" id="pksDMT" onclick="toggleDoc('pks','DMT')"><strong>DMT</strong><br>Điện mặt trời</button>
+    </div>
     <h3>Thông tin khảo sát</h3>
     <div class="row2">
       <div class="field"><label>Diện tích (ha)</label><input type="number" id="pksHa" value="7" min="0.5" step="0.5"></div>
@@ -898,6 +903,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── BIÊN BẢN NGHIỆM THU ── -->
   <div id="bbntFields" style="display:none">
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+      <button type="button" class="svc-btn active" id="bbntHTT" onclick="toggleDoc('bbnt','HTT')"><strong>HTT</strong><br>Hệ thống tưới</button>
+      <button type="button" class="svc-btn" id="bbntDMT" onclick="toggleDoc('bbnt','DMT')"><strong>DMT</strong><br>Điện mặt trời</button>
+    </div>
     <h3>Thông tin nghiệm thu</h3>
     <div class="field"><label>Căn cứ hợp đồng thi công số</label><input id="bbntSoHD" placeholder="06062026/HD-TC/2026"></div>
     <div class="row2">
@@ -1028,6 +1038,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── HỢP ĐỒNG DỊCH VỤ ── -->
   <div id="hdtkFields" style="display:none">
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+      <button type="button" class="svc-btn active" id="hdtkHTT" onclick="toggleDoc('hdtk','HTT')"><strong>HTT</strong><br>Hệ thống tưới</button>
+      <button type="button" class="svc-btn" id="hdtkDMT" onclick="toggleDoc('hdtk','DMT')"><strong>DMT</strong><br>Điện mặt trời</button>
+    </div>
     <h3>Thông tin hợp đồng dịch vụ</h3>
     <div class="field"><label>Loại dịch vụ</label>
       <select id="hdtkLoai">
@@ -1057,6 +1072,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── HỢP ĐỒNG THI CÔNG ── -->
   <div id="hdtcFields" style="display:none">
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+      <button type="button" class="svc-btn active" id="hdtcHTT" onclick="toggleDoc('hdtc','HTT')"><strong>HTT</strong><br>Hệ thống tưới</button>
+      <button type="button" class="svc-btn" id="hdtcDMT" onclick="toggleDoc('hdtc','DMT')"><strong>DMT</strong><br>Điện mặt trời</button>
+    </div>
     <h3>Thông tin hợp đồng thi công</h3>
     <div class="field"><label>Căn cứ HD-TK / HD-VT số</label><input id="hdtcSoHDCU" placeholder="06062026/HD-TK/2026"></div>
     <div class="row2">
@@ -1081,6 +1101,11 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
 
   <!-- ── HỢP ĐỒNG BẢO TRÌ ── -->
   <div id="hdbtFields" style="display:none">
+    <div style="margin-bottom:8px;font-size:11px;color:#C8E6C9;">Nhấn để chọn / bỏ hạng mục:</div>
+    <div class="svc-toggle-row" style="grid-template-columns:1fr 1fr;margin-bottom:12px;">
+      <button type="button" class="svc-btn active" id="hdbtHTT" onclick="toggleDoc('hdbt','HTT')"><strong>HTT</strong><br>Hệ thống tưới</button>
+      <button type="button" class="svc-btn" id="hdbtDMT" onclick="toggleDoc('hdbt','DMT')"><strong>DMT</strong><br>Điện mặt trời</button>
+    </div>
     <h3>Hợp đồng bảo trì</h3>
     <div class="field"><label>Tổng giá trị HĐ (đ)</label><input type="number" id="hdbtTong" placeholder="5000000" oninput="this.closest('#hdbtFields').querySelector('#hdbtCalc').textContent=parseInt(this.value||0).toLocaleString('vi-VN')+'đ'"></div>
     <div class="field"><label>% Tạm ứng</label><input type="number" id="hdbtTUPct" value="50" min="10" max="100"></div>
@@ -1874,6 +1899,21 @@ function toggleHdvt(type){
   if(isActive&&!anyOther) return; // không tắt hạng mục cuối cùng
   btn.classList.toggle('active');
 }
+
+// ── TOGGLE CHUNG (HTT/DMT) cho các tài liệu ──
+function toggleDoc(pfx,type){
+  const btn=document.getElementById(pfx+type);
+  const isActive=btn.classList.contains('active');
+  const anyOther=['HTT','DMT'].filter(t=>t!==type&&document.getElementById(pfx+t)?.classList.contains('active')).length>0;
+  if(isActive&&!anyOther)return;
+  btn.classList.toggle('active');
+}
+function getHangMuc(pfx){
+  const htt=document.getElementById(pfx+'HTT')?.classList.contains('active')??true;
+  const dmt=document.getElementById(pfx+'DMT')?.classList.contains('active')??false;
+  return htt&&dmt?'hệ thống tưới và điện mặt trời':dmt?'điện mặt trời':'hệ thống tưới';
+}
+function capFirst(s){return s.charAt(0).toUpperCase()+s.slice(1);}
 
 // ── TOGGLE SERVICE (BG-DV) ──
 function toggleSvc(type){
@@ -3778,6 +3818,7 @@ function genPKS(d){
   const ngayKS=document.getElementById('pksNgayKS')?.value?new Date(document.getElementById('pksNgayKS').value).toLocaleDateString('vi-VN'):d.ngay;
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
     <div class="ttl"><h1 style="font-size:16px;">Phiếu Khảo Sát Vườn</h1>
+      <div class="sub">V/v: Khảo sát ${getHangMuc('pks')}</div>
       <div class="sub">Số: ${d.soTL} &nbsp;|&nbsp; Ngày khảo sát: ${ngayKS}</div></div>
 
     <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông tin khách hàng</div></div>
@@ -3839,7 +3880,7 @@ function genBBNT(d){
   return `<div class="page">${headerHTML(d.soTL,d.ngay)}
     <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
     <div class="ttl"><h1 style="font-size:16px;">Biên Bản Nghiệm Thu</h1>
-      <div class="sub" style="font-size:12.5px;font-weight:600;">Hệ thống tưới ${ha}ha ${cay} — ${diaDiem}</div>
+      <div class="sub" style="font-size:12.5px;font-weight:600;">${capFirst(getHangMuc('bbnt'))} ${ha}ha ${cay} — ${diaDiem}</div>
       <div class="sub">Căn cứ HĐ số: ${soHD}</div></div>
 
     <p style="font-size:12px;line-height:1.7;margin-bottom:8px">Hôm nay, ngày ${d.ngay}, tại <b>${diaDiem}</b>, hai bên gồm:</p>
@@ -4363,7 +4404,8 @@ function genHDTC(d){
   const khNguoiDD=document.getElementById('khNguoiDD')?.value||'';
   let soHD=d.soHD;
   if(!soHD||soHD==='—'){const p=d.ngay.split('/');if(p.length===3)soHD=`${p[0]}${p[1]}${p[2]}/HD-TC/${p[2]}`;}
-  const moTa=`Thi công lắp đặt hệ thống tưới${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
+  const _hangMucTC=getHangMuc('hdtc');
+  const moTa=`Thi công lắp đặt ${_hangMucTC}${ha?' cho '+ha+'ha':''} ${cay?'cây '+cay:''} tại ${diaDiem}`.trim();
 
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
@@ -4482,7 +4524,7 @@ function genHDBT(d){
   const fmtVND=v=>v?v.toLocaleString('vi-VN')+'đ':'—';
   return `<div class="page">${headerHTML('',d.ngay,d.nguoiLap,{soBg:soHD,label:'Người lập'})}
     <div style="text-align:center;font-size:13px;color:#444;margin-bottom:8px">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM<br><b>Độc lập – Tự do – Hạnh phúc</b></div>
-    <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Bảo Trì Hệ Thống</h1><div class="sub">V/v: Bảo dưỡng &amp; bảo trì hệ thống tưới nông nghiệp</div></div>
+    <div class="ttl"><h1 style="font-size:16px;">Hợp Đồng Bảo Trì Hệ Thống</h1><div class="sub">V/v: Bảo dưỡng &amp; bảo trì ${getHangMuc('hdbt')}</div></div>
     ${_partyGrid(
       _partyCard(`BÊN A (Bên cung cấp dịch vụ): ${CO.ten}`,[
         {label:'Mã số thuế',value:CO.mst},
@@ -4527,8 +4569,10 @@ function calcHDTK(){
 // ── GEN HD-TK ──────────────────────────────────────────
 function genHDTK(d){
   const loaiVal=document.getElementById('hdtkLoai')?.value||'kstk';
-  const loaiMap={kstk:'Khảo sát, Tư vấn thiết kế Hệ thống tưới',kstkTC:'Khảo sát, Tư vấn thiết kế &amp; Thi công lắp đặt Hệ thống tưới',kstkHDKT:'Khảo sát, Tư vấn thiết kế &amp; Hướng dẫn kỹ thuật Hệ thống tưới',kstkTCHDKT:'Khảo sát, Tư vấn thiết kế, Thi công lắp đặt &amp; Hướng dẫn kỹ thuật Hệ thống tưới'};
-  const loaiTen=loaiMap[loaiVal]||'Dịch vụ Hệ thống tưới';
+  const hangMuc=getHangMuc('hdtk');
+  const _hm=capFirst(hangMuc);
+  const loaiMap={kstk:`Khảo sát, Tư vấn thiết kế ${_hm}`,kstkTC:`Khảo sát, Tư vấn thiết kế &amp; Thi công lắp đặt ${_hm}`,kstkHDKT:`Khảo sát, Tư vấn thiết kế &amp; Hướng dẫn kỹ thuật ${_hm}`,kstkTCHDKT:`Khảo sát, Tư vấn thiết kế, Thi công lắp đặt &amp; Hướng dẫn kỹ thuật ${_hm}`};
+  const loaiTen=loaiMap[loaiVal]||`Dịch vụ ${_hm}`;
   const hdMaMap={kstk:'HD-TK',kstkTC:'HD-TC',kstkHDKT:'HD-TK',kstkTCHDKT:'HD-TC'};
   const hdMa=hdMaMap[loaiVal]||'HD-TK';
   const ha=parseFloat(document.getElementById('hdtkHa')?.value)||0;
