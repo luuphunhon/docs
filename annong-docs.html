@@ -1973,13 +1973,13 @@ function generate(){
   const _svcs=[];
   if(_svcTK) _svcs.push('TK'); if(_svcTC) _svcs.push('TC'); if(_svcKT) _svcs.push('KT');
   const _titleMap={
-    'TK-TC' :['Báo Giá Dịch Vụ','KHẢO SÁT &amp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG LẮP ĐẶT'],
-    'TK-KT' :['Báo Giá Dịch Vụ','KHẢO SÁT &amp; THIẾT KẾ &nbsp;·&nbsp; HƯỚNG DẪN KỸ THUẬT'],
-    'TC-KT' :['Báo Giá Dịch Vụ','THI CÔNG LẮP ĐẶT &nbsp;·&nbsp; HƯỚNG DẪN KỸ THUẬT'],
-    'TK-TC-KT':['Báo Giá Dịch Vụ','KHẢO SÁT &nbsp;·&nbsp; THIẾT KẾ &nbsp;·&nbsp; THI CÔNG &nbsp;·&nbsp; KỸ THUẬT'],
+    'TK-TC' :['Báo Giá Dịch Vụ','V/v: Khảo sát &amp; thiết kế · thi công lắp đặt'],
+    'TK-KT' :['Báo Giá Dịch Vụ','V/v: Khảo sát &amp; thiết kế · hướng dẫn kỹ thuật'],
+    'TC-KT' :['Báo Giá Dịch Vụ','V/v: Thi công lắp đặt · hướng dẫn kỹ thuật'],
+    'TK-TC-KT':['Báo Giá Dịch Vụ','V/v: Khảo sát · thiết kế · thi công · hướng dẫn kỹ thuật'],
   };
   const _titleKey=_svcs.join('-');
-  const [_h1,_h2]=_titleMap[_titleKey]||['Báo Giá Dịch Vụ','HỆ THỐNG TƯỚI NÔNG NGHIỆP'];
+  const [_h1,_h2]=_titleMap[_titleKey]||['Báo Giá Dịch Vụ','V/v: Hệ thống tưới nông nghiệp'];
 
   const html=`
 <div class="page">
@@ -1987,7 +1987,7 @@ function generate(){
 
   <div class="ttl">
     <h1>${_h1}</h1>
-    <h2>${_h2}</h2>
+    <div class="sub">${_h2}</div>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
@@ -2399,7 +2399,7 @@ function generateBGTK(){
 
   <div class="ttl">
     <h1>Báo Giá Khảo Sát &amp; Thiết Kế</h1>
-    <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
+    <div class="sub">V/v: Hệ thống tưới nông nghiệp</div>
   </div>
 
   <!-- I. THÔNG TIN DỰ ÁN -->
@@ -2558,7 +2558,7 @@ function generateBGTC(){
   ${headerHTML('',ngayLap,nguoiLap,{soBg})}
   <div class="ttl">
     <h1>Báo Giá Thi Công Lắp Đặt</h1>
-    <h2>HỆ THỐNG TƯỚI NÔNG NGHIỆP</h2>
+    <div class="sub">V/v: Hệ thống tưới nông nghiệp</div>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
@@ -2746,7 +2746,7 @@ function generateBGKT(){
   ${headerHTML('',ngayLap,nguoiLap,{soBg})}
   <div class="ttl">
     <h1>Báo Giá Hướng Dẫn Kỹ Thuật</h1>
-    <h2>GIÁM SÁT &amp; HỖ TRỢ KỸ THUẬT HỆ THỐNG TƯỚI</h2>
+    <div class="sub">V/v: Giám sát &amp; hỗ trợ kỹ thuật hệ thống tưới</div>
   </div>
 
   <div class="sec"><div class="sec-bar"></div><div class="sec-lbl">I. Thông Tin Dự Án</div></div>
