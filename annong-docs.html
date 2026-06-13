@@ -221,12 +221,13 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   /* Preview = tab Xem */
   .preview{
     margin-left:0;padding:10px 8px 72px;
+    overflow-x:hidden;
     transition:opacity .2s;
   }
   .preview.m-hidden{display:none;}
 
-  /* Trang tài liệu co vừa màn hình */
-  .page{width:100%;min-width:0;font-size:10px;}
+  /* Trang tài liệu: giữ kích thước A4, zoom bằng JS */
+  .page{width:210mm;min-width:210mm;font-size:12.5px;}
 
   /* Ẩn btn-sticky cũ (thay bằng tab Xuất) */
   .btn-sticky{display:none!important;}
@@ -276,10 +277,7 @@ body{font-family:Arial,sans-serif;background:#f0f0f0;color:#1a1a1a;}
   .m-export-btn:active{background:#2E7D32;}
   .m-export-cancel{background:transparent;color:#81C784;border-color:#2E7D32;text-align:center;margin-top:4px;}
 
-  /* Scale bảng xuống cho vừa màn hình */
-  .t-vt,.t-svc,.t-pay,.t-info{font-size:9px;}
-  .hdr{font-size:9px;}
-  .hdr-addr,.hdr-box .bl{font-size:8.5px;}
+  /* Font sizes tự scale theo zoom của JS — không override ở đây */
 
   /* ── ACCORDION ── */
   .panel h3.acc-hdr{
@@ -4822,6 +4820,8 @@ function switchMTab(tab){
       const genBtn=document.getElementById('btn-gen');
       if(genBtn)genBtn.click();
     }
+    // Scale-to-fit sau khi nội dung có trong DOM
+    requestAnimationFrame(fitPageMobile);
   } else if(tab==='xuat'){
     exportSheet.classList.add('open');
     exportSheet.style.display='block';
@@ -4874,6 +4874,21 @@ function initAccordion(){
       body.classList.toggle('acc-closed');
       chev.classList.toggle('acc-closed',closing);
     });
+  });
+}
+
+function fitPageMobile(){
+  if(window.innerWidth>600)return;
+  const preview=document.getElementById('preview');
+  if(!preview)return;
+  const pages=preview.querySelectorAll('.page');
+  if(!pages.length)return;
+  const availW=window.innerWidth-20; // trừ padding preview 2×8px + buffer
+  pages.forEach(page=>{
+    page.style.zoom=''; // reset để đo chiều rộng gốc
+    const pageW=page.offsetWidth;
+    if(!pageW||pageW<=availW)return;
+    page.style.zoom=availW/pageW;
   });
 }
 
